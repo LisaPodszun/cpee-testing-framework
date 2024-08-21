@@ -1,0 +1,27 @@
+#!/usr/bin/ruby
+require 'rubygems'
+require '~/projects/cpee-testing-framework/fulltest'
+
+options = {
+  :host => 'localhost',
+  :port => 9303,
+  :secure => false
+}
+
+Riddl::Server.new(CPEE::InstanceTesting::SERVER, options) do
+  
+  
+  # TODO: understand these features
+  accessible_description true
+  
+  cross_site_xhr true
+  
+  
+  puts "Hello from testing server"
+  
+  
+  # local CPEE
+  @riddl_opts[:cpee] ||= 'http://localhost:8298/'
+
+  use CPEE::InstanceTesting::implementation(@riddl_opts)
+end.loop!
