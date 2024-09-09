@@ -1,7 +1,7 @@
 #! /usr/bin/ruby
 require 'rubygems'
 require 'xml/smart'
-require 'riddl/server'
+require '~/projects/riddl/lib/ruby/riddl/server'
 require 'securerandom'
 require 'base64'
 require 'uri'
@@ -91,7 +91,7 @@ module CPEE
         if behavior =~ /^wait/
           condition = behavior.match(/_([^_]+)_/)&.[](1) || 'finished'
           cb = @h['CPEE_CALLBACK']
-
+          puts "in handle waiting method"
           if cb
             cbk = SecureRandom.uuid
             srv = Riddl::Client.new(cpee, File.join(cpee,'?riddl-description'))
@@ -115,13 +115,27 @@ module CPEE
           sleep 0.5
           srv = Riddl::Client.new(cpee, File.join(cpee,'?riddl-description'))
           res = srv.resource("/#{instance}/properties/state")
-          status, response = res.put [
-            Riddl::Parameter::Simple.new('value','running')
-          ]
+          puts "handle starting put request"
+          status, response = res.put Riddl::Parameter::Simple.new('value','running')
+          puts "status of running put request: #{status}"
         end
       end #}}}
       private :handle_starting
+    
+      def subscribe_all(curr_ins) #{{{
+        
+        conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{curr_ins}")
+        conn.psubscribe('*') do |on|
+          on.pmessage do |channel, what, message|
+            
+            puts "channel: #{channel}; what: #{what}; message: #{message} \n"
+          
+          end
+        end
+        conn.close
+      end #}}}
     end #}}}
+
 
     class InstantiateXML < Riddl::Implementation #{{{
       include Helpers
@@ -134,18 +148,12 @@ module CPEE
         cblist   = @a[3]
         
 
-
-        puts "a arguments: #{@a}"
-        puts "p parameter: #{@p}"
-        puts "p data: #{@p[data].value}"
-
         tdoc = if @p[data].additional =~ /base64/
           Base64.decode64(@p[data].value.read)
         else
           @p[data].value.read
         end
         
-        puts "tdoc variable: #{tdoc}"
         tdoc = XML::Smart.string(tdoc)
         tdoc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
         tdoc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
@@ -158,7 +166,9 @@ module CPEE
             handle_waiting cpee, instance, uuid, behavior, selfurl, cblist
             handle_starting cpee, instance, behavior
           end
-
+          EM.defer do
+            subscribe_all instance
+          end 
           send = {
             'CPEE-INSTANCE' => instance,
             'CPEE-INSTANCE-URL' => File.join(cpee,instance),
@@ -173,15 +183,17 @@ module CPEE
       end
     end #}}}
 
-
+    
+      
+      
     def self::implementation(opts)
-      opts[:cpee]       ||= 'http://localhost:9298/'
+      opts[:cpee]       ||= 'http://localhost:8298/'
       opts[:redis_path] ||= '/tmp/redis.sock'
       opts[:redis_db]   ||= 14
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
-      opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])
-          
+      opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
       
+
       Proc.new do
         on resource do
           run InstantiateXML, opts[:cpee], true if post 'xmlsimple'
