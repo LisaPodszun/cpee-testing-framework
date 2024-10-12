@@ -7,6 +7,7 @@ require 'base64'
 require 'uri'
 require 'redis'
 require 'json'
+require 'sqlite3'
 
 
 
@@ -115,29 +116,45 @@ module CPEE
           sleep 0.5
           srv = Riddl::Client.new(cpee, File.join(cpee,'?riddl-description'))
           res = srv.resource("/#{instance}/properties/state")
-          puts "handle starting put request"
           status, response = res.put Riddl::Parameter::Simple.new('value','running')
-          puts "status of running put request: #{status}"
         end
       end #}}}
       private :handle_starting
     
       def subscribe_all(curr_ins) #{{{
-        
+        db = SQLite3::Database.open("events.db")
+        db.execute (
+          " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
+        )
         conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{curr_ins}")
         conn.psubscribe('*') do |on|
           on.pmessage do |channel, what, message|
-            
-            puts "channel: #{channel}; what: #{what}; message: #{message} \n"
-          
+            cut_message = message.slice((message.index("{"))..-1)
+            hash_message = JSON.parse cut_message
+            db.execute( "
+                INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
+                [curr_ins, what, message, hash_message['timestamp']])
           end
         end
+        db.close
         conn.close
       end #}}}
+
+      def get_model_structure(doc) #{{{
+        
+        
+        
+        
+        
+        
+        
+        #}}}
+
+
     end #}}}
 
 
-    class InstantiateXML < Riddl::Implementation #{{{
+    class InstantiateTestXML < Riddl::Implementation #{{{
       include Helpers
 
       def response
@@ -158,6 +175,8 @@ module CPEE
         tdoc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
         tdoc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
         tdoc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
+
+        model = get_model_structure tdoc
         
         if (instance, uuid = load_testset(tdoc,cpee)).first == -1
           @status = 500
@@ -196,9 +215,9 @@ module CPEE
 
       Proc.new do
         on resource do
-          run InstantiateXML, opts[:cpee], true if post 'xmlsimple'
+          run InstantiateTestXML, opts[:cpee], true if post 'xmlsimple'
           on resource 'xml' do 
-            run InstantiateXML, opts[:cpee], false if post 'xml'
+            run InstantiateTestXML, opts[:cpee], false if post 'xml'
           end
         end
       end
