@@ -1,5 +1,6 @@
 #! /usr/bin/ruby
 require 'rubygems'
+require 'securerandom'
 require_relative 'state_machines'
 
 class ServiceCall
@@ -119,48 +120,40 @@ class ScriptCall
     else
       "ERROR: Eventtype not possible for #{this.class}"
     end
-    def ended?
-      @state_machine.done?
-    end
 end
 
 
-class Process
+class Branch
   attr_accessor :subelements
-  @@current_element
-  @index = 0
+  @current_element
   @subelements = 0
   def initialize(process)
     @parent_process = process
+    @branch_id = SecureRandom.hex(5)
     @structure = []
   end
   def add_element(element)
     @structure << element
   end
-  def add_subelement(element)
-    if @parent_process.class == Process
-      @parent_process.subelements += 1
-    else
-      @parent_process.subelements += 1
-      @parent_process.add_subelement(element)
-  end
-  def next
+  def next_element
     if subelements == 0
-      @index += 1
-      @@current_element = @structure.shift
+      @current_element = @structure.shift
+      if @current_element.class == (ParallelGateway || DecisionGateway)
+        @subelements += 1
+      end
     else 
-      @@current_element = @structure.at(@index).next 
+      @current_element = @current_element.next_element
     end
   end
 end
 
-class ParallelGateway < Process
-  attr_accessor :wait_on_branches
+class ParallelGateway 
+  attr_accessor :wait_on_branches :current_elements
 
-  def initialize(process, wait, cancel)
-    @process = process
+  def initialize(wait, cancel)
+    @current_elements = []
     @wait = wait
-    if wait == -1
+    if @wait == -1
       @wait_on_branches = 0
     else
       @wait_on_branches = wait
@@ -171,16 +164,16 @@ class ParallelGateway < Process
     @structure << parallel_branch
     if @wait < 0
       @wait_on_branches += 1
-  end 
-end
-
-class ParallelBranch < Process
-  attr_reader :parallel_gateway
-
-  def initialize(parallel_gateway)
-    @parallel_gateway = parallel_gateway
   end
-  def signal_end
+
+  def next_element
+    @structure.each do |element|
+      @current_elements << element.next_element
+    end
+  end
+
+  def signal_end(branch)
+
     if @parallel_gateway.wait == -1 && @parallel_gateway.cancel == "after_last"
        @parallel_gateway.wait_on_branches = @parallel_gateway.wait_on_branches-1
     elsif @parallel_gateway.wait == -1 && @parallel_gateway.cancel == "after_first"
@@ -190,34 +183,29 @@ class ParallelBranch < Process
     else
        @parallel_gateway.wait_on_branches = 0
     end 
+  end
+  
+end
 
+class ParallelBranch < Branch
+  attr_reader :parallel_gateway
+
+  def initialize(parallel_gateway, cancel)
+    @parallel_gateway = parallel_gateway
+    @cancel = cancel
   end
 
-  def next
-    if @parallel_gateway.wait == -1
-      if @structure.length > 0
-        if subelements == 0
-          @index += 1
-          @@current_element = @structure.shift
-        else 
-          @@current_element = @structure.at(@index).next 
-        end
-      else
-        while !@@current_element.ended?
-        end
-        signal_end  
-    else
-      if @parallel_gateway.cancel == "after_first"
-        if subelements == 0 && @index == 0
-          @index += 1
-          @@current_element = @structure.shift
-          
-          
-    end
+  def is_done(this)
+    @parallel_gateway.signal_end_of(this)
   end
 end
 
-class DecisionGateway < Process
+
+
+
+
+
+class DecisionGateway
 
   def initialize(process, mode)
     @process = process
@@ -226,7 +214,7 @@ class DecisionGateway < Process
   end
 end
 
-class Alternative < Process
+class Alternative < Branch
   attr_reader :decision_gateway
 
   def initialize(decision_gateway, condition)

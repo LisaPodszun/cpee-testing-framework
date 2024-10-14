@@ -1,97 +1,53 @@
 #!/usr/bin/ruby
 require 'rubygems'
 require "xml/smart"
-require "./test_state_machine"
-
-
-
-
-class Parallel
-  def initialize
-    @wait_for_branches
-    @cancel
-  end
-end
-
-
-class ParallelBranch
-  def initialize
-
-  end
-end
-
-
-class Choice
-  def initialize
-    @mode
-  end
-end
-
-
-class Alternative
-  def initialize
-    @condition
-  end
-end
-
-class ServiceCall
-  def initialize
-      
-  end
-end
-
-class Manipulate
-  def initialize
-  end
-end
+#require_relative "test_process_model_structure"
 
 
 
 
 
 
-
-
-testfile = "TestXMLs/twoparallel.xml"
+testfile = "TestXMLs/paralleltest.xml"
 doc = XML::Smart.open("/home/i17/Downloads/#{testfile}")
 doc.register_namespace 'p', 'http://cpee.org/ns/properties/2.0'
 doc.register_namespace 'd', 'http://cpee.org/ns/description/1.0'
 
 
-
+# find description part of properties
 nodes = doc.find("/p:testset/p:description/d:description/d:*")
+active_tasks = []
 
+def get_current_nodes(nodes)
+    node = nodes.first
+    
+    case node.qname.name
 
-current_possible_tasks = []
-
-
-
-
-def get_current_nodes(node)
-  
-  case node.qname.name  
     when "call"
-      p "case call"
-      return node
+      if node.children.include?("code")
+        active_tasks << ServiceScriptCall.new(node.attributes["id"])
+        nodes.shift
+        nodes
+      else
+        active_tasks << ServiceCall.new(node.attributes["id"])
+        nodes.shift
+        nodes
     when "manipulate"
-      p "case manipulate"
-      return node
+        active_tasks << ScriptCall.new(node.attributes["id"])
+        nodes.shift
+        nodes
     when "parallel"
-      p "case parallel"
-      node.children
+        node.each do |child_node| get_current_nodes(child_node.children) end
     when "parallel_branch"
-      p "case parallel_branch"
-      return node.children[0]
-    when "choose"
-      p "case choose"
-      puts ""
-    when "alternative"
+        get_current_nodes(node.children)
 
-    else
-      puts "else path"
-  end
-end 
 
-p nodes[1].attributes.first.qname.name
+
+    when ""
+    end
+end
+
+
+
 
 #nodes.each {|node| if node.qname.name == "parallel" then p node.children[1].children[0].qname.name end}
