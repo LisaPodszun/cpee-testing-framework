@@ -3,6 +3,8 @@ require 'rubygems'
 require 'securerandom'
 require_relative 'state_machines'
 
+
+# TODO: handle specific error cases differently
 class ServiceCall
   attr_reader :id
   def initialize(id, parent_process)
@@ -43,7 +45,7 @@ class ServiceCall
          raise "ERROR: this #{type} event happens in wrong state"
       end
       if state_machine.done?
-        @parent_process.signal_end(@id)
+        @parent_process.signal_end(@id, @parent_process.branch_id)
       else
         raise "ERROR: state machine is not yet done to signal the end"
       end
@@ -105,7 +107,7 @@ class ServiceScriptCall
         raise "ERROR: this #{type} event happens in wrong state"
       end
       if state_machine.done?
-        @parent_process.signal_end(@id)
+        @parent_process.signal_end(@id, @parent_process.branch_id)
       else
         raise "ERROR: state machine is not yet done to signal the end"
       end
@@ -144,7 +146,7 @@ class ScriptCall
         raise "ERROR: this #{type} event happens in wrong state"
       end
       if state_machine.done?
-        @parent_process.signal_end(@id)
+        @parent_process.signal_end(@id, @parent_process.branch_id)
       else
         raise "ERROR: state machine is not yet done to signal the end"
       end
@@ -154,7 +156,7 @@ class ScriptCall
   end
 end
 
-def translate_from_xml(node)
+def translate_from_xml(node, parent_process)
 
   case node.qname.name
   when "call"
@@ -188,14 +190,16 @@ end
 
 
 class Branch
-  attr_accessor :subelements
-  @subelements = 0
-  def initialize(xml_node, parent_process)
+  attr_accessor :current_elements, :structure, :index
+  attr_reader :branch_id
+
+  def initialize(xml_node, parent_process=nil)
     @parent_process = parent_process
     @branch_id = SecureRandom.hex(5)
     @xml_node = xml_node
     @current_elements = {}
     @structure = []
+    @process_ended = false
     @index = 0
   end
   
@@ -203,104 +207,147 @@ class Branch
     if @current_elements.key?(id)
        @current_elements[id].event(type)
     else
-      
+      # TODO handle error case
+    end
   end
 
-  def signal_end(id)
+  def signal_end_of_task(task_id, branch_id)
     unless @parent_process.nil?
-      @parent_process.signal_end(id)
-      @current_elements.delete(id)
+      @parent_process.signal_end_of_task(task_id, branch_id)
+      @current_elements.delete(task_id)
     else
-      @current_elements.delete(id)
+      @current_elements.delete(task_id)
       next_elements
+    end
   end
 
+  def process_ended?
+    @process_ended
+  end
 
   def next_elements
+    if @index < xml_node.length
       @structure << translate_from_xml(xml_node[@index], this)
       if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
-         @current_elements.store(@structure[@index].id,@structure[@index])
+        @current_elements.store(@structure[@index].id, @structure[@index])
       else 
-         @current_elements << @structure[@index].next_elements
+        @current_elements << @structure[@index].next_elements
       end
-      @index += 1
+      if @structure[@index].process_ended?
+        @index += 1
+      end
+      @current_elements
+    else 
+      process_ended= true
+    end
   end
 end
 
 class ParallelGateway 
-  attr_accessor :wait_on_branches, :current_elements
+  attr_accessor :wait, :current_elements, :process_ended
 
-  def initialize(xml_node)
-    @executing_branches = []
-    @current_elements = []
-    @wait = wait
-    if @wait == -1
-      @wait_on_branches = 0
-    else
-      @wait_on_branches = wait
-      @cancel = cancel
+  def initialize(xml_node, parent_process)
+    @wait = xml_node.attributes["wait"]
+    @parent_process = parent_process
+    @current_elements = {}
+    @executing_branches = {}
+    @finished_branches = {}
+    @branches = {}
+    @process_ended = false
+    xml_node.children.each do |parallel_branch_node| 
+      @branches << translate_from_xml(parallel_branch_node.children, this)  
+    end
+    unless @wait == "-1"
+      @wait_on_branches = @wait
+      @cancel = xml_node.attributes["cancel"]
     end
   end
 
-  def add_element(parallel_branch)
-    @structure << parallel_branch
-    if @wait < 0
-      @wait_on_branches += 1
+  def process_ended?
+    @process_ended
+  end
+  
+  def next_elements
+    @branches.each do |branch|
+      unless branch.process_ended?   
+        @current_elements << branch.next_elements
+      end
     end
+    @current_elements
   end
-
-  def next_element(branch)
-    @current_elements << @structure.at(@structure.index(branch)).next_element
-  end
-
-  def update_current_elements(element)
-    @current_elements.delete(element)
-    next_element
-  end
-
-
-  def cancel_other_branches(branch)
-    if @wait_on_branches - 1 > 0
-      @wait_on_branches -= 1
-      @executing_branches << branch
+  
+  def signal_end_of_task(task_id, branch_id)
+    unless @wait == ("-1" || "0") 
+      if @cancel == "after_first"
+        # there are still parallel branches to wait on
+        if @wait_on_branches - 1 > 0
+          unless @executing_branches.include?(branch_id)
+            @wait_on_branches -= 1
+            @executing_branches << {branch_id:@branches[branch_id]}
+          end
+        else
+        # last branch to wait on has finished the first task
+          unless @executing_branches.include?(branch_id)
+            @wait_on_branches -= 1
+            @executing_branches << {branch_id:@branches[branch_id]}
+            @branches.keys.each do |branch|
+              unless @executing_branches.include?(branch)
+                branch.process_ended= true
+              end 
+            end
+          end
+        end
+      else
+         # there are still parallel branches to wait on
+        if @wait_on_branches - 1 > 0
+          if @branches[branch_id].process_ended?
+            @wait_on_branches -= 1
+            @finished_branches << {branch_id:@branches[branch_id]}
+          end
+        else
+          if @branches[branch_id].process_ended?
+            @wait_on_branches -= 1
+            @finished_branches << {branch_id:@branches[branch_id]}
+            process_ended= true
+          end  
+        end
+      end
     else
-      @executing_branches << branch
-      @structure.each do |branch|
-        if !executing_branches.include? branch.branch_id
-          @structure.delete(branch)
+      # wait for all branches and mark all finished branches
+      if @branches[branch_id].process_ended?
+        @finished_branches << {branch_id:@branches[branch_id]}
+        if @finished_branches == @branches
+          process_ended= true
         end
       end
     end
-  end
-
-  def signal_end(branch)
-         
+    # update finished tasks
+    @current_elements.delete(task_id)
+    @parent_process.signal_end_of_task(task_id, branch_id)
   end
 end
 
 class ParallelBranch < Branch
   attr_reader :parallel_gateway, :cancel
-
-  def initialize(xml_node,parallel_gateway)
-    @parallel_gateway = parallel_gateway
-    @cancel = cancel
-  end
-  def task_done
-    @parallel_gateway.update_current_elements(@current_element,)
-  end
-  def is_first
-    @parallel_gateway.cancel_other_branches(@branch_id)
-  end
-
-  def is_done
-    @parallel_gateway.signal_end(@branch_id)
+  def initialize(xml_node, parallel_gateway)
+    @parent_process = parallel_gateway
   end
 end
+
+
+
+
+
 
 
 
 class Loop
 end
+
+
+
+
+
 
 
 class DecisionGateway

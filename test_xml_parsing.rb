@@ -24,4 +24,4 @@ active_tasks = []
 
 # iterate over model
 
-p nodes[0].attributes["id"]
+nodes[1].children.each do |parallel_branch| p parallel_branch.qname.name; parallel_branch.children.each do |node| p node.qname.name  end end
