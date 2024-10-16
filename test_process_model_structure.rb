@@ -177,7 +177,7 @@ def translate_from_xml(node, parent_process)
       ParallelGateway(node)
   when "parallel_branch"
       ParallelBranch(node)
-  when "choice"
+  when "choose"
     # todo 
   when "alternative"
     # todo
@@ -227,13 +227,13 @@ class Branch
 
   def next_elements
     if @index < xml_node.length
-      @structure << translate_from_xml(xml_node[@index], this)
-      if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
-        @current_elements.store(@structure[@index].id, @structure[@index])
-      else 
-        @current_elements << @structure[@index].next_elements
-      end
       if @structure[@index].process_ended?
+        @structure << translate_from_xml(xml_node[@index], this)
+        if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
+          @current_elements.store(@structure[@index].id, @structure[@index])
+        else 
+          @current_elements << @structure[@index].next_elements
+        end
         @index += 1
       end
       @current_elements
@@ -331,14 +331,9 @@ class ParallelBranch < Branch
   attr_reader :parallel_gateway, :cancel
   def initialize(xml_node, parallel_gateway)
     @parent_process = parallel_gateway
+    
   end
 end
-
-
-
-
-
-
 
 
 class Loop
@@ -346,26 +341,56 @@ end
 
 
 
-
-
-
-
 class DecisionGateway
 
-  def initialize(process, mode)
-    @process = process
-    @mode = mode
-    @structure = []
+  def initialize(xml_node, parent_process)
+    @parent_process = parent_process
+    @mode = xml_node.attributes["mode"]
+    @current_elements = {}
+    @branches = {}
+    @chosen_branches = {}
+    @process_ended = false
+    xml_node.children.each do |alternative_branch_node| 
+      @branches << translate_from_xml(alternative_branch_node.children, this)  
+    end
+  end
+
+  def process_ended?
+    @process_ended
+  end
+
+  def next_elements
+      if @mode == "exclusive"
+        if @chosen_branches.empty?
+          branches.each do |branch| 
+            current_elements << branch.next_elements 
+          end
+        else   
+          current_elements << @chosen_branches.values.first.next_elements
+        end
+      else
+          # TODO: test inclusive mode of CPEE
+      end
+    @current_elements
+  end
+
+  def signal_end_of_task(task_id, branch_id)
+      if @mode == "exclusive"
+        if @chosen_branches.empty?
+          @chosen_branches << {branch_id:@branches[branch_id]}
+        else
+          
+      else
+      end
   end
 end
 
 class Alternative < Branch
   attr_reader :decision_gateway
 
-  def initialize(decision_gateway, condition)
-    @decision_gateway = decision_gateway
-    @condition = condition
-    @structure = []
+  def initialize(xml_node, decision_gateway)
+    @parent_process = decision_gateway
+    @condition = xml_node.attributes["condition"]
   end
 
   def signal_end
