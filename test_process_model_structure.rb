@@ -349,6 +349,7 @@ class DecisionGateway
     @current_elements = {}
     @branches = {}
     @chosen_branches = {}
+    @index = 0
     @process_ended = false
     xml_node.children.each do |alternative_branch_node| 
       @branches << translate_from_xml(alternative_branch_node.children, this)  
@@ -363,13 +364,18 @@ class DecisionGateway
       if @mode == "exclusive"
         if @chosen_branches.empty?
           branches.each do |branch| 
-            current_elements << branch.next_elements 
+            @current_elements << branch.next_elements 
           end
         else   
-          current_elements << @chosen_branches.values.first.next_elements
+         @current_elements << @chosen_branches.values.first.next_elements
         end
       else
-          # TODO: test inclusive mode of CPEE
+        if @chosen_branches.empty?
+          branches.each do |branch| 
+            @current_elements << branch.next_elements 
+          end
+        else
+          @current_elements << @chosen_branches[@index].next_elements
       end
     @current_elements
   end
@@ -378,9 +384,22 @@ class DecisionGateway
       if @mode == "exclusive"
         if @chosen_branches.empty?
           @chosen_branches << {branch_id:@branches[branch_id]}
+          @branches.each do |branch| 
+            unless branch.branch_id == branch_id
+              @parent_process.signal_end_of_task(task_id, branch_id)
+              @current_elements.delete(task_id)
+          end
         else
-          
+          @parent_process.signal_end_of_task(task_id, branch_id)
+          @current_elements.delete(task_id)
       else
+        unless @chosen_branches.include?(branch_id)
+          @chosen_branches << {branch_id:@branches[branch_id]}
+          @branches.each do |branch| 
+            unless branch.branch_id == branch_id
+              @parent_process.signal_end_of_task(task_id, branch_id)
+              @current_elements.delete(task_id)
+          end
       end
   end
 end
