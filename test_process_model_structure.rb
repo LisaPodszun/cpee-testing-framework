@@ -53,6 +53,9 @@ class ServiceCall
       raise "ERROR: Eventtype not possible for #{this.class}"
     end
   end
+  def process_ended?
+    @state_machine.done?
+  end
 end
 
 class ServiceScriptCall
@@ -115,6 +118,9 @@ class ServiceScriptCall
       "ERROR: Eventtype not possible for #{this.class}"
     end
   end
+  def process_ended?
+    @state_machine.done?
+  end
 end
 
 class ScriptCall
@@ -153,6 +159,9 @@ class ScriptCall
     else
       "ERROR: Eventtype not possible for #{this.class}"
     end
+  end
+  def process_ended?
+    @state_machine.done?
   end
 end
 
@@ -214,11 +223,16 @@ class Branch
   def signal_end_of_task(task_id, branch_id)
     unless @parent_process.nil?
       @parent_process.signal_end_of_task(task_id, branch_id)
-      @current_elements.delete(task_id)
-    else
-      @current_elements.delete(task_id)
-      next_elements
     end
+    @current_elements.delete(task_id)
+    if @strucute[@index].process_ended?
+      @index += 1
+    end  
+    if @index < xml_node.length
+      next_elements
+    else
+      @process_ended= true
+    end       
   end
 
   def process_ended?
@@ -226,20 +240,13 @@ class Branch
   end
 
   def next_elements
-    if @index < xml_node.length
-      if @structure[@index].process_ended?
-        @structure << translate_from_xml(xml_node[@index], this)
-        if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
-          @current_elements.store(@structure[@index].id, @structure[@index])
-        else 
-          @current_elements << @structure[@index].next_elements
-        end
-        @index += 1
-      end
-      @current_elements
+    @structure << translate_from_xml(xml_node[@index], this)
+    if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
+      @current_elements.store(@structure[@index].id, @structure[@index])
     else 
-      process_ended= true
+      @current_elements << @structure[@index].next_elements
     end
+    @current_elements
   end
 end
 
@@ -328,11 +335,6 @@ class ParallelGateway
 end
 
 class ParallelBranch < Branch
-  attr_reader :parallel_gateway, :cancel
-  def initialize(xml_node, parallel_gateway)
-    @parent_process = parallel_gateway
-    
-  end
 end
 
 
@@ -361,24 +363,26 @@ class DecisionGateway
   end
 
   def next_elements
-      if @mode == "exclusive"
-        if @chosen_branches.empty?
-          branches.each do |branch| 
-            @current_elements << branch.next_elements 
-          end
-        else   
-         @current_elements << @chosen_branches.values.first.next_elements
+    if @mode == "exclusive"
+      if @chosen_branches.empty?
+        branches.each do |branch| 
+          @current_elements << branch.next_elements 
+        end
+      else   
+          @current_elements << @chosen_branches.values.first.next_elements
+      end
+    else
+      if @chosen_branches.empty?
+        branches.each do |branch| 
+          @current_elements << branch.next_elements 
         end
       else
-        if @chosen_branches.empty?
-          branches.each do |branch| 
-            @current_elements << branch.next_elements 
-          end
-        else
           @current_elements << @chosen_branches[@index].next_elements
       end
+    end
     @current_elements
   end
+
 
   def signal_end_of_task(task_id, branch_id)
       if @mode == "exclusive"
@@ -388,18 +392,25 @@ class DecisionGateway
             unless branch.branch_id == branch_id
               @parent_process.signal_end_of_task(task_id, branch_id)
               @current_elements.delete(task_id)
+            end
           end
         else
-          @parent_process.signal_end_of_task(task_id, branch_id)
           @current_elements.delete(task_id)
+          if @chosen_branches.values.first.process_ended?
+            @process_ended= true
+          end
+          @parent_process.signal_end_of_task(task_id, branch_id)
+        end
       else
+        # TODO: contemplate about how to know when inclusive gateway ends
         unless @chosen_branches.include?(branch_id)
           @chosen_branches << {branch_id:@branches[branch_id]}
-          @branches.each do |branch| 
-            unless branch.branch_id == branch_id
-              @parent_process.signal_end_of_task(task_id, branch_id)
-              @current_elements.delete(task_id)
-          end
+        end
+        if @chosen_branches[@index].process_ended?
+          @index +=1          
+        end
+        @parent_process.signal_end_of_task(task_id, branch_id)
+        @current_elements.delete(task_id)
       end
   end
 end
@@ -408,12 +419,10 @@ class Alternative < Branch
   attr_reader :decision_gateway
 
   def initialize(xml_node, decision_gateway)
-    @parent_process = decision_gateway
     @condition = xml_node.attributes["condition"]
+    # TODO: find out if you need to call super constructor
   end
 
-  def signal_end
-    @decision_gateway
-  end
+  
 end
 
