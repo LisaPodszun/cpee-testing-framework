@@ -225,7 +225,7 @@ class Branch
       @parent_process.signal_end_of_task(task_id, branch_id)
     end
     @current_elements.delete(task_id)
-    if @strucute[@index].process_ended?
+    if @structure[@index].process_ended?
       @index += 1
     end  
     if @index < xml_node.length
@@ -240,13 +240,17 @@ class Branch
   end
 
   def next_elements
-    @structure << translate_from_xml(xml_node[@index], this)
-    if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
-      @current_elements.store(@structure[@index].id, @structure[@index])
-    else 
-      @current_elements << @structure[@index].next_elements
+    if @index < xml_node.length
+      @structure << translate_from_xml(xml_node[@index], this)
+      if @structure[@index].class == (ScriptCall || ServiceScriptCall || ServiceCall)
+        @current_elements.store(@structure[@index].id, @structure[@index])
+      else 
+        @current_elements << @structure[@index].next_elements
+      end
+      @current_elements
+    else
+      @process_ended= true
     end
-    @current_elements
   end
 end
 
@@ -337,12 +341,6 @@ end
 class ParallelBranch < Branch
 end
 
-
-class Loop
-end
-
-
-
 class DecisionGateway
 
   def initialize(xml_node, parent_process)
@@ -415,6 +413,12 @@ class DecisionGateway
   end
 end
 
+class Otherwise < Branch
+end
+
+
+
+
 class Alternative < Branch
   attr_reader :decision_gateway
 
@@ -423,6 +427,9 @@ class Alternative < Branch
     # TODO: find out if you need to call super constructor
   end
 
-  
+  def check_condition(condition)
+    if !(@condition == condition)
+      # TODO : handle error case
+    end
 end
 

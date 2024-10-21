@@ -65,202 +65,24 @@ class ScriptCallMachine
   end
 end
 
-
-
-serviceScriptTask = ServiceScriptCallMachine.new
-scriptTask = ScriptCallMachine.new
-
-
-
-def test_service_call_statemachine()
-  serviceTask = ServiceCall.new
-  puts "First state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.error
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-    
-  serviceTask = ServiceCall.new 
-  serviceTask.call
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-  
-    
-  serviceTask.get_content
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-    
-  serviceTask.receive
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-    
-  serviceTask.end_callback
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-    
-  serviceTask.end_activity
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
+class DecisionGatewayMachine
+  state_machine :state, initial: :ready do
+    event :split do 
+      transition ready: :gateway_split
+    end
+    event :decide do 
+      transition %i[gateway_split chosen_branch] => :chosen_branch
+    end
+  end
 end
 
-def test_servicescriptcall_statemachine()
-  serviceTask = ServiceScriptCall.new
-  puts "First state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-        Error: #{serviceTask.can_error?} \n
-        Call: #{serviceTask.can_call?} \n
-        Get Content: #{serviceTask.can_get_content?} \n
-        Receive: #{serviceTask.can_receive?} \n
-        Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-        End Callback: #{serviceTask.can_end_callback?} \n
-        Manipulate: #{serviceTask.can_manipulate?} \n
-        End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.error
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask = ServiceScriptCall.new
-  serviceTask.call
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.get_content
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.receive
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.end_callback
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.manipulate
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.error
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask = ServiceScriptCall.new
-  serviceTask.state = "manipulated"
-  serviceTask.change_dataelements
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
-  serviceTask.end_activity
-  puts "Current state: #{serviceTask.state}"
-  puts "Possible transitions from #{serviceTask.state}: \n 
-  Error: #{serviceTask.can_error?} \n
-  Call: #{serviceTask.can_call?} \n
-  Manipulate: #{serviceTask.can_manipulate?} \n
-  Get Content: #{serviceTask.can_get_content?} \n
-  Receive: #{serviceTask.can_receive?} \n
-  Change Dataelements: #{serviceTask.can_change_dataelements?} \n
-  End Callback: #{serviceTask.can_end_callback?} \n
-  End Activity: #{serviceTask.can_end_activity?} \n"
- 
+class ParallelGatewayMachine
+  state_machine :state, initial: :ready do
+    event :split do 
+      transition ready: :gateway_split
+    end
+    event :join do 
+      transition gateway_split: :parallel_done
+    end
+  end
 end
-
-#test_service_call_statemachine()
-#test_servicescriptcall_statemachine()
