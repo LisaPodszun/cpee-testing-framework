@@ -49,6 +49,13 @@ class ServiceScriptCallMachine
 end
 
 class ScriptCallMachine
+  @error_case
+  @states = {manipulate => t}
+  @states_error = {}
+
+  def initialize
+
+  end
   state_machine :state, initial: :ready do
     event :manipulate do
       transition ready: :manipulated
@@ -64,6 +71,10 @@ class ScriptCallMachine
     end
   end
 end
+
+
+
+
 
 class DecisionGatewayMachine
   state_machine :state, initial: :ready do

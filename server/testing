@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require 'rubygems'
-require '~/projects/cpee-testing-framework/fulltest'
+require '/home/i17/projects/cpee-testing-framework/lib/fulltest'
 
 options = {
   :host => 'localhost',
@@ -29,4 +29,3 @@ Riddl::Server.new(CPEE::InstanceTesting::SERVER, options) do
   use CPEE::InstanceTesting::implementation(@riddl_opts)
 end.loop!
 
-#at_exit {File.delete("events.db")}
