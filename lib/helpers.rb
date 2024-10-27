@@ -46,7 +46,6 @@ module Helpers #{{{
     if behavior =~ /^wait/
       condition = behavior.match(/_([^_]+)_/)&.[](1) || 'finished'
       cb = @h['CPEE_CALLBACK']
-      puts "in handle waiting method"
       if cb
         cbk = SecureRandom.uuid
         srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
@@ -59,35 +58,33 @@ module Helpers #{{{
         cblist.rpush(cbk, condition)
         cblist.rpush(cbk, instance)
         cblist.rpush(cbk, uuid)
-        cblist.rpush(cbk, File.join(@@cpee,instance))
+        cblist.rpush(cbk, File.join(@@cpee, instance))
       end
     end
   end #}}}
   private :handle_waiting
 
-  def handle_starting(instance,behavior) #{{{
-    if behavior =~ /_running$/
-      sleep 0.5
-      srv = Riddl::Client.new(cpee, File.join(@@cpee,'?riddl-description'))
-      res = srv.resource("/#{instance}/properties/state")
-      status, response = res.put Riddl::Parameter::Simple.new('value','running')
-    end
+  def handle_starting(instance) #{{{
+    sleep 0.5
+    srv = Riddl::Client.new(cpee, File.join(@@cpee,'?riddl-description'))
+    res = srv.resource("/#{instance}/properties/state")
+    status, response = res.put Riddl::Parameter::Simple.new('value','running')
   end #}}}
   private :handle_starting
 
-  def subscribe_all(curr_ins) #{{{
+  def subscribe_all(instance) #{{{
     db = SQLite3::Database.open("events.db")
     db.execute (
       " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
     )
-    conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{curr_ins}")
+    conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{instance}")
     conn.psubscribe('*') do |on|
       on.pmessage do |channel, what, message|
         cut_message = message.slice((message.index("{"))..-1)
         hash_message = JSON.parse cut_message
         db.execute( "
             INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
-            [curr_ins, what, message, hash_message['timestamp']])
+            [instance, what, message, hash_message['timestamp']])
       end
     end
     db.close
