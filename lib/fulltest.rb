@@ -123,8 +123,7 @@ module CPEE
           @status = 500
         else
           EM.defer do
-            handle_waiting cpee, instance, uuid, behavior, selfurl, cblist
-            handle_starting cpee, instance, behavior
+            handle_starting cpee, instance
           end
           EM.defer do
             subscribe_all instance
@@ -135,9 +134,7 @@ module CPEE
             'CPEE-INSTANCE-UUID' => uuid,
             'CPEE-BEHAVIOR' => behavior
           }
-          if @p[0].value =~ /^wait/
-            @headers << Riddl::Header.new('CPEE-CALLBACK','true')
-          end
+          
           Riddl::Parameter::Complex.new('instance', 'application/json', JSON::generate(send))
         end
       end

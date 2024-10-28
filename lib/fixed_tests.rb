@@ -18,9 +18,8 @@ module FixedTests
         end
 
         def hash_test(master_key, hash_1, hash_2)
-            if hash_1.keys == hash_2.keys
-                return {}
-            end
+            
+            # test hash_1 > hash_2 
             hash_1.each do |key, value|
                 if !hash_2.key?(key)
                     return master_key + "_" + key
@@ -43,6 +42,11 @@ module FixedTests
             [dif_rust_to_ruby, dif_ruby_to_rust]
         end
 
+        def content_test(rust_log_entry, ruby_log_entry)
+            const non_testable_entries = ["instance-url","instance", "timestamp", "content_attributes_uuid",
+             "instance-uuid", "content_uuid", "content-activity-uuid", "content_ecid", ""]
+
+        end
         def completeness_test(rust_log, ruby_log)
             events_rust = {}
             events_ruby = {}
@@ -58,7 +62,6 @@ module FixedTests
                     events_rust[value["channel"]] += 1
                 end
             end
-
             # store {event_type: amount}
             ruby_log.each do |key, value|
                 if !events_ruby.key?(value["channel"])
@@ -83,12 +86,9 @@ module FixedTests
                     missing_events_ruby << key
                 end
             end
-        [events_dif, missing_events_ruby, missing_events_rust]
+            [events_dif, missing_events_ruby, missing_events_rust]
         end
     end
-
-
-
 
 
     def test_service_call()
