@@ -42,28 +42,7 @@ module Helpers #{{{
   end #}}}
   private :post_testset
 
-  def handle_waiting(instance,uuid,behavior,selfurl,cblist) #{{{
-    if behavior =~ /^wait/
-      condition = behavior.match(/_([^_]+)_/)&.[](1) || 'finished'
-      cb = @h['CPEE_CALLBACK']
-      if cb
-        cbk = SecureRandom.uuid
-        srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
-        status, response = srv.resource("/#{instance}/notifications/subscriptions/").post [
-          Riddl::Parameter::Simple.new('url',File.join(selfurl,'callback',cbk)),
-          Riddl::Parameter::Simple.new('topic','state'),
-          Riddl::Parameter::Simple.new('events','change')
-        ]
-        cblist.rpush(cbk, cb)
-        cblist.rpush(cbk, condition)
-        cblist.rpush(cbk, instance)
-        cblist.rpush(cbk, uuid)
-        cblist.rpush(cbk, File.join(@@cpee, instance))
-      end
-    end
-  end #}}}
-  private :handle_waiting
-
+  
   def handle_starting(instance) #{{{
     sleep 0.5
     srv = Riddl::Client.new(cpee, File.join(@@cpee,'?riddl-description'))
@@ -73,22 +52,32 @@ module Helpers #{{{
   private :handle_starting
 
   def subscribe_all(instance) #{{{
-    db = SQLite3::Database.open("events.db")
-    db.execute (
-      " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
-    )
+    #db = SQLite3::Database.open("events.db")
+    event_log = {}
+    #db.execute (
+    #  " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
+    #)
     conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{instance}")
-    conn.psubscribe('*') do |on|
+    # subscribe to all events
+    seen_state_running = false
+    conn.psubscribe('event:00:*') do |on|
       on.pmessage do |channel, what, message|
         cut_message = message.slice((message.index("{"))..-1)
         hash_message = JSON.parse cut_message
-        db.execute( "
-            INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
-            [instance, what, message, hash_message['timestamp']])
+        if what == "event:00:state/change"
+          seen_state_running = (hash_message["content"]["state"] == "running")
+        end
+        if seen_state_running
+          event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
+        end
+        #db.execute( "
+        #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
+        #    [instance, what, message, hash_message['timestamp']])
       end
     end
-    db.close
     conn.close
+    event_log.sort_by {|key, value| key}
+    event_log
   end #}}}
 
 end #}}}
