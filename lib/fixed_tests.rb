@@ -5,16 +5,24 @@ require_relative 'helpers'
 module FixedTests
     
     module TestHelpers
-    
+        const @@non_testable_entries = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
+         "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
+        
         def run_test_case(doc, weel)
-            
             instance, uuid = post_testset(doc)
             wait = Queue.new
             [connection, event_log] = subscribe_all(instance, wait)
             handle_starting(instance)
             wait.deq
             connection.close
+            # sort by timestamp from weel
             event_log.sort_by{|key, value| key}
+            index = 0
+            event_log.each do |entry|
+                entry[0] = index
+                index += 1
+            end
+            event_log.to_h
         end
 
         
@@ -24,13 +32,14 @@ module FixedTests
             # holds all keys rust - ruby
             dif_rust_to_ruby = []
             
-            dif_ruby_to_rust << hash_test([], ruby_log_entry, rust_log_entry)
+            dif_ruby_to_rust = hash_structure_test([], ruby_log_entry, rust_log_entry)
             
-            dif_rust_to_ruby << hash_test([], rust_log_entry, ruby_log_entry)
+            dif_rust_to_ruby = hash_structure_test([], rust_log_entry, ruby_log_entry)
             
             [dif_rust_to_ruby, dif_ruby_to_rust]
         end
-        def hash_test(path, hash_1, hash_2)
+
+        def hash_structure_test(path, hash_1, hash_2)
             diff = []
             # test hash_1 > hash_2 
             hash_1.each do |key, value|
@@ -45,11 +54,26 @@ module FixedTests
             diff
         end
         
-        def content_test(rust_log_entry, ruby_log_entry)
-            const non_testable_entries = ["instance-url","instance", "timestamp", "content_attributes_uuid",
-             "instance-uuid", "content_uuid", "content-activity-uuid", "content_ecid", "attributes_uuid"]
-
+        def content_test(rust_log_entry, dif_rust_to_ruby, ruby_log_entry, dif_ruby_to_rust)
+            # save all common keys and if they hold the same or different values
+            dif_content_keys = hash_content_test([], rust_log_entry, ruby_log_entry, dif_rust_to_ruby, dif_ruby_to_rust)
         end
+        
+        def hash_content_test(path, hash_1, hash_2, dif_rust_to_ruby, dif_ruby_to_rust)
+            diff = {}
+            # test hash_1 > hash_2 
+            hash_1.each do |key, value|
+                path << key
+                if !(@@non_testable_entries.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash)
+                    diff << {path.join("_") => (value == hash_2[key])}
+                elsif value.class == Hash
+                    diff << hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust)
+                end
+                path.pop
+            end
+            diff
+        end
+
         def completeness_test(rust_log, ruby_log)
             events_rust = {}
             events_ruby = {}
@@ -76,7 +100,7 @@ module FixedTests
                 if events_rust.key?(key)
                     events_dif << {key: (value - events_rust[key])}
                 else
-                    events_dif << {key: 1}
+                    events_dif << {key: value}
                     missing_events_rust << key
                 end
             end
@@ -89,6 +113,79 @@ module FixedTests
             end
             [events_dif, missing_events_ruby, missing_events_rust]
         end
+
+        def extract_cf_events(log)
+            cf_events = {}
+            index = 0
+            log.values.each do |entry|
+                if ["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"]
+                    cf_events << {index => entry}
+                    index +=1
+                end
+            end
+            cf_events
+        end
+
+        # control flow tests
+        def cf_service_call(cf_events_ruby, cf_events_rust, completeness_result)
+
+        end
+
+        def cf_service_script_call()
+        end
+
+        def cf_script_call()
+        end
+
+        def cf_subprocess_call()
+        end
+
+        def cf_sequence()
+        end
+
+        def cf_exclusive_choice_simple_merge()
+        end
+
+        def cf_parallel_split_synchronization()
+        end
+
+        def cf_multichoice_chained()
+        end
+
+        def cf_multichoice_parallel()
+        end
+
+        def cf_cancelling_discriminator()
+        end
+
+        def cf_thread_split_thread_merge()
+        end
+
+        def cf_multiple_instances_with_design_time_knowledge()
+        end
+
+        def cf_multiple_instances_with_runtime_time_knowledge()
+        end
+
+        def cf_multiple_instances_without_runtime_time_knowledge()
+        end
+
+        def cf_cancelling_partial_join_multiple_instances()
+        end
+
+        def cf_interleaved_routing()
+        end
+
+        def cf_interleaved_parallel_routing()
+        end
+
+        def cf_loop_posttest()
+        end
+
+        def cf_loop_pretest()
+        end
+
+
     end
 
 

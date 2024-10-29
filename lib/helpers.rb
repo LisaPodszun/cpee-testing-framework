@@ -60,16 +60,19 @@ module Helpers #{{{
     conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{instance}")
     # subscribe to all events
     seen_state_running = false
+    instance_done = false
     conn.psubscribe('event:00:*') do |on|
       on.pmessage do |channel, what, message|
         (instance_id, message) = *message.split(" ", 2);
         if instance == instance_id  
           hash_message = JSON.parse cut_message
           if what == "event:00:state/change"
-            if hash_message["content"]["state"] == "running"
+            case hash_message["content"]["state"] 
+            when "running"
               seen_state_running = true
+            when "finished", "stopped"
+              instance_done  = true
             end
-            instance_done  = (hash_message["content"]["state"] == ("finished" || "stopped"))
           end
           if seen_state_running
             event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
