@@ -7,44 +7,47 @@ module FixedTests
     module TestHelpers
     
         def run_test_case(doc, weel)
-            instance, uuid = post_testset(doc)
-            EM.defer do
-               event_log = subscribe_all(instance)
-            end
-            EM.defer do
-               handle_starting(instance)
-            end
-            event_log
-        end
-
-        def hash_test(master_key, hash_1, hash_2)
             
-            # test hash_1 > hash_2 
-            hash_1.each do |key, value|
-                if !hash_2.key?(key)
-                    return master_key + "_" + key
-                elsif value.class == Hash
-                    new_key = master_key + "_" + key
-                    return hash_test(new_key, value, hash_2[key])
-                end
-            end
+            instance, uuid = post_testset(doc)
+            wait = Queue.new
+            [connection, event_log] = subscribe_all(instance, wait)
+            handle_starting(instance)
+            wait.deq
+            connection.close
+            event_log.sort_by{|key, value| key}
         end
+
+        
         def structure_test(rust_log_entry, ruby_log_entry)
-            # holds all keys ruby > rust
+            # holds all keys ruby - rust
             dif_ruby_to_rust = []
-            # holds all keys ruby < rust
+            # holds all keys rust - ruby
             dif_rust_to_ruby = []
-
-            dif_ruby_to_rust << hash_test("", ruby_log_entry, rust_log_entry)
-
-            dif_rust_to_ruby << hash_test("", rust_log_entry, ruby_log_entry)
-
+            
+            dif_ruby_to_rust << hash_test([], ruby_log_entry, rust_log_entry)
+            
+            dif_rust_to_ruby << hash_test([], rust_log_entry, ruby_log_entry)
+            
             [dif_rust_to_ruby, dif_ruby_to_rust]
         end
-
+        def hash_test(path, hash_1, hash_2)
+            diff = []
+            # test hash_1 > hash_2 
+            hash_1.each do |key, value|
+                path << key
+                if !hash_2.key?(key)
+                    diff << path.join("_")
+                elsif value.class == Hash
+                    diff << hash_test(path, value, hash_2[key])
+                end
+                path.pop
+            end
+            diff
+        end
+        
         def content_test(rust_log_entry, ruby_log_entry)
             const non_testable_entries = ["instance-url","instance", "timestamp", "content_attributes_uuid",
-             "instance-uuid", "content_uuid", "content-activity-uuid", "content_ecid", ""]
+             "instance-uuid", "content_uuid", "content-activity-uuid", "content_ecid", "attributes_uuid"]
 
         end
         def completeness_test(rust_log, ruby_log)
@@ -58,17 +61,15 @@ module FixedTests
             rust_log.each do |key, value|
                 if !events_rust.key?(value["channel"])
                     events_rust.store(value["channel"], 0)
-                else
-                    events_rust[value["channel"]] += 1
                 end
+                events_rust[value["channel"]] += 1
             end
             # store {event_type: amount}
             ruby_log.each do |key, value|
                 if !events_ruby.key?(value["channel"])
                     events_ruby.store(value["channel"], 0)
-                else
-                    events_ruby[value["channel"]] += 1
                 end
+                events_ruby[value["channel"]] += 1
             end
             # calculate dif ruby - rust for each event
             events_ruby.each do |key, value|
@@ -82,7 +83,7 @@ module FixedTests
             # check for missing events from other event log
             events_rust.each do |key, value|
                 if !events_ruby.key?(key)
-                    events_dif << {key: -1}
+                    events_dif << {key: -value}
                     missing_events_ruby << key
                 end
             end

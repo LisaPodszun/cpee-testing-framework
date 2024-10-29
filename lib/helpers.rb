@@ -62,22 +62,30 @@ module Helpers #{{{
     seen_state_running = false
     conn.psubscribe('event:00:*') do |on|
       on.pmessage do |channel, what, message|
-        cut_message = message.slice((message.index("{"))..-1)
-        hash_message = JSON.parse cut_message
-        if what == "event:00:state/change"
-          seen_state_running = (hash_message["content"]["state"] == "running")
-        end
-        if seen_state_running
-          event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
+        (instance_id, message) = *message.split(" ", 2);
+        if instance == instance_id  
+          hash_message = JSON.parse cut_message
+          if what == "event:00:state/change"
+            if hash_message["content"]["state"] == "running"
+              seen_state_running = true
+            end
+            instance_done  = (hash_message["content"]["state"] == ("finished" || "stopped"))
+          end
+          if seen_state_running
+            event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
+          end
+          if instance_done
+            # wait short time for remaining events to arrive
+            sleep 1
+            queue.enq "done"
+          end
         end
         #db.execute( "
         #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
         #    [instance, what, message, hash_message['timestamp']])
       end
     end
-    conn.close
-    event_log.sort_by {|key, value| key}
-    event_log
+    [conn, event_log]
   end #}}}
 
 end #}}}
