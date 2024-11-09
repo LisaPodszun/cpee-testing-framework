@@ -150,13 +150,16 @@ module FixedTests
                     else
                         false
                     end
+                end
             when "event:00:gateway/decide"
+                rust_log_entry["message"]["content"]["code"] == ruby_log_entry["message"]["content"]["code"]
 
             when "event:00:gateway/join"
-
+                
             when "event:00:gateway/split"
 
             when "event:00:dataelements/change"
+
 
             when "event:00:activity/calling"
 
