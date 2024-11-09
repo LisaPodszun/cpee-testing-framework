@@ -55,7 +55,7 @@ module Helpers #{{{
     #db = SQLite3::Database.open("events.db")
     event_log = {}
     #db.execute (
-    #  " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
+      #  " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
     #)
     conn = Redis.new(path: '/tmp/redis.sock', db: 0, id: "Instance_#{instance}")
     # subscribe to all events
@@ -64,9 +64,9 @@ module Helpers #{{{
     conn.psubscribe('event:00:*') do |on|
       on.pmessage do |channel, what, message|
         (instance_id, message) = *message.split(" ", 2);
-        if instance == instance_id  
-          hash_message = JSON.parse cut_message
-          if what == "event:00:state/change"
+        if instance == instance_id
+        hash_message = JSON.parse cut_message
+        if what == "event:00:state/change"
             case hash_message["content"]["state"] 
             when "running"
               seen_state_running = true
@@ -84,8 +84,8 @@ module Helpers #{{{
           end
         end
         #db.execute( "
-        #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
-        #    [instance, what, message, hash_message['timestamp']])
+            #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
+            #    [instance, what, message, hash_message['timestamp']])
       end
     end
     [conn, event_log]
