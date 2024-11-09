@@ -118,17 +118,90 @@ module FixedTests
             cf_events = {}
             index = 0
             log.values.each do |entry|
-                if ["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"]
+                if ["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"].include?(entry["channel"])
                     cf_events << {index => entry}
                     index +=1
                 end
             end
-            cf_events
+            cf_events 
+        end
+
+        def events_match?(ruby_log_entry, rust_log_entry)
+
+            event_type = ruby_log_entry["channel"]
+            case event_type
+            when "event:00:position/change"
+                content_keys = ruby_log_entry["message"]["content"].keys
+                if content_keys.include?("at")
+                    if rust_log_entry["message"]["content"].keys.include?("at")
+                        ruby_log_entry["message"]["content"]["at"] == rust_log_entry["message"]["content"]["at"]
+                    else
+                        false
+                    end
+                elsif content_keys.include?("after")
+                    if rust_log_entry["message"]["content"].keys.include?("after")
+                        ruby_log_entry["message"]["content"]["after"] == rust_log_entry["message"]["content"]["after"]
+                    else
+                        false
+                    end
+                elsif content_keys.include?("unmark")
+                    if rust_log_entry["message"]["content"].keys.include?("unmark")
+                        ruby_log_entry["message"]["content"]["unmark"] == rust_log_entry["message"]["content"]["unmark"]
+                    else
+                        false
+                    end
+            when "event:00:gateway/decide"
+
+            when "event:00:gateway/join"
+
+            when "event:00:gateway/split"
+
+            when "event:00:dataelements/change"
+
+            when "event:00:activity/calling"
+
+            when "event:00:activity/manipulating"
+
+            when "event:00:activity/done"
+
+            end
+
+        end
+
+        def match_logs(rust_log, ruby_log, events_dif, missing_events_ruby, missing_events_rust)
+            rust_index = 0
+            ruby_index = 0
+
+            while (ruby_index < ruby_log.length)
+                
+
+
+            end
+
         end
 
         # control flow tests
-        def cf_service_call(cf_events_ruby, cf_events_rust, completeness_result)
-
+        def cf_service_call(cf_events)
+            passed = 0
+            if cf_events.length == 3
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"] == "a1")
+                            passed += 1
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"] == "a1")
+                            passed += 1
+                    when 2
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"] == "a1")
+                            passed += 1
+                    end
+                end
+                (passed == 0)
+            else
+                # TODO: no control flow test possible, missing events
+                false
+            end
         end
 
         def cf_service_script_call()
