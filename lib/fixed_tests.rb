@@ -118,7 +118,7 @@ module FixedTests
             cf_events = {}
             index = 0
             log.values.each do |entry|
-                if ["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"].include?(entry["channel"])
+                if (["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"].include?(entry["channel"]) && entry["message"]["instance-name"] != "subprocess")
                     cf_events << {index => entry}
                     index +=1
                 end
@@ -230,14 +230,17 @@ module FixedTests
                 cf_events.each do |key, value|
                     case key
                     when 0
-                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"] == "a1")
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
                             passed += 1
+                        end
                     when 1
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
                             passed += 1
+                        end
                     when 2
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"] == "a1")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
                             passed += 1
+                        end
                     end
                 end
                 (passed == 0)
@@ -247,64 +250,521 @@ module FixedTests
             end
         end
 
-        def cf_service_script_call()
+        def cf_service_script_call(cf_events)
+            passed = 0
+            if cf_events.length == 3
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_script_call()
+        def cf_script_call(cf_events)
+            passed = 0
+            if cf_events.length == 3
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_subprocess_call()
+        def cf_subprocess_call(cf_events)
+            passed = 0
+            if cf_events.length == 3
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_sequence()
+        def cf_sequence(cf_events)
+            passed = 0
+            if cf_events.length == 7
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    end        
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_exclusive_choice_simple_merge()
+        def cf_exclusive_choice_simple_merge(cf_events)
+            passed = 0
+            ecid = 0
+            if cf_events.length == 6
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1 
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
+                            passed += 1
+                        end
+                    when 2 
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 5 
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_parallel_split_synchronization()
+        def cf_parallel_split_synchronization(cf_events)
+            passed = 0
+            if cf_events.length == 11
+                cf_events.each do |key, value|
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 5 
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a3")
+                            passed += 1
+                        end
+                    when 10
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a3")
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
+
+
         end
 
-        def cf_multichoice_chained()
+        def cf_multichoice_chained(cf_events)
+            passed = 0
+            ecid = 0
+            if cf_events.length == 11
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1 
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 10
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    end        
+                end
+                (passed == 0)
+            else
+                false
+            end
+        end
+        
+        # TODO : fix this test, see if it can execute
+        def cf_multichoice_parallel(cf_events)
+
+            passed = 0
+            ecid = 0
+            if cf_events.length == 11
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1 
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 10
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    end        
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_multichoice_parallel()
+        def cf_cancelling_discriminator(cf_events)
+            passed = 0
+            ecid = 0
+            if cf_events.length == 10
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1 
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 6    
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    end       
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_cancelling_discriminator()
+        # TODO: test against working run with event logs
+        def cf_thread_split_thread_merge(cf_events)
+            passed = 0
+            ecid = 0
+            if cf_events.length == 17
+                cf_events.each do |key, value|
+                case key
+                when 0
+                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a4")
+                        passed += 1
+                    end
+                when 1
+                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a4")
+                        passed += 1
+                    end
+                when 2
+                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
+                        passed += 1
+                    end
+                when 3
+                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                        passed += 1
+                        ecid = value["message"]["content"]["ecid"]
+                    end
+                when 4
+                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                        passed += 1
+                    end
+                when 5
+                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                        passed += 1
+                    end
+                when 6
+                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                        passed += 1
+                    end
+                when 7
+                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                        passed += 1
+                    end
+                when 8
+                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                        passed += 1
+                    end   
+                when 9
+                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                        passed += 1
+                    end
+                when 10
+                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                        passed += 1
+                    end
+                when 11
+                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                        passed += 1
+                    end
+                when 12
+                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                        passed += 1
+                    end
+                when 13
+                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                        passed += 1
+                    end
+                when 14
+                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a5")
+                        passed += 1
+                    end
+                when 15
+                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a5")
+                        passed += 1
+                    end
+                when 16
+                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a5")
+                        passed += 1
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
-        def cf_thread_split_thread_merge()
+        def cf_multiple_instances_with_design_time_knowledge(cf_events)
+            
         end
 
-        def cf_multiple_instances_with_design_time_knowledge()
+        # not possible in comparison test
+        def cf_multiple_instances_with_runtime_time_knowledge(cf_events)
         end
 
-        def cf_multiple_instances_with_runtime_time_knowledge()
+        # not possible in comparison test
+        def cf_multiple_instances_without_runtime_time_knowledge(cf_events)
         end
 
-        def cf_multiple_instances_without_runtime_time_knowledge()
+        def cf_cancelling_partial_join_multiple_instances(cf_events)
         end
 
-        def cf_cancelling_partial_join_multiple_instances()
+        def cf_interleaved_routing(cf_events)
         end
 
-        def cf_interleaved_routing()
+        def cf_interleaved_parallel_routing(cf_events)
         end
 
-        def cf_interleaved_parallel_routing()
+        def cf_critical_section(cf_events)
         end
 
-        def cf_critical_section()
+        def cf_cancel_multiple_instance_activity(cf_events)
         end
 
-        def cf_cancel_multiple_instance_activity()
+        def cf_loop_posttest(cf_events)
         end
 
-        def cf_loop_posttest()
-        end
-
-        def cf_loop_pretest()
+        def cf_loop_pretest(cf_events)
         end
     #}}}
 
@@ -325,7 +785,7 @@ module FixedTests
         content_differences_ruby = {}
         content_differences_rust = {}
 
-        matches[0].each do |entry, value|
+        matches[0].each do |entry, value| 
             if value.instance_of?(Integer)
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
                 structure_differences_ruby << {key => dif_structure[1]}

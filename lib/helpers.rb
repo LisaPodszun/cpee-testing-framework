@@ -67,6 +67,7 @@ module Helpers #{{{
         if instance == instance_id
         hash_message = JSON.parse cut_message
         if what == "event:00:state/change"
+          if hash_message["instance-name"] != "subprocess"
             case hash_message["content"]["state"] 
             when "running"
               seen_state_running = true
@@ -74,6 +75,7 @@ module Helpers #{{{
               instance_done  = true
             end
           end
+        end
           if seen_state_running
             event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
           end
