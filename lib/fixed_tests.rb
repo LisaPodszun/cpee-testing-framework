@@ -466,8 +466,6 @@ module FixedTests
             else
                 false
             end
-
-
         end
 
         def cf_multichoice_chained(cf_events)
@@ -651,11 +649,10 @@ module FixedTests
             end
         end
 
-        # TODO: test against working run with event logs
         def cf_thread_split_thread_merge(cf_events)
             passed = 0
             ecid = 0
-            if cf_events.length == 17
+            if cf_events.length == 18
                 cf_events.each do |key, value|
                 case key
                 when 0
@@ -667,63 +664,70 @@ module FixedTests
                         passed += 1
                     end
                 when 2
-                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
-                        passed += 1
-                    end
-                when 3
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
+                when 3
+                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
+                        passed += 1
+                    end
+                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        passed += 1
+                    end
                 when 4
-                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                    if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
                         passed += 1
                     end
                 when 5
-                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                    if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
                         passed += 1
                     end
                 when 6
-                    if !(value["message"]["content"].key?("at") && ["a1","a2","a3"].include?(value["message"]["content"]["at"][0]["position"]))
+                    if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
                         passed += 1
                     end
                 when 7
+                    if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
+                        passed += 1
+                    end                               
+                when 8
                     if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
                         passed += 1
                     end
-                when 8
+                when 9
                     if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
                         passed += 1
                     end   
-                when 9
-                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
-                        passed += 1
-                    end
                 when 10
-                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
                         passed += 1
                     end
                 when 11
-                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
-                        passed += 1
-                    end
-                when 12
                     if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
                         passed += 1
                     end
+                when 12
+                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                        passed += 1
+                    end
                 when 13
-                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
                         passed += 1
                     end
                 when 14
-                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a5")
+                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
                 when 15
-                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a5")
+                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a5")
                         passed += 1
                     end
                 when 16
+                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a5")
+                        passed += 1
+                    end
+                when 17
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a5")
                         passed += 1
                     end
@@ -734,8 +738,8 @@ module FixedTests
             end
         end
 
-        def cf_multiple_instances_with_design_time_knowledge(cf_events)
-            
+        # runs with error, check with Juergen
+        def cf_multiple_instances_with_design_time_knowledge(cf_events)        
         end
 
         # not possible in comparison test
@@ -746,25 +750,312 @@ module FixedTests
         def cf_multiple_instances_without_runtime_time_knowledge(cf_events)
         end
 
+        # ask because extra event sent
         def cf_cancelling_partial_join_multiple_instances(cf_events)
+            passed = 0
+            ecid = 0
+            if cf_events.length == 22
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1 
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a5")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a5")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a8")
+                            passed += 1
+                        end
+                    when 8   
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 10
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 11
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a6")
+                            passed += 1
+                        end
+                    when 12   
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a4")
+                            passed += 1
+                        end
+                    when 13
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
+                            passed += 1
+                        end
+                    when 14
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 15
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a7")
+                            passed += 1
+                        end
+                    when 16
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a6")
+                            passed += 1
+                        end
+                    when 17
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a6")
+                            passed += 1
+                        end
+                    when 18
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a7")
+                            passed += 1
+                        end
+                    when 19
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a8")
+                            passed += 1
+                        end
+                    when 20    
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 21
+                        # strange extra position/change event sent
+                        if !(value["message"]["content"].key?("unmark"))
+                            passed += 1
+                        end
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
+
         end
 
         def cf_interleaved_routing(cf_events)
+            passed = 0
+            if cf_events.length == 11
+                cf_events.each do |key, value|
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"]== "a5")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a5")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a5")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"]== "a6")
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a6")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a6")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 10
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end    
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
         def cf_interleaved_parallel_routing(cf_events)
+            passed = 0
+            if cf_events.length == 11
+                cf_events.each do |key, value|
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 4 
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a3")
+                            passed += 1
+                        end
+                    when 8
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a3")
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 10
+                        # strange extra event
+                        if !(value["message"]["content"].key?("unmark"))
+                            passed += 1
+                        end        
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
         def cf_critical_section(cf_events)
+            passed = 0
+            ecid = 0 
+            if cf_events.length == 9
+                cf_events.each do |key, value|
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
+                            passed += 1
+                        end
+                    when 4 
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a2")
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 8
+                        # strange extra event
+                        if !(value["message"]["content"].key?("unmark"))
+                            passed += 1
+                        end        
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
         def cf_cancel_multiple_instance_activity(cf_events)
+
         end
 
         def cf_loop_posttest(cf_events)
+
         end
 
         def cf_loop_pretest(cf_events)
+            
         end
     #}}}
 
