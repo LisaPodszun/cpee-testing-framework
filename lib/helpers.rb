@@ -38,7 +38,7 @@ module Helpers #{{{
       res = srv.resource("/#{ins}/properties").put Riddl::Parameter::Complex.new('properties','application/xml',inp.to_s)
     end
      # return instance number and instance uuid 
-    [ins, uuid]
+    return ins, uuid
   end #}}}
   private :post_testset
 
@@ -90,7 +90,7 @@ module Helpers #{{{
             #    [instance, what, message, hash_message['timestamp']])
       end
     end
-    [conn, event_log]
+    return conn, event_log
   end #}}}
 
 end #}}}

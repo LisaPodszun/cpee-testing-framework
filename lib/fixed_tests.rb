@@ -5,13 +5,13 @@ require_relative 'helpers'
 module FixedTests
     
     module TestHelpers
-        const @@non_testable_entries = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
+        NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
          "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
         
         def run_test_case(doc, weel)
             instance, uuid = post_testset(doc)
             wait = Queue.new
-            [connection, event_log] = subscribe_all(instance, wait)
+            connection, event_log  = subscribe_all(instance, wait)
             handle_starting(instance)
             wait.deq
             connection.close
@@ -47,11 +47,11 @@ module FixedTests
                 if !hash_2.key?(key)
                     diff << path.join("_")
                 elsif value.class == Hash
-                    diff << hash_test(path, value, hash_2[key])
+                    diff << hash_structure_test(path, value, hash_2[key])
                 end
                 path.pop
             end
-            diff
+            diff.flatten
         end
         
         def content_test(rust_log_entry, dif_rust_to_ruby, ruby_log_entry, dif_ruby_to_rust)
@@ -60,18 +60,20 @@ module FixedTests
         end
         
         def hash_content_test(path, hash_1, hash_2, dif_rust_to_ruby, dif_ruby_to_rust)
-            diff = {}
+            diff = []
             # test hash_1 > hash_2 
             hash_1.each do |key, value|
                 path << key
-                if !(@@non_testable_entries.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash)
-                    diff << {path.join("_") => (value == hash_2[key])}
+                if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash)
+                    if (value != hash_2[key])
+                        diff << path.join("_")
+                    end
                 elsif value.class == Hash
-                    diff << hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust)
+                    diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
                 end
                 path.pop
             end
-            diff
+            diff.flatten
         end
 
         def completeness_test(rust_log, ruby_log)
@@ -98,20 +100,20 @@ module FixedTests
             # calculate dif ruby - rust for each event
             events_ruby.each do |key, value|
                 if events_rust.key?(key)
-                    events_dif << {key: (value - events_rust[key])}
+                    events_dif = events_dif.merge({key => (value - events_rust[key])})
                 else
-                    events_dif << {key: value}
+                    events_dif = events_dif.merge({key =>  value})
                     missing_events_rust << key
                 end
             end
             # check for missing events from other event log
             events_rust.each do |key, value|
                 if !events_ruby.key?(key)
-                    events_dif << {key: -value}
+                    events_dif = events_dif.merge({key => -value})
                     missing_events_ruby << key
                 end
             end
-            [events_dif, missing_events_ruby, missing_events_rust]
+            return events_dif, missing_events_ruby, missing_events_rust
         end
 
         def extract_cf_events(log)
@@ -119,7 +121,7 @@ module FixedTests
             index = 0
             log.values.each do |entry|
                 if (["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"].include?(entry["channel"]) && entry["message"]["instance-name"] != "subprocess")
-                    cf_events << {index => entry}
+                    cf_events =  cf_events.merge({index => entry})
                     index +=1
                 end
             end
@@ -127,7 +129,6 @@ module FixedTests
         end
 
         def events_match?(ruby_log_entry, rust_log_entry)
-
             event_type = ruby_log_entry["channel"]
             case event_type
             when "event:00:position/change"
@@ -413,8 +414,10 @@ module FixedTests
 
         def cf_parallel_split_synchronization(cf_events)
             passed = 0
+            ecid = 0
             if cf_events.length == 11
                 cf_events.each do |key, value|
+                    case key
                     when 0
                         if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
                             passed += 1
@@ -654,82 +657,83 @@ module FixedTests
             ecid = 0
             if cf_events.length == 18
                 cf_events.each do |key, value|
-                case key
-                when 0
-                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a4")
-                        passed += 1
-                    end
-                when 1
-                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a4")
-                        passed += 1
-                    end
-                when 2
-                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
-                        passed += 1
-                        ecid = value["message"]["content"]["ecid"]
-                    end
-                when 3
-                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
-                        passed += 1
-                    end
-                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
-                        passed += 1
-                    end
-                when 4
-                    if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
-                        passed += 1
-                    end
-                when 5
-                    if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
-                        passed += 1
-                    end
-                when 6
-                    if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
-                        passed += 1
-                    end
-                when 7
-                    if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
-                        passed += 1
-                    end                               
-                when 8
-                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
-                        passed += 1
-                    end
-                when 9
-                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
-                        passed += 1
-                    end   
-                when 10
-                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
-                        passed += 1
-                    end
-                when 11
-                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
-                        passed += 1
-                    end
-                when 12
-                    if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
-                        passed += 1
-                    end
-                when 13
-                    if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
-                        passed += 1
-                    end
-                when 14
-                    if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
-                        passed += 1
-                    end
-                when 15
-                    if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a5")
-                        passed += 1
-                    end
-                when 16
-                    if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a5")
-                        passed += 1
-                    end
-                when 17
-                    if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a5")
-                        passed += 1
+                    case key
+                    when 0
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a4")
+                            passed += 1
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a4")
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a4")
+                            passed += 1
+                        end
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("at") && ["a1","a2"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
+                            passed += 1
+                        end                               
+                    when 8
+                        if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                            passed += 1
+                        end
+                    when 9
+                        if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                            passed += 1
+                        end   
+                    when 10
+                        if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                            passed += 1
+                        end
+                    when 11
+                        if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                            passed += 1
+                        end
+                    when 12
+                        if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
+                            passed += 1
+                        end
+                    when 13
+                        if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
+                            passed += 1
+                        end
+                    when 14
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 15
+                        if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a5")
+                            passed += 1
+                        end
+                    when 16
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a5")
+                            passed += 1
+                        end
+                    when 17
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a5")
+                            passed += 1
+                        end
                     end
                 end
                 (passed == 0)
@@ -869,6 +873,7 @@ module FixedTests
             passed = 0
             if cf_events.length == 11
                 cf_events.each do |key, value|
+                    case key
                     when 0
                         if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
                             passed += 1
@@ -938,6 +943,7 @@ module FixedTests
             passed = 0
             if cf_events.length == 11
                 cf_events.each do |key, value|
+                    case key
                     when 0
                         if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
                             passed += 1
@@ -1000,6 +1006,7 @@ module FixedTests
             ecid = 0 
             if cf_events.length == 9
                 cf_events.each do |key, value|
+                    case key
                     when 0
                         if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
                             passed += 1
@@ -1046,19 +1053,68 @@ module FixedTests
             end
         end
 
+        # error message! Check once it can run
         def cf_cancel_multiple_instance_activity(cf_events)
-
+            passed = 0
+            ecid = 0 
+            if cf_events.length == 9
+                cf_events.each do |key, value|
+                    case key
+                    when 0
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/split/)
+                            passed += 1
+                            ecid = value["message"]["content"]["ecid"]
+                        end
+                    when 1
+                        if !(value["message"]["content"].key?("at") && ["a4","a5","a6"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 2
+                        if !(value["message"]["content"].key?("at") && ["a4","a5","a6"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 3
+                        if !(value["message"]["content"].key?("at") && ["a4","a5","a6"].include?(value["message"]["content"]["at"][0]["position"]))
+                            passed += 1
+                        end
+                    when 4
+                        if !(value["message"]["content"].key?("wait") && ["a4","a5","a6"].include?(value["message"]["content"]["wait"][0]["position"]))
+                            passed += 1
+                        end
+                    when 5
+                        if !(value["message"]["content"].key?("wait") && ["a4","a5","a6"].include?(value["message"]["content"]["wait"][0]["position"]))
+                            passed += 1
+                        end
+                    when 6
+                        if !(value["message"]["content"].key?("wait") && ["a4","a5","a6"].include?(value["message"]["content"]["wait"][0]["position"]))
+                            passed += 1
+                        end
+                    when 7
+                        if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
+                            passed += 1
+                        end
+                    when 8
+                        # strange extra event
+                        if !(value["message"]["content"].key?("unmark"))
+                            passed += 1
+                        end        
+                    end
+                end
+                (passed == 0)
+            else
+                false
+            end
         end
 
+        # runs with error, because of dataelements change
         def cf_loop_posttest(cf_events)
 
         end
-
+        # runs with error, because of dataelements change
         def cf_loop_pretest(cf_events)
-            
+
         end
     #}}}
-
     end
 
 
