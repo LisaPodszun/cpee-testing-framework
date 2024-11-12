@@ -85,17 +85,19 @@ module FixedTests
             missing_events_rust = []
             # store {event_type: amount}
             rust_log.each do |key, value|
-                if !events_rust.key?(value["channel"])
-                    events_rust.store(value["channel"], 0)
+                channel = value["channel"].split(':')[2]
+                if !events_rust.key?(channel)
+                    events_rust.store(channel, 0)
                 end
-                events_rust[value["channel"]] += 1
+                events_rust[channel] += 1
             end
             # store {event_type: amount}
             ruby_log.each do |key, value|
-                if !events_ruby.key?(value["channel"])
-                    events_ruby.store(value["channel"], 0)
+                channel = value["channel"].split(':')[2]
+                if !events_ruby.key?(channel)
+                    events_ruby.store(channel, 0)
                 end
-                events_ruby[value["channel"]] += 1
+                events_ruby[channel] += 1
             end
             # calculate dif ruby - rust for each event
             events_ruby.each do |key, value|
@@ -120,7 +122,9 @@ module FixedTests
             cf_events = {}
             index = 0
             log.values.each do |entry|
-                if (["event:00:position/change", "event:00:gateway/decide", "event:00:gateway/join", "event:00:gateway/split"].include?(entry["channel"]) && entry["message"]["instance-name"] != "subprocess")
+                tmp = entry["channel"].split(":")
+                channel = tmp[2]
+                if (["position/change", "gateway/decide", "gateway/join", "gateway/split"].include?(channel) && entry["message"]["instance-name"] != "subprocess")
                     cf_events =  cf_events.merge({index => entry})
                     index +=1
                 end
@@ -130,8 +134,11 @@ module FixedTests
 
         def events_match?(ruby_log_entry, rust_log_entry)
             event_type = ruby_log_entry["channel"]
-            case event_type
-            when "event:00:position/change"
+            channel = event_type.split(":")[2]
+            case channel
+            when "state/change"
+                rust_log_entry["message"]["content"]["state"] == ruby_log_entry["message"]["content"]["state"]
+            when "position/change"
                 content_keys = ruby_log_entry["message"]["content"].keys
                 if content_keys.include?("at")
                     if rust_log_entry["message"]["content"].keys.include?("at")
@@ -152,30 +159,33 @@ module FixedTests
                         false
                     end
                 end
-            when "event:00:gateway/decide"
+            when "gateway/decide"
                 rust_log_entry["message"]["content"]["code"] == ruby_log_entry["message"]["content"]["code"]
 
-            when "event:00:gateway/join"
+            when "gateway/join"
                 rust_log_entry["message"]["content"]["branches"] == ruby_log_entry["message"]["content"]["branches"]
                 
-            when "event:00:gateway/split"
+            when "gateway/split"
                 rust_log_entry["message"]["name"] == ruby_log_entry["message"]["name"]
 
-            when "event:00:dataelements/change"
+            when "dataelements/change"
                 dataelements = (rust_log_entry["message"]["content"]["changed"] == ruby_log_entry["message"]["content"]["changed"])
                 values = (rust_log_entry["message"]["content"]["values"] == ruby_log_entry["message"]["content"]["values"])
                 dataelements && values
 
-            when "event:00:activity/calling"
+            when "activity/calling"
                 rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
 
-            when "event:00:activity/manipulating"
+            when "activity/manipulating"
                 rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
 
-            when "event:00:activity/done"
+            when "activity/receiving"
                 rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            when "activity/done"
+                rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            when "status/resource_utilization"
+                true
             end
-
         end
 
         def match_logs(rust_log, ruby_log, missing_events_ruby, missing_events_rust)
@@ -188,37 +198,49 @@ module FixedTests
             # rust_log_entry => ruby_log_entry 
             rust_log_tags = {}
             while (ruby_index < ruby_log.length)
-                event_type = ruby_log[ruby_index]["channel"]
-                if missing_events_rust.include?(event_type)
-                    ruby_log_tags << {ruby_index => "only_ruby"}
+                str_ruby_index = ruby_index.to_s
+                str_rust_index = rust_index.to_s
+                ruby_event_type = ruby_log[str_ruby_index]["channel"].split(":")[2]
+                rust_event_type = rust_log[str_rust_index]["channel"].split(":")[2]
+                if missing_events_rust.include?(ruby_event_type)
+                    ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
                     ruby_index += 1
-                elsif rust_log[rust_index]["channel"] == event_type
-                    if events_match?(rust_log[rust_index],ruby_log[ruby_index])
-                        ruby_log_tags << {ruby_index => rust_index}
-                        rust_log_tags << {rust_index => ruby_index}
+                elsif rust_event_type == ruby_event_type
+                    if events_match?(rust_log[str_rust_index],ruby_log[str_ruby_index])
+                        ruby_log_tags = ruby_log_tags.merge({ruby_index => rust_index})
+                        rust_log_tags = rust_log_tags.merge({rust_index => ruby_index})
                         ruby_index += 1
                         rust_index += 1
                         after_last_rust_match = rust_index
                     else
                         rust_index += 1
                         if (rust_index == rust_log.length)
-                            ruby_log_tags << {ruby_index => "no_match"}
+                            ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
                             rust_index = after_last_rust_match
                             ruby_index += 1
                         end
+                    end
+                else
+                    if missing_events_ruby.include?(rust_event_type)
+                        rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
+                        rust_index += 1
+                    else
+                        ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
+                        ruby_index += 1
                     end
                 end
             end
             rust_index = 0
             while (rust_index < rust_log.length)
-                event_type = rust_log[rust_index]["channel"]
+                str_rust_index = rust_index.to_s
+                event_type = rust_log[str_rust_index]["channel"].split(":")[2]
                 if missing_events_ruby.include?(event_type)
-                    rust_log_tags << {rust_index => "only_rust"}
+                    rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
                     rust_index += 1
                 elsif rust_log_tags.keys.include?(rust_index)
                     rust_index += 1
                 else
-                    rust_log_tags << {rust_index => "no_match"}
+                    rust_log_tags = rust_log_tags.merge({rust_index => "no_match"})
                     rust_index += 1
                 end
             end

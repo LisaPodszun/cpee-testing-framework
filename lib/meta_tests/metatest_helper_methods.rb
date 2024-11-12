@@ -1,5 +1,6 @@
 require_relative "../fixed_tests"
 require "test/unit"
+require "json"
 
 class TestHelperMethods < Test::Unit::TestCase
   include FixedTests::TestHelpers
@@ -10,9 +11,12 @@ class TestHelperMethods < Test::Unit::TestCase
                 "lipstick" => "red", "giftcard" => 40}
     @rusty_bag = {"tissues" => 2,"uuid" => 21, "wallet" => {"credit_card" => "expired", "id" => 12356, "photo" => "dog", "coins" => {"cents" => 13, "euros" => 3}}, 
                 "lipstick" => "orange", "crab" => "ferris"}
-    # mock event logs for completeness test
-    @ruby_log = {0 => {"channel" => "A"}, 1 => {"channel" => "B"}, 2 => {"channel" => "C"}}
-    @rust_log = {0 => {"channel" => "B"}, 1 => {"channel" => "B"}, 2 => {"channel" => "C"}, 3 => {"channel" => "D"}}
+    # mock event logs
+    ruby_log_file = File.read('./ruby_log.json')
+    @ruby_log = JSON.parse(ruby_log_file)
+
+    rust_log_file = File.read("./rust_log.json")
+    @rust_log = JSON.parse(rust_log_file)      
   end
 
 
@@ -36,9 +40,9 @@ class TestHelperMethods < Test::Unit::TestCase
   end
 
   def test_completeness_test
-    expected_dif = {"A" => 1, "B" => -1, "C" => 0, "D" => -1}
-    expected_missing_events_ruby = ["D"]
-    expected_missing_events_rust = ["A"]
+    expected_dif = {"state/change" => -1, "position/change" => 0, "activity/calling" => 1, "activity/receiving" => 0, "activity/done" => 0, "status/resource_utilization" => 6}
+    expected_missing_events_ruby = []
+    expected_missing_events_rust = ["status/resource_utilization"]
 
     actual_dif, actual_missing_events_ruby, actual_missing_events_rust = completeness_test(@rust_log, @ruby_log)
 
@@ -49,4 +53,24 @@ class TestHelperMethods < Test::Unit::TestCase
     assert_equal(expected_missing_events_rust, actual_missing_events_rust, "Missing events in rust")
   end
   
+  def test_events_match
+      assert(@ruby_log)
+      assert_true(events_match?(@ruby_log["0"], @rust_log["0"]), "The events should match")
+      assert_false(events_match?(@ruby_log["0"], @rust_log["15"]), "The events should not match")
+  end
+
+  def test_matching
+      assert(@ruby_log)
+      assert(@rust_log)
+      matches = match_logs(@rust_log, @ruby_log, [], ["status/resource_utilization"])
+
+      # ruby to rust matches
+      ruby_rust = {0 => 0, 1 => 1, 2 => "only_ruby", 3 => "no_match", 4 => 2, 5 => 3, 6 => "only_ruby", 7 => 4, 8 => 5, 9 => "only_ruby", 10 => 6, 11 => 7, 12 => 8, 13 => "only_ruby", 14 => 9, 15 => 10, 16 => "only_ruby", 17 => 11, 18 => 12, 19 => "only_ruby", 20 => 13, 21 => 14}
+
+      rust_ruby = {0 => 0, 1 => 1, 2 => 4, 3 => 5, 4 => 7, 5 => 8, 6 => 10, 7 => 11, 8 => 12, 9 => 14, 10 => 15, 11 => 17, 12 => 18, 13 => 20, 14 => 21, 15 => "no_match"}
+  
+      assert_equal(ruby_rust, matches[0])
+      assert_equal(rust_ruby, matches[1])
+    end
+
 end
