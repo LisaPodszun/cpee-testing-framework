@@ -20,12 +20,14 @@ module CPEE
 
     class FullTest < Riddl::Implementation #{{{
       include Helpers
+      include FixedTests
+      include FixedTests::TestHelpers
 
       def response
         puts "fulltest call"
         # Own Basic Tests
         test_service_call()
-
+        """
         test_service_script_call()
 
         test_script_call()
@@ -91,7 +93,7 @@ module CPEE
         test_loop_posttest()
         
         test_loop_pretest()
-
+        """
         set = {}
         Riddl::Parameter::Complex.new('testcase_summary', 'application/json', JSON::generate(set))
       end

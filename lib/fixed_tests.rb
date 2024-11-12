@@ -1,5 +1,5 @@
 require_relative 'helpers'
-
+require "xml/smart"
 
 
 module FixedTests
@@ -8,13 +8,22 @@ module FixedTests
         NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
          "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
         
+        # TODO: find out how to start rust instance
         def run_test_case(doc, weel)
+            puts "in run test case"
             instance, uuid = post_testset(doc)
             wait = Queue.new
-            connection, event_log  = subscribe_all(instance, wait)
+            event_log = {}
+            conn = nil
+            m = Thread.new do 
+            conn, event_log = subscribe_all(instance, wait)
+            end
             handle_starting(instance)
+            puts "waiting for dequeue"
+            p event_log
+            m.join
             wait.deq
-            connection.close
+            conn.close
             # sort by timestamp from weel
             event_log.sort_by{|key, value| key}
             index = 0
@@ -23,6 +32,7 @@ module FixedTests
                 index += 1
             end
             event_log.to_h
+            p event_log
         end
 
         
@@ -1141,12 +1151,20 @@ module FixedTests
 
 
     def run_tests_on(testcase_doc)
+        puts "in run tests on"
+        testcase_doc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
+        testcase_doc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
+        testcase_doc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
+
         ruby_log = run_test_case(testcase_doc, "ruby")
         rust_log = run_test_case(testcase_doc, "rust")
 
+        puts "finished running tests"
 
         differences_log_entries = completeness_test(rust_log, ruby_log)
         matches = match_logs(rust_log, ruby_log, differences_log_entries[1], differences_log_entries[2])
+
+        puts "matched logs"
 
         structure_differences_ruby = {}
         structure_differences_rust = {}
@@ -1175,7 +1193,8 @@ module FixedTests
 
     def test_service_call()
         # TODO: setup doc links
-        testdoc = ""
+        testdoc = "/home/i17/Documents/Masterarbeit/Testsets/OwnBasic/service_call.xml"
+        testdoc = XML::Smart.open(testdoc)
         results = run_tests_on(testdoc)
 
         cf_ruby_result = cf_service_call(results[6])

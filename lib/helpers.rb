@@ -16,7 +16,7 @@ module Helpers #{{{
   def post_testset(doc) #{{{
     ins = -1
     uuid = nil
-
+    puts "in post testset"
     srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
 
     res = srv.resource('/')
@@ -24,6 +24,7 @@ module Helpers #{{{
     # create instance
     status, response, headers = res.post Riddl::Parameter::Simple.new('info', doc.find('string(/*/prop:attributes/prop:info)'))
 
+    puts "postet testset"
     if status == 200
       ins = response.first.value
       uuid = headers['CPEE_INSTANCE_UUID']
@@ -45,14 +46,17 @@ module Helpers #{{{
   
   def handle_starting(instance) #{{{
     sleep 0.5
-    srv = Riddl::Client.new(cpee, File.join(@@cpee,'?riddl-description'))
+    puts "in handle starting"
+    srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
+    puts "created new client"
     res = srv.resource("/#{instance}/properties/state")
     status, response = res.put Riddl::Parameter::Simple.new('value','running')
   end #}}}
   private :handle_starting
 
-  def subscribe_all(instance) #{{{
+  def subscribe_all(instance, queue) #{{{
     #db = SQLite3::Database.open("events.db")
+    puts "in subscribe all"
     event_log = {}
     #db.execute (
       #  " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
@@ -63,26 +67,29 @@ module Helpers #{{{
     instance_done = false
     conn.psubscribe('event:00:*') do |on|
       on.pmessage do |channel, what, message|
-        (instance_id, message) = *message.split(" ", 2);
+        (instance_id, cut_message) = *message.split(" ", 2);
         if instance == instance_id
-        hash_message = JSON.parse cut_message
-        if what == "event:00:state/change"
-          if hash_message["instance-name"] != "subprocess"
-            case hash_message["content"]["state"] 
-            when "running"
-              seen_state_running = true
-            when "finished", "stopped"
-              instance_done  = true
+          hash_message = JSON.parse cut_message
+          if /event:[0-9][0-9]:state\/change/ =~ what
+            if hash_message["instance-name"] != "subprocess"
+              case hash_message["content"]["state"] 
+              when "running"
+                seen_state_running = true
+              when "finished", "stopped"
+                instance_done  = true
+              end
             end
           end
-        end
           if seen_state_running
-            event_log.store(hash_message["timestamp"], {channel: what, message: hash_message})
+            event_log.store(hash_message["timestamp"], {"channel" => what, "message" => hash_message})
           end
           if instance_done
-            # wait short time for remaining events to arrive
+          # wait short time for remaining events to arrive
+            puts "Queue problem"
             sleep 1
             queue.enq "done"
+            puts "after queue"
+            return conn, event_log
           end
         end
         #db.execute( "
@@ -90,7 +97,6 @@ module Helpers #{{{
             #    [instance, what, message, hash_message['timestamp']])
       end
     end
-    return conn, event_log
   end #}}}
 
 end #}}}
