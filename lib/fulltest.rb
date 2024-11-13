@@ -147,7 +147,8 @@ module CPEE
       p "Calling implementation with opts: #{opts}"
       opts[:cpee]       ||= 'http://localhost:8298/'
       opts[:redis_path] ||= '/tmp/redis.sock'
-      opts[:redis_db]   ||= 14
+      opts[:redis_db]   ||= 0
+      opts[:redis_pid]  ||= 'redis.pid'
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
       
