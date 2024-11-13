@@ -13,10 +13,10 @@ class TestHelperMethods < Test::Unit::TestCase
                 "lipstick" => "orange", "crab" => "ferris"}
     # mock event logs
     ruby_log_file = File.read('./ruby_log.json')
-    @ruby_log = JSON.parse(ruby_log_file)
+    @ruby_log = JSON.parse(ruby_log_file).map!{|k,v| [k.to_i, v]}.to_h  
 
     rust_log_file = File.read("./rust_log.json")
-    @rust_log = JSON.parse(rust_log_file)      
+    @rust_log = JSON.parse(rust_log_file).map!{|k,v| [k.to_i, v]}.to_h      
   end
 
 

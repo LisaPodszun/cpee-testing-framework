@@ -13,26 +13,22 @@ module FixedTests
             puts "in run test case"
             instance, uuid = post_testset(doc)
             wait = Queue.new
-            event_log = {}
-            conn = nil
-            m = Thread.new do 
-            conn, event_log = subscribe_all(instance, wait)
+            setup_done = Queue.new
+            Thread.new do
+                setup_done.deq()
+                handle_starting(instance)
             end
-            handle_starting(instance)
+            conn, event_log = subscribe_all(instance, wait, setup_done)
             puts "waiting for dequeue"
-            p event_log
-            m.join
             wait.deq
-            conn.close
             # sort by timestamp from weel
-            event_log.sort_by{|key, value| key}
+            event_log = event_log.sort_by{|key, value| key}
             index = 0
             event_log.each do |entry|
                 entry[0] = index
                 index += 1
             end
             event_log.to_h
-            p event_log
         end
 
         
@@ -139,6 +135,8 @@ module FixedTests
                     index +=1
                 end
             end
+            puts "Control flow events"
+            p cf_events
             cf_events 
         end
 
@@ -208,15 +206,13 @@ module FixedTests
             # rust_log_entry => ruby_log_entry 
             rust_log_tags = {}
             while (ruby_index < ruby_log.length)
-                str_ruby_index = ruby_index.to_s
-                str_rust_index = rust_index.to_s
-                ruby_event_type = ruby_log[str_ruby_index]["channel"].split(":")[2]
-                rust_event_type = rust_log[str_rust_index]["channel"].split(":")[2]
+                ruby_event_type = ruby_log[ruby_index]["channel"].split(":")[2]
+                rust_event_type = rust_log[rust_index]["channel"].split(":")[2]
                 if missing_events_rust.include?(ruby_event_type)
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
                     ruby_index += 1
                 elsif rust_event_type == ruby_event_type
-                    if events_match?(rust_log[str_rust_index],ruby_log[str_ruby_index])
+                    if events_match?(rust_log[rust_index],ruby_log[ruby_index])
                         ruby_log_tags = ruby_log_tags.merge({ruby_index => rust_index})
                         rust_log_tags = rust_log_tags.merge({rust_index => ruby_index})
                         ruby_index += 1
@@ -242,8 +238,7 @@ module FixedTests
             end
             rust_index = 0
             while (rust_index < rust_log.length)
-                str_rust_index = rust_index.to_s
-                event_type = rust_log[str_rust_index]["channel"].split(":")[2]
+                event_type = rust_log[rust_index]["channel"].split(":")[2]
                 if missing_events_ruby.include?(event_type)
                     rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
                     rust_index += 1
@@ -267,17 +262,18 @@ module FixedTests
                             passed += 1
                         end
                     when 1
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                             passed += 1
                         end
                     when 2
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                             passed += 1
                         end
                     end
                 end
                 (passed == 0)
             else
+                puts "not enough cf events! Expected 3 but got #{cf_events.length}"
                 # TODO: no control flow test possible, missing events
                 false
             end
@@ -293,11 +289,11 @@ module FixedTests
                             passed += 1
                         end
                     when 1
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                             passed += 1
                         end
                     when 2
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                             passed += 1
                         end
                     end
@@ -318,11 +314,11 @@ module FixedTests
                             passed += 1
                         end
                     when 1
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                             passed += 1
                         end
                     when 2
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                             passed += 1
                         end
                     end
@@ -343,11 +339,11 @@ module FixedTests
                             passed += 1
                         end
                     when 1
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                             passed += 1
                         end
                     when 2
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                             passed += 1
                         end
                     end
@@ -379,7 +375,7 @@ module FixedTests
                             passed += 1
                         end
                     when 3
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a2")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
                             passed += 1
                         end
                     when 4
@@ -390,11 +386,11 @@ module FixedTests
                             passed += 1
                         end
                     when 5
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
                             passed += 1
                         end
                     when 6
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                             passed += 1
                         end
                     end        
@@ -550,11 +546,11 @@ module FixedTests
                             passed += 1
                         end
                     when 9
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
                             passed += 1
                         end
                     when 10
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                             passed += 1
                         end
                     end        
@@ -614,11 +610,11 @@ module FixedTests
                             passed += 1
                         end
                     when 9
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
                             passed += 1
                         end
                     when 10
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a3")
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                             passed += 1
                         end
                     end        
@@ -649,7 +645,7 @@ module FixedTests
                             passed += 1
                         end
                     when 3
-                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["at"][0]["position"] == "a1")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                             passed += 1
                         end
                     when 4
@@ -657,22 +653,26 @@ module FixedTests
                             passed += 1
                         end
                     when 5
-                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["at"][0]["position"] == "a2")
+                        if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
+                            passed += 1
+                        end    
+                    when 6
+                        if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
                             passed += 1
                         end
-                    when 6    
+                    when 7    
                         if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                             passed += 1
                         end
-                    when 7
+                    when 8
                         if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a3")
                             passed += 1
                         end
-                    when 8
+                    when 9
                         if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a3")
                             passed += 1
                         end
-                    when 9
+                    when 10
                         if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                             passed += 1
                         end
@@ -1157,14 +1157,20 @@ module FixedTests
         testcase_doc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
 
         ruby_log = run_test_case(testcase_doc, "ruby")
+        
+        puts "Ruby log"
+        p ruby_log
         rust_log = run_test_case(testcase_doc, "rust")
 
+        puts "Rust log"
+        p rust_log
         puts "finished running tests"
 
         differences_log_entries = completeness_test(rust_log, ruby_log)
         matches = match_logs(rust_log, ruby_log, differences_log_entries[1], differences_log_entries[2])
 
         puts "matched logs"
+        puts "can match perfectly? #{!(matches[0].include?("no_match") || matches[1].include?("no_match"))}"
 
         structure_differences_ruby = {}
         structure_differences_rust = {}
@@ -1172,20 +1178,21 @@ module FixedTests
         content_differences_ruby = {}
         content_differences_rust = {}
 
-        matches[0].each do |entry, value| 
+        matches[0].each do |key, value| 
             if value.instance_of?(Integer)
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
-                structure_differences_ruby << {key => dif_structure[1]}
-                structure_differences_rust << {value => dif_structure[0]}
+                structure_differences_ruby.merge({key => dif_structure[1]})
+                structure_differences_rust.merge({value => dif_structure[0]})
                 diff_content = content_test(rust_log[value]["message"], dif_structure[0], ruby_log[key]["message"], dif_structure[1])
-                content_differences_ruby << {key => diff_content}
-                content_differences_rust << {value => diff_content}
+                content_differences_ruby.merge({key => diff_content})
+                content_differences_rust.merge({value => diff_content})
             end
         end
 
         ruby_cf_events = extract_cf_events(ruby_log)
         rust_cf_events = extract_cf_events(rust_log)
 
+        puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
         [differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
 
     end
@@ -1200,6 +1207,12 @@ module FixedTests
         cf_ruby_result = cf_service_call(results[6])
         cf_rust_result = cf_service_call(results[7])
 
+        puts "Passed control flow tests?"
+        puts cf_ruby_result
+        puts "Passed control flow tests a second time?"
+        puts cf_rust_result
+
+        p "ran all tests successfully"
         # TODO communicate to frontend
     end
 

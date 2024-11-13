@@ -151,7 +151,7 @@ module CPEE
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
       
-
+      puts "Current options: #{opts}"
       Proc.new do
         on resource do
           on resource 'fulltest' do
