@@ -28,15 +28,6 @@ module Helpers #{{{
     if status == 200
       ins = response.first.value
       uuid = headers['CPEE_INSTANCE_UUID']
-      inp = XML::Smart::string('<properties xmlns="http://cpee.org/ns/properties/2.0"/>')
-      inp.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
-      # copy data from original xml to new one
-      %w{executionhandler positions dataelements endpoints attributes description transformation}.each do |item|
-        ele = doc.find("/*/prop:#{item}")
-        inp.root.add(ele.first) if ele.any?
-      end
-      # expand instance data with copied information
-      res = srv.resource("/#{ins}/properties").put Riddl::Parameter::Complex.new('properties','application/xml',inp.to_s)
     end
      # return instance number and instance uuid 
     return ins, uuid

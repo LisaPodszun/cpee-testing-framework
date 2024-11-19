@@ -1,13 +1,17 @@
 require_relative 'helpers'
 require "xml/smart"
+require_relative 'fulltest'
 
 
-module FixedTests
+module TestHelpers
+    include CPEE::InstanceTesting
+    @@cpee =  "https://cpee.org/flow/start/url/"
     
-    module TestHelpers
+        
         NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
          "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
         
+        # only for testing
         @logs = {}
 
         # TODO: find out how to start rust instance
@@ -1141,20 +1145,19 @@ module FixedTests
 
         end
     #}}}
-    end
-
-
-    def run_tests_on(start_url, doc_url, identifier)
+    
+    def run_tests_on(start_url_ins_1, doc_url_ins_1, identifier_1, start_url_ins_2, doc_url_ins_2, identifier_2)
         puts "in run tests on"
-        testcase_doc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
-        testcase_doc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
-        testcase_doc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
+        
+        #testcase_doc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
+        #testcase_doc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
+        #testcase_doc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
 
-        ruby_log = run_test_case(start_url, doc_url, "ruby")
+        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, identifier_1)
         
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(start_url, doc_url, "rust")
+        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, identifier_2)
 
         puts "Rust log"
         p rust_log
@@ -1190,246 +1193,4 @@ module FixedTests
         [differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
 
     end
-
-
-    def test_service_call()
-        # TODO: setup doc links
-        doc_url_ruby = https://github.com/LisaPodszun/cpee-testing-framework/blob/0e1e764c14a9df2db89dc6d9ba38a4fd45ab6e69/testsets/Ruby/OwnBasic/service_call.xml
-        doc_url_rust = https://github.com/LisaPodszun/cpee-testing-framework/blob/0e1e764c14a9df2db89dc6d9ba38a4fd45ab6e69/testsets/Rust/OwnBasic/service_call.xml
-        
-        results = run_tests_on()
-
-        cf_ruby_result = cf_service_call(results[6])
-        cf_rust_result = cf_service_call(results[7])
-
-        puts "Passed control flow tests?"
-        puts cf_ruby_result
-        puts "Passed control flow tests a second time?"
-        puts cf_rust_result
-
-        p "ran all tests successfully"
-        # TODO communicate to frontend
-    end
-
-    def test_service_script_call()
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_service_script_call(results[6])
-        cf_rust_result = cf_service_script_call(results[7])
-
-    end
-
-    def test_script_call()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_script_call(results[6])
-        cf_rust_result = cf_script_call(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    def test_subprocess_call()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_subprocess_call(results[6])
-        cf_rust_result = cf_subprocess_call(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # Workflow patterns fully supported by the CPEE start from here
-
-    # Basic Control flow
-    def test_sequence()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_sequence(results[6])
-        cf_rust_result = cf_sequence(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    def test_exclusive_choice_simple_merge()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_exclusive_choice_simple_merge(results[6])
-        cf_rust_result = cf_exclusive_choice_simple_merge(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    def test_parallel_split_synchronization()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_parallel_split_synchronization(results[6])
-        cf_rust_result = cf_parallel_split_synchronization(results[7])
-
-        # TODO communicate to frontend
-        
-    end
-
-    # Advanced Branching and Synchronization
-
-    def test_multichoice_chained()
-         # TODO: setup doc links
-         testdoc = ""
-         results = run_tests_on(testdoc)
- 
-         cf_ruby_result = cf_multichoice_chained(results[6])
-         cf_rust_result = cf_multichoice_chained(results[7])
- 
-         # TODO communicate to frontend
-    end
-
-    def test_multichoice_parallel()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_multichoice_parallel(results[6])
-        cf_rust_result = cf_multichoice_parallel(results[7])
-
-        # TODO communicate to frontend
-
-    end
-
-    def test_cancelling_discriminator()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_cancelling_discriminator(results[6])
-        cf_rust_result = cf_cancelling_discriminator(results[7])
-
-        # TODO communicate to frontend
-
-    end
-
-    def test_thread_split_thread_merge()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_thread_split_thread_merge(results[6])
-        cf_rust_result = cf_thread_split_thread_merge(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # Multiple Instances
-
-    def test_multiple_instances_with_design_time_knowledge()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_multiple_instances_with_design_time_knowledge(results[6])
-        cf_rust_result = cf_multiple_instances_with_design_time_knowledge(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # Impossible to test against one another
-    def test_multiple_instances_with_runtime_time_knowledge()
-    end
-
-    # Impossible to test against one another
-    def test_multiple_instances_without_runtime_time_knowledge()
-    end
-
-    def test_cancelling_partial_join_multiple_instances()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_cancelling_partial_join_multiple_instances(results[6])
-        cf_rust_result = cf_cancelling_partial_join_multiple_instances(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # State Based
-
-    def test_interleaved_routing()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_interleaved_routing(results[6])
-        cf_rust_result = cf_interleaved_routing(results[7])
-
-        # TODO communicate to frontend
-    end
-
-
-    def test_interleaved_parallel_routing()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_interleaved_parallel_routing(results[6])
-        cf_rust_result = cf_interleaved_parallel_routing(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    def test_critical_section()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_critical_section(results[6])
-        cf_rust_result = cf_critical_section(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # Cancellation and Force Completion
-
-    def test_cancel_multiple_instance_activity()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_cancel_multiple_instance_activity(results[6])
-        cf_rust_result = cf_cancel_multiple_instance_activity(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    # Iterations
-
-    def test_loop_posttest()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_loop_posttest(results[6])
-        cf_rust_result = cf_loop_posttest(results[7])
-
-        # TODO communicate to frontend
-    end
-
-    def test_loop_pretest()
-        # TODO: setup doc links
-        testdoc = ""
-        results = run_tests_on(testdoc)
-
-        cf_ruby_result = cf_loop_pretest(results[6])
-        cf_rust_result = cf_loop_prettest(results[7])
-
-        # TODO communicate to frontend
-    end
 end
-

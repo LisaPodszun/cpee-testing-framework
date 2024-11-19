@@ -8,9 +8,7 @@ require 'uri'
 require 'redis'
 require 'json'
 require 'sqlite3'
-require_relative 'fixed_tests'
-require_relative 'helpers'
-
+require_relative 'test_cases'
 
 
 module CPEE 
@@ -19,10 +17,15 @@ module CPEE
     SERVER = File.expand_path(File.join(__dir__,'instantiation.xml'))
     @q = Queue.new
     @event_log = {}
+    
+    def wait_on_instance()
+      @q.deq
+      @event_log
+    end
+
     class FullTest < Riddl::Implementation #{{{
       include Helpers
-      include FixedTests
-      include FixedTests::TestHelpers
+      include TestCases
 
       def response
         puts "fulltest call"
@@ -100,11 +103,7 @@ module CPEE
       end
     end 
     
-
-    def wait_on_instance()
-      @q.deq
-      @event_log
-    end
+    
 
     class HandleEvents < Riddl::Implementation # {{{
       
@@ -119,7 +118,7 @@ module CPEE
         event = @p[3].value.read
         
         puts event
-
+        
         @event_log.merge!(JSON.parse(event))
 
         if topic =~ /state*/ && eventname == "finished" 
@@ -178,7 +177,6 @@ module CPEE
     #}}}
       
     def self::implementation(opts)
-      p "Calling implementation with opts: #{opts}"
       opts[:cpee]       ||= 'http://localhost:8298/'
       opts[:redis_path] ||= '/tmp/redis.sock'
       opts[:redis_db]   ||= 0
@@ -186,7 +184,6 @@ module CPEE
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
       
-      puts "Current options: #{opts}"
       Proc.new do
         on resource do
           on resource 'fulltest' do

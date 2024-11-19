@@ -2,11 +2,16 @@
   <message name="result">
     <parameter name="testcase_summary" mimetype="application/json"/>
   </message>
-
+  <message name="fulltest">
+    <parameter name="type" type="string"/>
+    <parameter name="topic" type="string"/>
+    <parameter name="event" type="string"/>
+    <parameter name="notification" type="string"/>
+  </message>
   <resource>
     <resource relative="fulltest">
       <get out="result"/>
-      <post in="fulltest" out="event">
+      <post in="fulltest"/>
     </resource>
   </resource>
 

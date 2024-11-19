@@ -5,6 +5,7 @@ require "json"
 class TestHelperMethods < Test::Unit::TestCase
   include FixedTests::TestHelpers
 
+  
   def setup
     # mock data for testing the recursive hash test methods
     @ruby_bag = {"tissues" => 4, "uuid" => 32,"wallet" => {"credit_card" => "expired", "id" => 12345, "membershipcard" => "fitness", "coins" => {"cents" => 10, "euros" => 3, "yen" => 100}}, 
