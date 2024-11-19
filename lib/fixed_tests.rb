@@ -11,9 +11,9 @@ module FixedTests
         @logs = {}
 
         # TODO: find out how to start rust instance
-        def run_test_case(doc_url, start_url, identifier)
+        def run_test_case(start_url, doc_url, identifier)
             puts "in run test case"
-            instance, uuid = post_testset(doc_url)
+            instance, uuid = post_testset(start_url, doc_url)
             
             log = wait_on_instance()
             # sort by timestamp from weel
@@ -1144,17 +1144,17 @@ module FixedTests
     end
 
 
-    def run_tests_on(testcase_doc)
+    def run_tests_on(start_url, doc_url, identifier)
         puts "in run tests on"
         testcase_doc.register_namespace 'desc', 'http://cpee.org/ns/description/1.0'
         testcase_doc.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
         testcase_doc.register_namespace 'sub', 'http://riddl.org/ns/common-patterns/notifications-producer/2.0'
 
-        ruby_log = run_test_case(testcase_doc, "ruby")
+        ruby_log = run_test_case(start_url, doc_url, "ruby")
         
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(testcase_doc, "rust")
+        rust_log = run_test_case(start_url, doc_url, "rust")
 
         puts "Rust log"
         p rust_log
@@ -1194,9 +1194,10 @@ module FixedTests
 
     def test_service_call()
         # TODO: setup doc links
-        testdoc = "/home/i17/Documents/Masterarbeit/Testsets/OwnBasic/service_call.xml"
-        testdoc = XML::Smart.open(testdoc)
-        results = run_tests_on(testdoc)
+        doc_url_ruby = https://github.com/LisaPodszun/cpee-testing-framework/blob/0e1e764c14a9df2db89dc6d9ba38a4fd45ab6e69/testsets/Ruby/OwnBasic/service_call.xml
+        doc_url_rust = https://github.com/LisaPodszun/cpee-testing-framework/blob/0e1e764c14a9df2db89dc6d9ba38a4fd45ab6e69/testsets/Rust/OwnBasic/service_call.xml
+        
+        results = run_tests_on()
 
         cf_ruby_result = cf_service_call(results[6])
         cf_rust_result = cf_service_call(results[7])
