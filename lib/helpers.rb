@@ -13,16 +13,16 @@ module Helpers #{{{
 
   @@cpee = "http://localhost:8298/"
 
-  def post_testset(doc) #{{{
+  def post_testset(start_url, doc_url) #{{{
     ins = -1
     uuid = nil
     puts "in post testset"
-    srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
+    srv = Riddl::Client.new(start_url)
 
     res = srv.resource('/')
    
     # create instance
-    status, response, headers = res.post Riddl::Parameter::Simple.new('info', doc.find('string(/*/prop:attributes/prop:info)'))
+    status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "fork_running"), Riddl::Parameter::Simple.new('url', doc_url)]
 
     puts "postet testset"
     if status == 200

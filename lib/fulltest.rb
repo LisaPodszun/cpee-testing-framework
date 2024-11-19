@@ -17,7 +17,8 @@ module CPEE
   module InstanceTesting
     
     SERVER = File.expand_path(File.join(__dir__,'instantiation.xml'))
-
+    @q = Queue.new
+    @event_log = {}
     class FullTest < Riddl::Implementation #{{{
       include Helpers
       include FixedTests
@@ -99,6 +100,41 @@ module CPEE
       end
     end 
     
+
+    def wait_on_instance()
+      @q.deq
+      @event_log
+    end
+
+    class HandleEvents < Riddl::Implementation # {{{
+      
+      def response
+        
+        type  = @p[0].value
+        # topic = state, dataelements, activity, ...
+        topic = @p[1].value
+        # eventname = change, calling, manipulating, ...
+        eventname = @p[2].value
+        # 
+        event = @p[3].value.read
+        
+        puts event
+
+        @event_log.merge!(JSON.parse(event))
+
+        if topic =~ /state*/ && eventname == "finished" 
+          Thread.new do
+            sleep 5
+            @q.enq "done"
+          end
+        end
+      end
+    end 
+    # }}}
+
+
+
+
     class InstantiateTestXML < Riddl::Implementation #{{{
       include Helpers
 
@@ -157,6 +193,7 @@ module CPEE
         on resource do
           on resource 'fulltest' do
             run FullTest if get
+            run HandleEvents if post 'fulltest'
           end
         end
       end

@@ -6,6 +6,7 @@
   <resource>
     <resource relative="fulltest">
       <get out="result"/>
+      <post in="fulltest" out="event">
     </resource>
   </resource>
 

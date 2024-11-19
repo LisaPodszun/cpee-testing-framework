@@ -8,30 +8,24 @@ module FixedTests
         NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
          "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
         
+        @logs = {}
+
         # TODO: find out how to start rust instance
-        def run_test_case(doc, weel)
+        def run_test_case(doc_url, start_url, identifier)
             puts "in run test case"
-            instance, uuid = post_testset(doc)
-            wait = Queue.new
-            setup_done = Queue.new
-            Thread.new do
-                setup_done.deq()
-                handle_starting(instance)
-            end
-            conn, event_log = subscribe_all(instance, wait, setup_done)
-            puts "waiting for dequeue"
-            wait.deq
+            instance, uuid = post_testset(doc_url)
+            
+            log = wait_on_instance()
             # sort by timestamp from weel
-            event_log = event_log.sort_by{|key, value| key}
+            log.sort_by{|key, value| key}
             index = 0
-            event_log.each do |entry|
+            log.each do |entry|
                 entry[0] = index
                 index += 1
             end
-            event_log.to_h
+            logs[identifier] = log.to_h
         end
 
-        
         def structure_test(rust_log_entry, ruby_log_entry)
             # holds all keys ruby - rust
             dif_ruby_to_rust = []
@@ -1140,7 +1134,7 @@ module FixedTests
 
         # runs with error, because of dataelements change
         def cf_loop_posttest(cf_events)
-
+            
         end
         # runs with error, because of dataelements change
         def cf_loop_pretest(cf_events)
