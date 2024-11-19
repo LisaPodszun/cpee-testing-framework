@@ -133,8 +133,6 @@ module CPEE
     # }}}
 
 
-
-
     class InstantiateTestXML < Riddl::Implementation #{{{
       include Helpers
 
