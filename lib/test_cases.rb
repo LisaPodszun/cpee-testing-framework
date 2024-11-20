@@ -1,19 +1,21 @@
-require_relative "fixed_tests"
+require 'json'
+require_relative 'fixed_tests'
 
 class TestCase
   include TestHelpers
   START =  "https://cpee.org/flow/start/url/"
   
-  
-  def test_service_call(que)
+  def test_service_call(data,testinstance)
     # TODO: setup doc links
     doc_url_ruby = "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_call.xml"
     doc_url_rust = "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_call.xml"
     
-    results = run_tests_on(START, doc_url_ruby, "ruby", START, doc_url_rust, "rust", que)
+    results = run_tests_on(START, doc_url_ruby, "ruby", START, doc_url_rust, "rust", data)
     
     cf_ruby_result = cf_service_call(results[6])
     cf_rust_result = cf_service_call(results[7])
+
+    testinstance[:result] = JSON::encode(results)
 
     puts "Passed control flow tests?"
     puts cf_ruby_result

@@ -14,29 +14,32 @@ module TestHelpers
     end
 
     # TODO: find out how to start rust instance
-    def run_test_case(start_url, doc_url, identifier, que)
+    def run_test_case(start_url, doc_url, identifier, data)
         puts "in run test case"
-        instance, uuid = post_testset(start_url, doc_url)
+        instance, uuid, url = post_testset(start_url, doc_url)
         
-        que.deq
+        data[url] = {}
+        data[url][:end] =  WEEL::Continue.new
+        data[url][:log] = {}
+
+        data[url][:end].wait
+
         # sort by timestamp from weel
-        log.sort_by{|key, value| key}
-        index = 0
-        log.each do |entry|
-            entry[0] = index
-            index += 1
+        data[url][:log].sort_by!{|key, value| key}
+        data[url][:log].each_with_index do |entry,i|
+            entry[0] = i
         end
-        logs[identifier] = log.to_h
+        data[url][:log].to_h
     end
 
-    def run_tests_on(start_url_ins_1, doc_url_ins_1, identifier_1, start_url_ins_2, doc_url_ins_2, identifier_2, que)
+    def run_tests_on(start_url_ins_1, doc_url_ins_1, identifier_1, start_url_ins_2, doc_url_ins_2, identifier_2, data)
         puts "in run tests on"
         
-        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, identifier_1, que)
+        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, identifier_1, data)
         
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, identifier_2)
+        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, identifier_2, data)
 
         puts "Rust log"
         p rust_log
