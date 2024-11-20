@@ -1,14 +1,16 @@
 require_relative "fixed_tests"
 
-module TestCases
+class TestCase
   include TestHelpers
-  @@cpee =  "https://cpee.org/flow/start/url/"
-  def test_service_call()
+  START =  "https://cpee.org/flow/start/url/"
+  
+  
+  def test_service_call(que)
     # TODO: setup doc links
     doc_url_ruby = "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_call.xml"
     doc_url_rust = "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_call.xml"
     
-    results = run_tests_on(@@cpee, doc_url_ruby, "ruby", @@cpee, doc_url_rust, "rust")
+    results = run_tests_on(START, doc_url_ruby, "ruby", START, doc_url_rust, "rust", que)
     
     cf_ruby_result = cf_service_call(results[6])
     cf_rust_result = cf_service_call(results[7])

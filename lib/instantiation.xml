@@ -8,10 +8,19 @@
     <parameter name="event" type="string"/>
     <parameter name="notification" type="string"/>
   </message>
+  <message name="instance">
+    <parameter name="instance" type="nonNegativeInteger"/>
+  </message>
+  <message name="results">
+    <parameter name="results" mimetype="application/json"/>
+  </message>
   <resource>
     <resource relative="fulltest">
       <get out="result"/>
-      <post in="fulltest"/>
+      <post in="fulltest" out="instance"/>
+      <resource relative="\d+">
+        <get out="results"/>
+      </resource>  
     </resource>
   </resource>
 </description>

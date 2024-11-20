@@ -8,10 +8,10 @@ require 'uri'
 require 'redis'
 require 'json'
 require 'sqlite3'
+require 'weel'
 
 module Helpers #{{{
-
-  @@cpee = "http://localhost:8298/"
+  
 
   def post_testset(start_url, doc_url) #{{{
     ins = -1
@@ -28,9 +28,10 @@ module Helpers #{{{
     if status == 200
       ins = response.first.value
       uuid = headers['CPEE_INSTANCE_UUID']
+      url = headers['CPEE_INSTANCE_URL']
     end
      # return instance number and instance uuid 
-    return ins, uuid
+    return ins, uuid, url
   end #}}}
   private :post_testset
 
