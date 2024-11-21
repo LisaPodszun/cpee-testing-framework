@@ -1,6 +1,6 @@
 <testset xmlns="http://cpee.org/ns/properties/2.0">
   <subscriptions>
-	  <subscription id="testing_service" url="https://localhost:9303/fulltest">
+	  <subscription id="testing_service" url="https://echo.bpm.in.tum.de/fulltest">
 	  <topic id='activity'>
 	      <event>calling</event>
 	      <event>receiving</event>
