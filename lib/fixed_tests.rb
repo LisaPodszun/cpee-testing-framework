@@ -17,7 +17,7 @@ module TestHelpers
     def run_test_case(start_url, doc_url, identifier, data)
         puts "in run test case"
         instance, uuid, url = post_testset(start_url, doc_url)
-        
+        puts "after post testset"
         data[url] = {}
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}

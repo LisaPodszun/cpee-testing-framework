@@ -20,7 +20,7 @@ module CPEE
 
     class Status < Riddl::Implementation #{{{
       def response
-        Riddl::Parameter::Complex.new('results','application/json', JSON::encode(@a[0]))
+        Riddl::Parameter::Complex.new('results','application/json', @a[0].to_json)
       end  
     end
 
@@ -51,7 +51,6 @@ module CPEE
         puts "fulltest call"
         # Own Basic Tests
 
-        data << Queue.new
         Thread.new do
           tests.each do |testname|
             testinstance[testname] = {}
@@ -80,6 +79,9 @@ module CPEE
         # value
         event = JSON.parse(@p[3].value.read)
         
+        puts "event value got in handleevents"
+        p event
+
         data[event['cpee-instance-url']][:log][event['timestamp']] = event
         
         if topic =~ 'state' && eventname == 'finished'
@@ -97,7 +99,7 @@ module CPEE
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
 
-      opts[:data] = []
+      opts[:data] = {}
       opts[:testinstances] = {}
       
       Proc.new do
