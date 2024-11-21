@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
 require 'rubygems'
-require '/home/i17/projects/cpee-testing-framework/lib/fulltest'
+require '/home/i17/projects/cpee-testing-framework/lib/implementation'
 
 options = {
   :host => 'localhost',

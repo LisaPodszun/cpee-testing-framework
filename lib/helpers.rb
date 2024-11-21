@@ -14,8 +14,9 @@ module Helpers #{{{
   
 
   def post_testset(start_url, doc_url) #{{{
-    ins = -1
+    ins_id = -1
     uuid = nil
+    url = ""
     puts "in post testset"
     srv = Riddl::Client.new(start_url)
 
@@ -23,15 +24,14 @@ module Helpers #{{{
    
     # create instance
     status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "fork_running"), Riddl::Parameter::Simple.new('url', doc_url)]
-
-    puts "postet testset"
+    parsed_content = JSON.parse(headers['CPEE_INSTANTIATION'])
     if status == 200
-      ins = response.first.value
-      uuid = headers['CPEE_INSTANCE_UUID']
-      url = headers['CPEE_INSTANCE_URL']
+      ins_id = parsed_content['CPEE-INSTANCE']
+      uuid = parsed_content['CPEE-INSTANCE-UUID']
+      url = parsed_content['CPEE-INSTANCE-URL']
     end
      # return instance number and instance uuid 
-    return ins, uuid, url
+    return ins_id, uuid, url
   end #}}}
   private :post_testset
 

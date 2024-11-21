@@ -14,7 +14,7 @@ require_relative 'test_cases'
 module CPEE 
   module InstanceTesting
     
-    SERVER = File.expand_path(File.join(__dir__,'instantiation.xml'))
+    SERVER = File.expand_path(File.join(__dir__,'testing.xml'))
     
     @event_log = {}
 
@@ -34,16 +34,16 @@ module CPEE
 
         tests = [
           :test_service_call,
-#          :test_service_script_call
+        # :test_service_script_call
         ]          
 
         i  = 0
-        i += 1 while testinstances.has_key(i)
+        i += 1 while testinstances.key?(i)
         testinstances[i] = {
           :status => :running,
           :currently_running => '',
-          :total => tests.length
-          :finished => 0
+          :total => tests.length,
+          :finished => 0,
           :results => {}
         } 
         testinstance = testinstances[i]  
@@ -53,7 +53,7 @@ module CPEE
 
         data << Queue.new
         Thread.new do
-          test.each do |testname|
+          tests.each do |testname|
             testinstance[testname] = {}
             testinstance[testname][:start] = Time.now
             testinstance[:currently_running] = testname
@@ -97,7 +97,7 @@ module CPEE
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
 
-      opts[:data] = {}
+      opts[:data] = []
       opts[:testinstances] = {}
       
       Proc.new do
