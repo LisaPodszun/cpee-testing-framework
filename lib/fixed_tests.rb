@@ -15,15 +15,17 @@ module TestHelpers
 
     # TODO: find out how to start rust instance
     def run_test_case(start_url, doc_url, identifier, data)
-        puts "in run test case"
+        puts 'in run test case'
         instance, uuid, url = post_testset(start_url, doc_url)
-        puts "after post testset"
+        puts 'after post testset'
+        puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
         data[url] = {}
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
 
+        puts 'before wait'
         data[url][:end].wait
-
+        puts 'after wait'
         # sort by timestamp from weel
         data[url][:log].sort_by!{|key, value| key}
         data[url][:log].each_with_index do |entry,i|
