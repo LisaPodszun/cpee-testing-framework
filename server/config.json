@@ -2,10 +2,10 @@
     "execution_handlers": ["ruby", "rust"],
     "process_engines": [{
         "name": "echo",
-        "url": ""
+        "url": "https://cpee.org/flow/start/url/"
     }, {
         "name": "demo",
-        "url": ""
+        "url": "https://cpee.org/flow/start/url/"
     }],
     "tests": ["all"]
 }

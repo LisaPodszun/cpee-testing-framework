@@ -31,7 +31,8 @@ module CPEE
       def response
         data = @a[0]
         testinstances = @a[1]
-
+        settings = JSON.parse(@p[0].value.read)
+        
         tests = [
           :test_service_call,
         # :test_service_script_call
@@ -69,8 +70,7 @@ module CPEE
 
     class Configuration < Riddl::Implementation #{{{
       def response
-        configuration_file = File.open("./config.json")
-        Riddl::Parameter::Complex.new("configuration", "application/json", configuration_file)
+        Riddl::Parameter::Complex.new("configuration", "application/json", File.open("./config.json"))
       end
     end 
 
@@ -113,8 +113,10 @@ module CPEE
         on resource do
           on resource 'fulltest' do
             run FullTest, opts[:data], opts[:testinstances] if get
-            on resource 'events'
+            
+            on resource 'events' do
               run HandleEvents, opts[:data] if post 'event'
+            end
             on resource '\d+' do |res|
               run Status, opts[:testinstances][res[:r].last] if get
             end  

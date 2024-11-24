@@ -1,17 +1,18 @@
 
 $(document).ready(function(){
 
-    const processEngines = ['echo', 'demo']
+    let url = "https://echo.bpm.in.tum.de/fulltest/configuration";
+    // let url = "localhost:9303/fulltest/configuration";
+    $.getJSON(url, function(data){
+        console.log(data);
+        console.log(data["process_engines"])
+        for (let index in data["process_engines"]) {
+            let item = data["process_engines"][index]
+            console.log(item);
+            ($('select[name="process-engine-form"]')).append($(new Option(item["name"], item["url"])));
+        };
+    });
     
-    var $forms = $('select[name="process-engine-form"]');
-    console.log($forms)
-    
-    processEngines.forEach(addOptions) 
-    
-
-    function addOptions(item, index, arr) {
-        ($('select[name="process-engine-form"]')).append($(new Option(item, index)));
-    }
     
 
 });

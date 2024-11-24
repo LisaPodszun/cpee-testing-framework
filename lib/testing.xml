@@ -5,6 +5,9 @@
     <parameter name="event" type="string"/>
     <parameter name="notification" type="string"/>
   </message>
+  <message name="settings">
+    <parameter name="settings" mimetype="application/json"/>
+  </message>
   <message name="instance">
     <parameter name="instance" type="nonNegativeInteger"/>
   </message>
@@ -16,7 +19,7 @@
   </message>
   <resource>
     <resource relative="fulltest">
-      <get out="instance"/>
+      <post in="settings" out="instance"/>
       <resource relative="events">
         <post in="event"/>
       </resource>
