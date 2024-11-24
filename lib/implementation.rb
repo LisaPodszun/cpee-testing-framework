@@ -1,8 +1,8 @@
 #! /usr/bin/ruby
 require 'rubygems'
 require 'xml/smart'
-require 'riddle/client'
-require 'riddle/server'
+require 'riddl/client'
+require 'riddl/server'
 require 'securerandom'
 require 'base64'
 require 'uri'
