@@ -17,7 +17,9 @@
   <resource>
     <resource relative="fulltest">
       <get out="instance"/>
-      <post in="fulltest"/>
+      <resource relative="events">
+        <post in="event"/>
+      </resource>
       <resource relative="\d+">
         <get out="results"/>
       </resource>  
