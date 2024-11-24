@@ -1,0 +1,361 @@
+{
+   "0": {
+      "channel": "event:00:state/change",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "state",
+         "type": "event",
+         "name": "change",
+         "timestamp": "2024-11-24T16:09:28.417+01:00",
+         "content": {
+            "state": "running",
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "1": {
+      "channel": "event:00:position/change",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "position",
+         "type": "event",
+         "name": "change",
+         "timestamp": "2024-11-24T16:09:28.418+01:00",
+         "content": {
+            "at": [
+               {
+                  "position": "a1",
+                  "uuid": "08f164b98946e0847386c2ffccdc8303"
+               }
+            ],
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "2": {
+      "channel": "event:00:status/resource_utilization",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "status",
+         "type": "event",
+         "name": "resource_utilization",
+         "timestamp": "2024-11-24T16:09:28.440+01:00",
+         "content": {
+            "mib": 89.30859375,
+            "utime": 0.75913,
+            "stime": 0.104882,
+            "cutime": 0.0,
+            "cstime": 0.0,
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "3": {
+      "channel": "event:00:activity/calling",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "activity",
+         "type": "event",
+         "name": "calling",
+         "timestamp": "2024-11-24T16:09:28.440+01:00",
+         "content": {
+            "ecid": 48780,
+            "activity-uuid": "08f164b98946e0847386c2ffccdc8303",
+            "label": "",
+            "activity": "a1",
+            "passthrough": null,
+            "endpoint": "https-post://cpee.org/services/timeout.php",
+            "parameters": {
+               "label": "",
+               "arguments": [
+                  {
+                     "name": "timeout",
+                     "value": "1"
+                  }
+               ]
+            },
+            "annotations": {
+               "_generic": null,
+               "_timing": {
+                  "_timing_weight": null,
+                  "_timing_avg": null,
+                  "explanations": null
+               },
+               "_shifting": {
+                  "_shifting_type": "Duration"
+               },
+               "_context_data_analysis": {
+                  "probes": null,
+                  "ips": null
+               },
+               "report": {
+                  "url": null
+               },
+               "_notes": {
+                  "_notes_general": null
+               }
+            },
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "4": {
+      "channel": "callback:00:activity/content",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "activity",
+         "type": "callback",
+         "name": "content",
+         "timestamp": "2024-11-24T16:09:28.440+01:00",
+         "content": {
+            "activity-uuid": "08f164b98946e0847386c2ffccdc8303",
+            "label": "",
+            "activity": "a1",
+            "key": "23ec8493b085b89b011381568bfe3964"
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "5": {
+      "channel": "event:00:activity/receiving",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "activity",
+         "type": "event",
+         "name": "receiving",
+         "timestamp": "2024-11-24T16:09:29.527+01:00",
+         "content": {
+            "ecid": 48780,
+            "activity-uuid": "08f164b98946e0847386c2ffccdc8303",
+            "label": "",
+            "activity": "a1",
+            "endpoint": "https-post://cpee.org/services/timeout.php",
+            "received": [
+               {
+                  "name": "result",
+                  "mimetype": "text/html",
+                  "data": "Timeout: 1"
+               }
+            ],
+            "annotations": {
+               "_generic": null,
+               "_timing": {
+                  "_timing_weight": null,
+                  "_timing_avg": null,
+                  "explanations": null
+               },
+               "_shifting": {
+                  "_shifting_type": "Duration"
+               },
+               "_context_data_analysis": {
+                  "probes": null,
+                  "ips": null
+               },
+               "report": {
+                  "url": null
+               },
+               "_notes": {
+                  "_notes_general": null
+               }
+            },
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "6": {
+      "channel": "callback-end:00:23ec8493b085b89b011381568bfe3964",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": ".",
+         "type": "callback-end",
+         "name": "23ec8493b085b89b011381568bfe3964",
+         "timestamp": "2024-11-24T16:09:29.527+01:00",
+         "content": {},
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "7": {
+      "channel": "event:00:activity/done",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "activity",
+         "type": "event",
+         "name": "done",
+         "timestamp": "2024-11-24T16:09:29.537+01:00",
+         "content": {
+            "ecid": 48780,
+            "activity-uuid": "08f164b98946e0847386c2ffccdc8303",
+            "endpoint": "https-post://cpee.org/services/timeout.php",
+            "label": "",
+            "activity": "a1",
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "8": {
+      "channel": "event:00:status/resource_utilization",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "status",
+         "type": "event",
+         "name": "resource_utilization",
+         "timestamp": "2024-11-24T16:09:29.537+01:00",
+         "content": {
+            "mib": 91.5859375,
+            "utime": 0.788381,
+            "stime": 0.104931,
+            "cutime": 0.0,
+            "cstime": 0.0,
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "9": {
+      "channel": "event:00:position/change",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "position",
+         "type": "event",
+         "name": "change",
+         "timestamp": "2024-11-24T16:09:29.537+01:00",
+         "content": {
+            "after": [
+               {
+                  "position": "a1",
+                  "uuid": "08f164b98946e0847386c2ffccdc8303"
+               }
+            ],
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "10": {
+      "channel": "event:00:position/change",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "position",
+         "type": "event",
+         "name": "change",
+         "timestamp": "2024-11-24T16:09:29.546+01:00",
+         "content": {
+            "unmark": [
+               {
+                  "position": "a1",
+                  "uuid": "08f164b98946e0847386c2ffccdc8303"
+               }
+            ],
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   },
+   "11": {
+      "channel": "event:00:state/change",
+      "message": {
+         "cpee": "https://echo.bpm.in.tum.de/flow/engine/",
+         "instance-url": "https://echo.bpm.in.tum.de/flow/engine/731",
+         "instance": 731,
+         "topic": "state",
+         "type": "event",
+         "name": "change",
+         "timestamp": "2024-11-24T16:09:29.546+01:00",
+         "content": {
+            "state": "finished",
+            "attributes": {
+               "uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+               "info": "Enter info here",
+               "modeltype": "CPEE",
+               "theme": "preset"
+            }
+         },
+         "instance-uuid": "5a634748-a8fc-4b5d-be07-597a83e29305",
+         "instance-name": "Enter info here"
+      }
+   }
+}

@@ -1,20 +1,27 @@
-require 'rubygems'
-require 'state_machines'
+require "rubygems"
+require "state_machines"
 
+class ProcessMachine
+  state_machine :state, initial: :ready do
+    event :running do
+      transition ready: :running
+    end
+    event :finished do
+      transition running: :finished
+    end
+  end
+end
 
 class ServiceCallMachine
   state_machine :state, initial: :ready do
-    event :call do 
+    event :call do
       transition ready: :called
     end
     event :error do
       transition ready: :got_error
     end
-    event :get_content do
-      transition called: :got_content
-    end
     event :receive do
-      transition got_content: :received
+      transition called: :received
     end
     event :end_activity do
       transition received: :done
@@ -23,22 +30,19 @@ class ServiceCallMachine
 end
 
 class ServiceScriptCallMachine
-    state_machine :state, initial: :ready do
+  state_machine :state, initial: :ready do
     event :call do
       transition ready: :called
     end
     event :error do
       transition %i[ready manipulated] => :got_error
     end
-    event :get_content do
-      transition called: :got_content
-    end
     event :receive do
-      transition got_content: :received
+      transition called: :received
     end
     event :manipulate do
       transition received: :manipulated
-    end 
+    end
     event :change_dataelements do
       transition manipulated: :dataelements_changed
     end
@@ -49,13 +53,6 @@ class ServiceScriptCallMachine
 end
 
 class ScriptCallMachine
-  @error_case
-  @states = {manipulate => t}
-  @states_error = {}
-
-  def initialize
-
-  end
   state_machine :state, initial: :ready do
     event :manipulate do
       transition ready: :manipulated
@@ -72,28 +69,29 @@ class ScriptCallMachine
   end
 end
 
-
-
-
-
 class DecisionGatewayMachine
   state_machine :state, initial: :ready do
-    event :split do 
+    event :split do
       transition ready: :gateway_split
     end
-    event :decide do 
-      transition %i[gateway_split chosen_branch] => :chosen_branch
+    event :decide do
+      # For gateway/decide, we have no custom state
+      transition gateway_split: :gateway_split
+    end
+    event :join do
+      # For gateway/decide, we have no custom state
+      transition gateway_split: :done
     end
   end
 end
 
 class ParallelGatewayMachine
   state_machine :state, initial: :ready do
-    event :split do 
+    event :split do
       transition ready: :gateway_split
     end
-    event :join do 
-      transition gateway_split: :parallel_done
+    event :join do
+      transition gateway_split: :done
     end
   end
 end
