@@ -1,0 +1,11 @@
+{
+    "execution_handlers": ["ruby", "rust"],
+    "process_engines": [{
+        "name": "echo",
+        "url": ""
+    }, {
+        "name": "demo",
+        "url": ""
+    }],
+    "tests": ["all"]
+}

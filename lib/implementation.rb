@@ -67,6 +67,13 @@ module CPEE
       end
     end 
 
+    class Configuration < Riddl::Implementation #{{{
+      def response
+        let configuration_file = File.open("./config.json")
+        Riddl::Parameter::Complex.new("configuration", "application/json", configuration_file)
+      end
+    end 
+
     class HandleEvents < Riddl::Implementation # {{{    
       def response
         data = @a[0]
@@ -106,10 +113,14 @@ module CPEE
         on resource do
           on resource 'fulltest' do
             run FullTest, opts[:data], opts[:testinstances] if get
-            run HandleEvents, opts[:data] if post 'fulltest'
+            on resource 'events'
+              run HandleEvents, opts[:data] if post 'event'
             on resource '\d+' do |res|
               run Status, opts[:testinstances][res[:r].last] if get
             end  
+          end
+          on resource 'configuration' do
+            run Configuration if get  
           end
         end
       end

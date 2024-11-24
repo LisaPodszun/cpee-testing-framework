@@ -1,5 +1,5 @@
 <description datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://riddl.org/ns/description/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <message name="fulltest">
+  <message name="event">
     <parameter name="type" type="string"/>
     <parameter name="topic" type="string"/>
     <parameter name="event" type="string"/>
@@ -11,6 +11,9 @@
   <message name="results">
     <parameter name="results" mimetype="application/json"/>
   </message>
+  <message name="configuration">
+    <parameter name="configuration" mimetype="application/json"/>
+  </message>
   <resource>
     <resource relative="fulltest">
       <get out="instance"/>
@@ -18,6 +21,9 @@
       <resource relative="\d+">
         <get out="results"/>
       </resource>  
+    </resource>
+    <resource relative="configuration">
+      <get out="configuration"/>
     </resource>
   </resource>
 </description>
