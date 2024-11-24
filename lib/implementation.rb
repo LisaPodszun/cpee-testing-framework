@@ -118,9 +118,9 @@ module CPEE
             on resource '\d+' do |res|
               run Status, opts[:testinstances][res[:r].last] if get
             end  
-          end
-          on resource 'configuration' do
-            run Configuration if get  
+            on resource 'configuration' do
+              run Configuration if get  
+            end
           end
         end
       end
