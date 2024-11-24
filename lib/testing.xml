@@ -23,9 +23,9 @@
       <resource relative="\d+">
         <get out="results"/>
       </resource>  
-    </resource>
-    <resource relative="configuration">
+      <resource relative="configuration">
       <get out="configuration"/>
+    </resource>
     </resource>
   </resource>
 </description>
