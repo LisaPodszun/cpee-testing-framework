@@ -1,13 +1,12 @@
 #! /usr/bin/ruby
 require 'rubygems'
 require 'xml/smart'
-require '~/projects/riddl/lib/ruby/riddl/server'
+require 'riddle/client'
 require 'securerandom'
 require 'base64'
 require 'uri'
 require 'redis'
 require 'json'
-require 'sqlite3'
 require 'weel'
 
 module Helpers #{{{
