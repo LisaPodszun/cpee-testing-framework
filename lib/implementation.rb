@@ -69,7 +69,7 @@ module CPEE
 
     class Configuration < Riddl::Implementation #{{{
       def response
-        let configuration_file = File.open("./config.json")
+        configuration_file = File.open("./config.json")
         Riddl::Parameter::Complex.new("configuration", "application/json", configuration_file)
       end
     end 
