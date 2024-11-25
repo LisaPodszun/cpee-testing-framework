@@ -19,7 +19,7 @@
   </message>
   <resource>
     <resource relative="fulltest">
-      <post in="settings" out="instance"/>
+      <get  out="instance"/>
       <resource relative="events">
         <post in="event"/>
       </resource>
