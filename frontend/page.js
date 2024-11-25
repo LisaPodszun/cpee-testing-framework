@@ -17,7 +17,7 @@ $(document).ready(function(){
         for (let index in data['tests']) {
             let item = data['tests'][index];
             console.log(item);
-            ($('#test_case')).append($(new Option(item, item)));
+            ($('#test_case')).append($(new Option(item['name'], [item['ruby'], item['rust']])));
         };
     });
 
