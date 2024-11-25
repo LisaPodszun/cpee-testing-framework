@@ -1,8 +1,10 @@
 
 $(document).ready(function(){
 
-    let url = "https://echo.bpm.in.tum.de/fulltest/configuration";
+    let config_url = "https://echo.bpm.in.tum.de/fulltest/configuration";
     // let url = "localhost:9303/fulltest/configuration";
+    let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/";
+
     $.getJSON(url, function(data){
         for (let index in data["process_engines"]) {
             let item = data["process_engines"][index]
@@ -20,9 +22,12 @@ $(document).ready(function(){
             ($('#test_case')).append($(new Option(item['name'], [item['ruby'], item['rust']])));
         };
     });
+});
+$("#start").click(function(){
+    let form_data = {
+        instance_1 : []
+    }
+    $.post(run_tests_url,
 
-
-    
-    
-
+    )
 });

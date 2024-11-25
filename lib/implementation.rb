@@ -113,7 +113,6 @@ module CPEE
         on resource do
           on resource 'fulltest' do
             run FullTest, opts[:data], opts[:testinstances] if get
-            
             on resource 'events' do
               run HandleEvents, opts[:data] if post 'event'
             end

@@ -7,7 +7,13 @@
         "name": "demo",
         "url": "https://cpee.org/flow/start/url/"
     }],
-    "tests": [{
+    "tests": [
+        {
+            "name": "all",
+            "ruby": "",
+            "rust": ""
+        },
+       {
             "name": "service_call", 
             "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_call.xml",
             "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_call.xml"
