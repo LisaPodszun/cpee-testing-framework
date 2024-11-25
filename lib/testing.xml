@@ -13,10 +13,10 @@
   </message>
   <resource>
     <get  out="instance"/>
-    <resource "\d+">
+    <resource relative="\d+">
       <get out="results"/>
     </resource>
-    <resource "configuration">
+    <resource relative="configuration">
       <get out="configuration"/>
     </resource>
   </resource>
