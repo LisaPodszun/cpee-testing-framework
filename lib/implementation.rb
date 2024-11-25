@@ -115,10 +115,12 @@ module CPEE
         end
 
         on interface 'testing' do
-          run FullTest, opts[:data], opts[:testinstances] if get
+          run FullTest, opts[:data], opts[:testinstances] if post
+
           on resource '\d+' do |res|
             run Status, opts[:testinstances][res[:r].last] if get
           end
+
           on resource 'configuration' do
             run Configuration if get
           end

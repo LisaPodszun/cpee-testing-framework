@@ -25,9 +25,14 @@ $(document).ready(function(){
 });
 $("#start").click(function(){
     let form_data = {
-        instance_1 : []
+        "instance_1" : [
+            {"process_engine" : $("#cpee1").val()},
+            {"execution_handler" : $("#exe1").val()}],
+        "instance_2" : [
+            {"process_engine" : $("#cpee2").val()},
+            {"execution_handler" : $("#exe2").val()}],
+        "test" : $("#test_case")    
     }
-    $.post(run_tests_url,
-
-    )
+    console.log(form_data)
+    
 });
