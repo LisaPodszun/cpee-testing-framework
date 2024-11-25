@@ -1,10 +1,4 @@
 <description datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://riddl.org/ns/description/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <message name="event">
-    <parameter name="type" type="string"/>
-    <parameter name="topic" type="string"/>
-    <parameter name="event" type="string"/>
-    <parameter name="notification" type="string"/>
-  </message>
   <message name="settings">
     <parameter name="settings" mimetype="application/json"/>
   </message>
@@ -18,17 +12,12 @@
     <parameter name="configuration" mimetype="application/json"/>
   </message>
   <resource>
-    <resource relative="fulltest">
-      <get  out="instance"/>
-      <resource relative="events">
-        <post in="event"/>
-      </resource>
-      <resource relative="\d+">
-        <get out="results"/>
-      </resource>  
-      <resource relative="configuration">
-      <get out="configuration"/>
+    <get  out="instance"/>
+    <resource relative="\d+">
+      <get out="results"/>
     </resource>
+    <resource relative="configuration">
+      <get out="configuration"/>
     </resource>
   </resource>
 </description>

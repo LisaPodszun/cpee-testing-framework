@@ -11,17 +11,17 @@ require 'json'
 require_relative 'test_cases'
 
 
-module CPEE 
+module CPEE
   module InstanceTesting
-    
-    SERVER = File.expand_path(File.join(__dir__,'testing.xml'))
-    
+
+    SERVER = File.expand_path(File.join(__dir__,'implementation.xml'))
+
     @event_log = {}
 
-    class Status < Riddl::Implementation #{{{
+     class Status < Riddl::Implementation #{{{
       def response
         Riddl::Parameter::Complex.new('results','application/json', @a[0].to_json)
-      end  
+      end
     end
 
     class FullTest < Riddl::Implementation #{{{
@@ -32,11 +32,11 @@ module CPEE
         data = @a[0]
         testinstances = @a[1]
         #settings = JSON.parse(@p[0].value.read)
-        
+
         tests = [
           :test_service_call,
         # :test_service_script_call
-        ]          
+        ]
 
         i  = 0
         i += 1 while testinstances.key?(i)
@@ -46,9 +46,9 @@ module CPEE
           :total => tests.length,
           :finished => 0,
           :results => {}
-        } 
-        testinstance = testinstances[i]  
-        
+        }
+        testinstance = testinstances[i]
+
         puts "fulltest call"
         # Own Basic Tests
 
@@ -66,15 +66,15 @@ module CPEE
         end
         Riddl::Parameter::Simple.new('instance', i)
       end
-    end 
+    end
 
     class Configuration < Riddl::Implementation #{{{
       def response
         Riddl::Parameter::Complex.new("configuration", "application/json", File.open("./config.json"))
       end
-    end 
+    end
 
-    class HandleEvents < Riddl::Implementation # {{{    
+    class HandleEvents < Riddl::Implementation # {{{
       def response
         data = @a[0]
 
@@ -85,43 +85,42 @@ module CPEE
         eventname = @p[2].value
         # value
         event = JSON.parse(@p[3].value.read)
-        
+
         puts "event value got in handleevents"
         p event
 
         data[event['cpee-instance-url']][:log][event['timestamp']] = event
-        
+
         if topic =~ 'state' && eventname == 'finished'
           data[event['cpee-instance-url']][:end].continue
         end
       end
-    end 
+    end
     # }}}
-      
+
     def self::implementation(opts)
       opts[:cpee]       ||= 'http://localhost:8298/'
       opts[:redis_path] ||= '/tmp/redis.sock'
       opts[:redis_db]   ||= 0
       opts[:redis_pid]  ||= 'redis.pid'
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
-      opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])  
+      opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])
 
       opts[:data] = {}
       opts[:testinstances] = {}
-      
+
       Proc.new do
-        on resource do
-          on resource 'fulltest' do
-            run FullTest, opts[:data], opts[:testinstances] if get
-            on resource 'events' do
-              run HandleEvents, opts[:data] if post 'event'
-            end
-            on resource '\d+' do |res|
-              run Status, opts[:testinstances][res[:r].last] if get
-            end  
-            on resource 'configuration' do
-              run Configuration if get  
-            end
+        on interface 'events' do
+          run HandleEvents, opts[:data] if post 'event'
+        end
+
+        on interface 'testing' do
+          run FullTest, opts[:data], opts[:testinstances] if get
+          on resource '\d+' do |res|
+            run Status, opts[:testinstances][res[:r].last] if get
+          end
+          on resource 'configuration' do
+            run Configuration if get
           end
         end
       end
