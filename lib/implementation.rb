@@ -122,6 +122,7 @@ module CPEE
           end
 
           on resource 'configuration' do
+            p "Test"
             run Configuration if get
           end
         end

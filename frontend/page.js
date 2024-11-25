@@ -1,9 +1,9 @@
 
 $(document).ready(function(){
 
-    let config_url = "https://echo.bpm.in.tum.de/fulltest/configuration";
-    // let url = "localhost:9303/fulltest/configuration";
-    let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/";
+    
+    let config_url = "localhost:9303/configuration";
+    let run_tests_url = "localhost:9303/fulltest/";
 
     $.getJSON(url, function(data){
         for (let index in data["process_engines"]) {
