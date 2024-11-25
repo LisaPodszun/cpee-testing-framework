@@ -31,7 +31,7 @@ module CPEE
       def response
         data = @a[0]
         testinstances = @a[1]
-        settings = JSON.parse(@p[0].value.read)
+        #settings = JSON.parse(@p[0].value.read)
         
         tests = [
           :test_service_call,
