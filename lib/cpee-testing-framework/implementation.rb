@@ -110,11 +110,11 @@ module CPEE
       opts[:testinstances] = {}
 
       Proc.new do
-        on interface 'events' do
+        interface 'events' do
           run HandleEvents, opts[:data] if post 'event'
         end
 
-        on interface 'testing' do
+        interface 'testing' do
           run FullTest, opts[:data], opts[:testinstances] if post
 
           on resource '\d+' do |res|

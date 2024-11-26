@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 require 'rubygems'
-require '~/Projects/cpee-testing-framework/lib/implementation'
+require_relative '../lib/cpee-testing-framework/implementation'
+# require 'cpee-testing-framework/implementation'
 
 options = {
   :host => 'localhost',
@@ -9,20 +10,20 @@ options = {
 }
 
 Riddl::Server.new(CPEE::InstanceTesting::SERVER, options) do
-  
+
   if File.exist?('events.db')
     File.delete('events.db')
   end
 
   # TODO: understand these features
   accessible_description true
-  
+
   cross_site_xhr true
-  
-  
+
+
   puts "Hello from testing server"
-  
-  
+
+
   # echo CPEE
   @riddl_opts[:cpee] ||= 'https://localhost:8298'
 
