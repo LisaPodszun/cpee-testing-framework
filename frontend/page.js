@@ -1,16 +1,18 @@
+
+/*
 jQuery(function ($) {
     $(document).ajaxSend(function () {
         $("#overlay").fadeIn(300);
     });
-});
+}); */
 function displayResults( data ){
     
 }
 $(document).ready(function () {
 
-    /* 
-     let config_url = "http://localhost:9303/configuration/";
-     let run_tests_url = "http://localhost:9303/fulltest/";
+     
+     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
+     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/";
  
      $.getJSON(config_url, function(data){
          for (let index in data["process_engines"]) {
@@ -29,8 +31,8 @@ $(document).ready(function () {
              ($('#test_case')).append($(new Option(item['name'], [item['ruby'], item['rust']])));
          };
          });
-         */
-
+});
+/*
     $("#start").click(function () {
         $("#main").remove();
         let form_data = {
@@ -43,7 +45,7 @@ $(document).ready(function () {
             "test": $("#test_case").val()
         };
         $.ajax({
-            url: "http://localhost:9303/fulltest/",
+            url: run_tests_url,
             type: 'POST',
             data: form_data,
             dataType: 'json',
@@ -52,7 +54,7 @@ $(document).ready(function () {
             }
         });
         $.ajax({
-            url: "http://localhost:9303/fulltest/" + ins,
+            url: run_tests_url + ins,
             type: 'GET',
             dataType: 'json',
             success: function(data) {
@@ -65,4 +67,4 @@ $(document).ready(function () {
             displayResults(data);
         });
     });
-});
+});*/
