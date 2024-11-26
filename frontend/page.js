@@ -40,22 +40,20 @@ $(document).ready(function () {
         };
         for (let index in data['tests']) {
             let item = data['tests'][index];
-            // console.log(item);
-            $('#test_case').append($(new Option(item["name"], [item['ruby'], item['rust']])));
+            $('#test_case').append($(new Option(item["name"], item['name'])));
         };
     }).done(function () {
-        console.log($('#test_case'))
+        console.log($('#test_case').val())
         const form_data =
         {
             instance_1: { process_engine: $("#cpee1").val(), execution_handler: $("#exe1").val() },
             instance_2: { process_engine: $("#cpee2").val(), execution_handler: $("#exe2").val() },
             test: $("#test_case").val()
         };
-        console.log(form_data)
 
         $("#start").click(function () {
             $("#main").remove();
-            console.log(form_data.type);
+            console.log("in click");
             const settings = JSON.stringify(form_data);
             $.ajax({
                 url: run_tests_url,
