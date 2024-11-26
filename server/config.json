@@ -1,94 +1,113 @@
 {
-    "execution_handlers": ["ruby", "rust"],
-    "process_engines": [{
-        "name": "echo",
-        "url": "https://cpee.org/flow/start/url/"
-    }, {
-        "name": "demo",
-        "url": "https://cpee.org/flow/start/url/"
-    }],
-    "tests": [
-        {
-            "name": "all",
-            "ruby": "",
-            "rust": ""
-        },
-       {
-            "name": "service_call", 
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_call.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_call.xml"
-    },  {       
-            "name":"service_script_call", 
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_script_call.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_script_call.xml"
-    }, {
-            "name": "script_call", 
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/script_call.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/script_call.xml"
-    }, {   
-            "name": "subprocesstest",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/subprocesstest.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/subprocesstest.xml"
-    }, {
-            "name": "exclusive_choice_simple_merge",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/exclusive_choice_simple_merge.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/exclusive_choice_simple_merge.xml"
-    }, { 
-            "name": "parallel_split_and_synchronization",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/parallel_split_and_synchronization.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/parallel_split_and_synchronization.xml"
-    }, {
-            "name": "sequence",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/sequence.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/sequence.xml"
-    }, {
-            "name": "cancelling_discriminator",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/cancelling_discriminator.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/cancelling_discriminator.xml"
-    }, {
-            "name": "multi_choice_chained",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/multi_choice_chained.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/multi_choice_chained.xml"
-    }, {
-            "name": "multi_choice_parallel",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/multi_choice_parallel.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/multi_choice_parallel.xml"
-    }, {
-            "name": "thread_split_thread_merge",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/thread_split_thread_merge.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/thread_split_thread_merge.xml"
-    }, {
-            "name": "cancel_multiple_instance_activity",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml"
-    }, {
-            "name": "loop_pretest",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/Iterations/loop_pretest.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/Iterations/loop_pretest.xml"
-    }, {
-            "name": "loop_posttest",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/Iterations/loop_posttest.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/Iterations/loop_posttest.xml"
-    }, {
-            "name": "cancelling_partial_join_multiple_instances",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/MultipleInstaces/cancelling_partial_join_multiple_instances.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/MultipleInstaces/cancelling_partial_join_multiple_instances.xml"
-    }, {
-            "name": "multiple_instances_with_design_time_knowledge",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/MultipleInstaces/multiple_instances_with_design_time_knowledge.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/MultipleInstaces/multiple_instances_with_design_time_knowledge.xml"
-    }, {
-            "name": "critical_section",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/critical_section.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/critical_section.xml"
-    }, {
-            "name": "interleaved_parallel_routing",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/interleaved_parallel_routing.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/interleaved_parallel_routing.xml"
-    }, {
-            "name": "interleaved_routing",
-            "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/interleaved_routing.xml",
-            "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/interleaved_routing.xml"
-        }
-    ]
+        "execution_handlers": [
+                "ruby",
+                "rust"
+        ],
+        "process_engines": [
+                {
+                        "name": "echo",
+                        "url": "https://cpee.org/flow/start/url/"
+                },
+                {
+                        "name": "demo",
+                        "url": "https://cpee.org/flow/start/url/"
+                }
+        ],
+        "tests": [
+                {
+                        "name": "service_call",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_call.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_call.xml"
+                },
+                {
+                        "name": "service_script_call",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/service_script_call.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/service_script_call.xml"
+                },
+                {
+                        "name": "script_call",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/script_call.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/script_call.xml"
+                },
+                {
+                        "name": "subprocesstest",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/OwnBasic/subprocesstest.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/OwnBasic/subprocesstest.xml"
+                },
+                {
+                        "name": "exclusive_choice_simple_merge",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/exclusive_choice_simple_merge.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/exclusive_choice_simple_merge.xml"
+                },
+                {
+                        "name": "parallel_split_and_synchronization",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/parallel_split_and_synchronization.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/parallel_split_and_synchronization.xml"
+                },
+                {
+                        "name": "sequence",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/BasicControlFlow/sequence.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/BasicControlFlow/sequence.xml"
+                },
+                {
+                        "name": "cancelling_discriminator",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/cancelling_discriminator.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/cancelling_discriminator.xml"
+                },
+                {
+                        "name": "multi_choice_chained",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/multi_choice_chained.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/multi_choice_chained.xml"
+                },
+                {
+                        "name": "multi_choice_parallel",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/multi_choice_parallel.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/multi_choice_parallel.xml"
+                },
+                {
+                        "name": "thread_split_thread_merge",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/AdvancedBranchingandSynchronization/thread_split_thread_merge.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/thread_split_thread_merge.xml"
+                },
+                {
+                        "name": "cancel_multiple_instance_activity",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml"
+                },
+                {
+                        "name": "loop_pretest",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/Iterations/loop_pretest.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/Iterations/loop_pretest.xml"
+                },
+                {
+                        "name": "loop_posttest",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/Iterations/loop_posttest.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/Iterations/loop_posttest.xml"
+                },
+                {
+                        "name": "cancelling_partial_join_multiple_instances",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/MultipleInstaces/cancelling_partial_join_multiple_instances.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/MultipleInstaces/cancelling_partial_join_multiple_instances.xml"
+                },
+                {
+                        "name": "multiple_instances_with_design_time_knowledge",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/MultipleInstaces/multiple_instances_with_design_time_knowledge.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/MultipleInstaces/multiple_instances_with_design_time_knowledge.xml"
+                },
+                {
+                        "name": "critical_section",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/critical_section.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/critical_section.xml"
+                },
+                {
+                        "name": "interleaved_parallel_routing",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/interleaved_parallel_routing.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/interleaved_parallel_routing.xml"
+                },
+                {
+                        "name": "interleaved_routing",
+                        "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/StateBased/interleaved_routing.xml",
+                        "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/StateBased/interleaved_routing.xml"
+                }
+        ]
 }
