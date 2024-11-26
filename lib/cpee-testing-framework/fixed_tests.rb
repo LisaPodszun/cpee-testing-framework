@@ -3,6 +3,7 @@ require "xml/smart"
 
 module TestHelpers
     
+
     
     NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
         "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
@@ -14,7 +15,7 @@ module TestHelpers
     end
 
     # TODO: find out how to start rust instance
-    def run_test_case(start_url, doc_url, identifier, data)
+    def run_test_case(start_url, doc_url, data)
         puts 'in run test case'
         instance, uuid, url = post_testset(start_url, doc_url)
         puts 'after post testset'
@@ -34,14 +35,35 @@ module TestHelpers
         data[url][:log].to_h
     end
 
-    def run_tests_on(start_url_ins_1, doc_url_ins_1, identifier_1, start_url_ins_2, doc_url_ins_2, identifier_2, data)
+    def run_tests_on(settings, data)
         puts "in run tests on"
         
-        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, identifier_1, data)
+        engine_1 = ''
+        engine_2 = ''
+        doc_url_ins_1 = ''
+        doc_url_ins_2 = ''
+
+        config = JSON.parse(File.read('./server/config.json'))
+        
+        config['process_engines'].each do |entry|
+            if entry['name'] == settings['instance_1']['process_engine']
+              engine_1 = entry['url']
+            elsif entry['name'] == settings['instance_2']['process_engine']
+              engine_2 = entry['url']
+            end
+        end
+        config['tests'].each do |entry|
+          if entry['name'] == 'service_call'
+            doc_url_ins_1 = entry[settings['instance_1']['executionhandler']]
+            doc_url_ins_2 = entry[settings['instance_2']['executionhandler']]
+            break
+          end
+        end
+        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, data)
         
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, identifier_2, data)
+        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, data)
 
         puts "Rust log"
         p rust_log

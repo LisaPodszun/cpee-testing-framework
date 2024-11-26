@@ -1,10 +1,17 @@
 
-/*
+
 jQuery(function ($) {
     $(document).ajaxSend(function () {
         $("#overlay").fadeIn(300);
     });
-}); */
+});
+jQuery(function ($) {
+    $(document).ajaxComplete(function () {
+        setTimeout(function () {
+            $("#overlay").fadeOut(300);
+        }, 500);
+    });
+});
 function displayResults( data ){
     
 }
@@ -14,7 +21,11 @@ $(document).ready(function () {
      let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
      let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/";
  
-     $.getJSON(config_url, function(data){
+     $.ajax({
+        url: config_url,
+        type: 'GET',
+        dataType: 'json',
+        global: false}).done(function (data) {
          for (let index in data["process_engines"]) {
              let item = data["process_engines"][index]
              console.log(item);
@@ -31,8 +42,7 @@ $(document).ready(function () {
              ($('#test_case')).append($(new Option(item['name'], [item['ruby'], item['rust']])));
          };
          });
-});
-/*
+         
     $("#start").click(function () {
         $("#main").remove();
         let form_data = {
@@ -61,10 +71,8 @@ $(document).ready(function () {
                 console.log(data);
             }
         }).done(function () {
-            setTimeout(function () {
-                $("#overlay").fadeOut(300);
-            }, 500);
+            
             displayResults(data);
         });
     });
-});*/
+});

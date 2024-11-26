@@ -31,12 +31,15 @@ module CPEE
       def response
         data = @a[0]
         testinstances = @a[1]
-        #settings = JSON.parse(@p[0].value.read)
-
-        tests = [
-          :test_service_call,
-        # :test_service_script_call
-        ]
+        settings = JSON.parse(@p[0].value.read)
+        if settings['tests'] == 'all'
+          tests = [
+            :test_service_call,
+        #   :test_service_script_call
+          ]
+        else
+          tests = [settings['tests'].to_sym]
+        end
 
         i  = 0
         i += 1 while testinstances.key?(i)
@@ -57,7 +60,7 @@ module CPEE
             testinstance[testname] = {}
             testinstance[testname][:start] = Time.now
             testinstance[:currently_running] = testname
-            send testname, data, testinstance[testname]
+            send testname, data, testinstance, settings 
             testinstance[testname][:end] = Time.now
             testinstance[testname][:duration_in_seconds] = testinstance[testname][:end] - testinstance[testname][:start]
             testinstance[:finished] += 1
