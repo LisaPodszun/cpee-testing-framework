@@ -19,7 +19,7 @@ $(document).ready(function () {
 
      
      let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
-     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/";
+     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
  
      $.ajax({
         url: config_url,

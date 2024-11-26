@@ -12,7 +12,7 @@
     <parameter name="configuration" mimetype="application/json"/>
   </message>
   <resource>
-    <get  out="instance"/>
+    <post in="settings"  out="instance"/>
     <resource relative="\d+">
       <get out="results"/>
     </resource>
