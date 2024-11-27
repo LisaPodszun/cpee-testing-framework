@@ -28,7 +28,6 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
-        console.log(data)
         for (let index in data["process_engines"]) {
             let item = data["process_engines"][index]
             // console.log(item);
@@ -43,9 +42,9 @@ $(document).ready(function () {
             let item = data['tests'][index];
             $('#test_case').append($(new Option(item["name"], item['name'])));
         };
-        console.log($("#start").attr("disabled"));
-        $("#start").attr("disabled", false);
-        console.log($("#start").attr("disabled"));
+        console.log($('#start').attr('disabled'));
+        $('#start').attr('disabled', false);
+        console.log($('#start').attr('disabled'));
     });
 
     $("#start").click(function () {
