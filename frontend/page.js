@@ -43,7 +43,9 @@ $(document).ready(function () {
             let item = data['tests'][index];
             $('#test_case').append($(new Option(item["name"], item['name'])));
         };
+        console.log($("#start").attr("disabled"));
         $("#start").attr("disabled", false);
+        console.log($("#start").attr("disabled"));
     });
 
     $("#start").click(function () {
