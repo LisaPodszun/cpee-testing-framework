@@ -12,7 +12,7 @@ module TestCases
     cf_ruby_result = cf_service_call(results[6])
     cf_rust_result = cf_service_call(results[7])
 
-    testinstance[:test_service_call][:result] = JSON::encode(results)
+    testinstance[:test_service_call][:result] = results.to_json
 
     puts "Passed control flow tests?"
     puts cf_ruby_result

@@ -13,6 +13,7 @@ jQuery(function ($) {
     });
 });
 function displayResults(data) {
+    results = JSON.parse(data);
 
 }
 $(document).ready(function () {
@@ -42,39 +43,38 @@ $(document).ready(function () {
             let item = data['tests'][index];
             $('#test_case').append($(new Option(item["name"], item['name'])));
         };
-    }).done(function () {
-        console.log($('#test_case').val())
-        const form_data =
-        {
+        $("#start").attr("disabled", false);
+    });
+
+    $("#start").click(function () {
+        const form_data =  {
             instance_1: { process_engine: $("#cpee1").val(), execution_handler: $("#exe1").val() },
             instance_2: { process_engine: $("#cpee2").val(), execution_handler: $("#exe2").val() },
             test: $("#test_case").val()
         };
 
-        $("#start").click(function () {
-            $("#main").remove();
-            console.log("in click");
-            const settings = JSON.stringify(form_data);
-            $.ajax({
-                url: run_tests_url,
-                type: 'POST',
-                data: settings,
-                dataType: 'json',
-                success: function (data) {
-                    let ins = data["instance"];
-                }
-            });
-            $.ajax({
-                url: run_tests_url + ins,
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data);
-                }
-            }).done(function (data) {
-
-                displayResults(data);
-            });
+        $("#main").remove();
+        const settings = JSON.stringify(form_data);
+        console.log(settings)
+        $.ajax({
+            url: run_tests_url,
+            type: 'POST',
+            data: settings,
+            contentType: 'application/json',
+            headers: { 'Content-ID': 'settings' },
+            success: function (data) {
+                let ins = data["instance"];
+            }
         });
+        /*
+        $.ajax({
+            url: run_tests_url + ins,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                displayResults(data);
+            }
+        })
+        */
     });
 });

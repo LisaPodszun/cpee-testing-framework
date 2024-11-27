@@ -84,11 +84,11 @@ module TestHelpers
         matches[0].each do |key, value| 
             if value.instance_of?(Integer)
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
-                structure_differences_ruby.merge({key => dif_structure[1]})
-                structure_differences_rust.merge({value => dif_structure[0]})
+                structure_differences_ruby.merge!({key => dif_structure[1]})
+                structure_differences_rust.merge!({value => dif_structure[0]})
                 diff_content = content_test(rust_log[value]["message"], dif_structure[0], ruby_log[key]["message"], dif_structure[1])
-                content_differences_ruby.merge({key => diff_content})
-                content_differences_rust.merge({value => diff_content})
+                content_differences_ruby.merge!({key => diff_content})
+                content_differences_rust.merge!({value => diff_content})
             end
         end
 
@@ -96,7 +96,7 @@ module TestHelpers
         rust_cf_events = extract_cf_events(rust_log)
 
         puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
-        [differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
+        [ruby_log, rust_log, differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
 
     end
 
