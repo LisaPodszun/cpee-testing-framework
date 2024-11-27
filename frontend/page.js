@@ -28,6 +28,7 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
+        console.log("Done with get config");
         for (let index in data["process_engines"]) {
             let item = data["process_engines"][index]
             // console.log(item);
