@@ -1,13 +1,13 @@
 require_relative 'helpers'
-require "xml/smart"
-
+require 'xml/smart'
+require 'pathname'
 module TestHelpers
-    
 
-    
+
+
     NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
         "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
-    
+
     def instance_finished(event_log)
         sleep 5
         @q.enq "done"
@@ -37,14 +37,18 @@ module TestHelpers
 
     def run_tests_on(settings, data)
         puts "in run tests on"
-        
+
         engine_1 = ''
         engine_2 = ''
         doc_url_ins_1 = ''
         doc_url_ins_2 = ''
 
-        config = JSON.parse(File.read('./server/config.json'))
-        
+
+        pn =  Pathname.new(__dir__).parent.parent
+        puts pn.join('server/config.json')
+        file = File.read(pn.join('server/config.json'))
+        config = JSON.parse(file)
+
         config['process_engines'].each do |entry|
             if entry['name'] == settings['instance_1']['process_engine']
               engine_1 = entry['url']
@@ -60,7 +64,7 @@ module TestHelpers
           end
         end
         ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, data)
-        
+
         puts "Ruby log"
         p ruby_log
         rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, data)
@@ -81,7 +85,7 @@ module TestHelpers
         content_differences_ruby = {}
         content_differences_rust = {}
 
-        matches[0].each do |key, value| 
+        matches[0].each do |key, value|
             if value.instance_of?(Integer)
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
                 structure_differences_ruby.merge!({key => dif_structure[1]})
@@ -105,17 +109,17 @@ module TestHelpers
         dif_ruby_to_rust = []
         # holds all keys rust - ruby
         dif_rust_to_ruby = []
-        
+
         dif_ruby_to_rust = hash_structure_test([], ruby_log_entry, rust_log_entry)
-        
+
         dif_rust_to_ruby = hash_structure_test([], rust_log_entry, ruby_log_entry)
-        
+
         [dif_rust_to_ruby, dif_ruby_to_rust]
     end
 
     def hash_structure_test(path, hash_1, hash_2)
         diff = []
-        # test hash_1 > hash_2 
+        # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
             if !hash_2.key?(key)
@@ -127,15 +131,15 @@ module TestHelpers
         end
         diff.flatten
     end
-    
+
     def content_test(rust_log_entry, dif_rust_to_ruby, ruby_log_entry, dif_ruby_to_rust)
         # save all common keys and if they hold the same or different values
         dif_content_keys = hash_content_test([], rust_log_entry, ruby_log_entry, dif_rust_to_ruby, dif_ruby_to_rust)
     end
-    
+
     def hash_content_test(path, hash_1, hash_2, dif_rust_to_ruby, dif_ruby_to_rust)
         diff = []
-        # test hash_1 > hash_2 
+        # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
             if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash)
@@ -205,7 +209,7 @@ module TestHelpers
         end
         puts "Control flow events"
         p cf_events
-        cf_events 
+        cf_events
     end
 
     def events_match?(ruby_log_entry, rust_log_entry)
@@ -240,7 +244,7 @@ module TestHelpers
 
         when "gateway/join"
             rust_log_entry["message"]["content"]["branches"] == ruby_log_entry["message"]["content"]["branches"]
-            
+
         when "gateway/split"
             rust_log_entry["message"]["name"] == ruby_log_entry["message"]["name"]
 
@@ -250,15 +254,15 @@ module TestHelpers
             dataelements && values
 
         when "activity/calling"
-            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
 
         when "activity/manipulating"
-            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
 
         when "activity/receiving"
-            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
         when "activity/done"
-            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"] 
+            rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
         when "status/resource_utilization"
             true
         end
@@ -271,7 +275,7 @@ module TestHelpers
         ruby_index = 0
         # ruby_log_entry => rust_log_entry
         ruby_log_tags = {}
-        # rust_log_entry => ruby_log_entry 
+        # rust_log_entry => ruby_log_entry
         rust_log_tags = {}
         while (ruby_index < ruby_log.length)
             ruby_event_type = ruby_log[ruby_index]["channel"].split(":")[2]
@@ -461,7 +465,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                         passed += 1
                     end
-                end        
+                end
             end
             (passed == 0)
         else
@@ -480,11 +484,11 @@ module TestHelpers
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
-                when 1 
+                when 1
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
                         passed += 1
                     end
-                when 2 
+                when 2
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
                         passed += 1
                     end
@@ -496,7 +500,7 @@ module TestHelpers
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
-                when 5 
+                when 5
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                         passed += 1
                     end
@@ -535,7 +539,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
                         passed += 1
                     end
-                when 5 
+                when 5
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a2")
                         passed += 1
                     end
@@ -578,7 +582,7 @@ module TestHelpers
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
-                when 1 
+                when 1
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
                         passed += 1
                     end
@@ -621,14 +625,14 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                         passed += 1
                     end
-                end        
+                end
             end
             (passed == 0)
         else
             false
         end
     end
-    
+
     # TODO : fix this test, see if it can execute
     def cf_multichoice_parallel(cf_events)
 
@@ -642,7 +646,7 @@ module TestHelpers
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
-                when 1 
+                when 1
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/decide/)
                         passed += 1
                     end
@@ -685,7 +689,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                         passed += 1
                     end
-                end        
+                end
             end
             (passed == 0)
         else
@@ -704,7 +708,7 @@ module TestHelpers
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
-                when 1 
+                when 1
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a2")
                         passed += 1
                     end
@@ -723,12 +727,12 @@ module TestHelpers
                 when 5
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
                         passed += 1
-                    end    
+                    end
                 when 6
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a2")
                         passed += 1
                     end
-                when 7    
+                when 7
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
@@ -744,7 +748,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a3")
                         passed += 1
                     end
-                end       
+                end
             end
             (passed == 0)
         else
@@ -793,7 +797,7 @@ module TestHelpers
                 when 7
                     if !(value["message"]["content"].key?("wait") && ["a1","a2", "a3"].include?(value["message"]["content"]["wait"][0]["position"]))
                         passed += 1
-                    end                               
+                    end
                 when 8
                     if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
                         passed += 1
@@ -801,7 +805,7 @@ module TestHelpers
                 when 9
                     if !(value["message"]["content"].key?("unmark") && ["a1","a2","a3"].include?(value["message"]["content"]["unmark"][0]["position"]))
                         passed += 1
-                    end   
+                    end
                 when 10
                     if !(value["message"]["content"].key?("after") && ["a1","a2","a3"].include?(value["message"]["content"]["after"][0]["position"]))
                         passed += 1
@@ -843,7 +847,7 @@ module TestHelpers
     end
 
     # runs with error, check with Juergen
-    def cf_multiple_instances_with_design_time_knowledge(cf_events)        
+    def cf_multiple_instances_with_design_time_knowledge(cf_events)
     end
 
     # not possible in comparison test
@@ -866,7 +870,7 @@ module TestHelpers
                         passed += 1
                         ecid = value["message"]["content"]["ecid"]
                     end
-                when 1 
+                when 1
                     if !(value["message"]["content"].key?("at") && ["a1", "a2", "a3", "a4", "a5"].include?(value["message"]["content"]["at"][0]["position"]))
                         passed += 1
                     end
@@ -897,7 +901,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a8")
                         passed += 1
                     end
-                when 8   
+                when 8
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a2")
                         passed += 1
                     end
@@ -916,7 +920,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a6")
                         passed += 1
                     end
-                when 12   
+                when 12
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a4")
                         passed += 1
                     end
@@ -951,7 +955,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a8")
                         passed += 1
                     end
-                when 20    
+                when 20
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
@@ -1030,7 +1034,7 @@ module TestHelpers
                 when 10
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
-                    end    
+                    end
                 end
             end
             (passed == 0)
@@ -1064,7 +1068,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
                         passed += 1
                     end
-                when 4 
+                when 4
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"]=="a1")
                         passed += 1
                     end
@@ -1092,7 +1096,7 @@ module TestHelpers
                     # strange extra event
                     if !(value["message"]["content"].key?("unmark"))
                         passed += 1
-                    end        
+                    end
                 end
             end
             (passed == 0)
@@ -1103,7 +1107,7 @@ module TestHelpers
 
     def cf_critical_section(cf_events)
         passed = 0
-        ecid = 0 
+        ecid = 0
         if cf_events.length == 9
             cf_events.each do |key, value|
                 case key
@@ -1124,7 +1128,7 @@ module TestHelpers
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"]=="a1")
                         passed += 1
                     end
-                when 4 
+                when 4
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"]=="a2")
                         passed += 1
                     end
@@ -1144,7 +1148,7 @@ module TestHelpers
                     # strange extra event
                     if !(value["message"]["content"].key?("unmark"))
                         passed += 1
-                    end        
+                    end
                 end
             end
             (passed == 0)
@@ -1156,7 +1160,7 @@ module TestHelpers
     # error message! Check once it can run
     def cf_cancel_multiple_instance_activity(cf_events)
         passed = 0
-        ecid = 0 
+        ecid = 0
         if cf_events.length == 9
             cf_events.each do |key, value|
                 case key
@@ -1197,7 +1201,7 @@ module TestHelpers
                     # strange extra event
                     if !(value["message"]["content"].key?("unmark"))
                         passed += 1
-                    end        
+                    end
                 end
             end
             (passed == 0)
@@ -1208,13 +1212,13 @@ module TestHelpers
 
     # runs with error, because of dataelements change
     def cf_loop_posttest(cf_events)
-        
+
     end
     # runs with error, because of dataelements change
     def cf_loop_pretest(cf_events)
 
     end
     #}}}
-    
-   
+
+
 end

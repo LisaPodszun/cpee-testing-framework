@@ -34,13 +34,13 @@ module CPEE
         settings = JSON.parse(@p[0].value.read)
         puts "Settings:"
         p settings
-        if settings['tests'] == 'all'
+        if settings['test'] == 'all'
           tests = [
             :test_service_call,
         #   :test_service_script_call
           ]
         else
-          tests = [settings['tests'].to_sym]
+          tests = [settings['test'].to_sym]
         end
 
         i  = 0
