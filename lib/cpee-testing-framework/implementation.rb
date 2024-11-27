@@ -18,11 +18,11 @@ module CPEE
 
     @event_log = {}
 
-     class Status < Riddl::Implementation #{{{
+    class Status < Riddl::Implementation #{{{
       def response
         Riddl::Parameter::Complex.new('results','application/json', @a[0].to_json)
       end
-    end
+    end #}}}
 
     class FullTest < Riddl::Implementation #{{{
       include Helpers
@@ -60,7 +60,7 @@ module CPEE
             testinstance[testname] = {}
             testinstance[testname][:start] = Time.now
             testinstance[:currently_running] = testname
-            send testname, data, testinstance, settings 
+            send testname, data, testinstance, settings
             testinstance[testname][:end] = Time.now
             testinstance[testname][:duration_in_seconds] = testinstance[testname][:end] - testinstance[testname][:start]
             testinstance[:finished] += 1
@@ -69,13 +69,13 @@ module CPEE
         end
         Riddl::Parameter::Simple.new('instance', i)
       end
-    end
+    end #}}}
 
     class Configuration < Riddl::Implementation #{{{
       def response
         Riddl::Parameter::Complex.new("configuration", "application/json", File.open("./config.json"))
       end
-    end
+    end #}}}
 
     class HandleEvents < Riddl::Implementation # {{{
       def response
@@ -98,10 +98,9 @@ module CPEE
           data[event['cpee-instance-url']][:end].continue
         end
       end
-    end
-    # }}}
+    end # }}}
 
-    def self::implementation(opts)
+    def self::implementation(opts) #{{{
       opts[:cpee]       ||= 'http://localhost:8298/'
       opts[:redis_path] ||= '/tmp/redis.sock'
       opts[:redis_db]   ||= 0
@@ -131,5 +130,6 @@ module CPEE
         end
       end
     end
-  end
+  end #}}}
+
 end
