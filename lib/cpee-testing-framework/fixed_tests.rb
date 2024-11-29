@@ -38,8 +38,8 @@ module TestHelpers
     def run_tests_on(settings, data)
         puts "in run tests on"
 
-        engine_1 = ''
-        engine_2 = ''
+        engine_1 = settings['instance_1']['process_engine']
+        engine_2 = settings['instance_2']['process_engine']
         doc_url_ins_1 = ''
         doc_url_ins_2 = ''
 
@@ -49,25 +49,23 @@ module TestHelpers
         file = File.read(pn.join('server/config.json'))
         config = JSON.parse(file)
 
-        config['process_engines'].each do |entry|
-            if entry['name'] == settings['instance_1']['process_engine']
-              engine_1 = entry['url']
-            elsif entry['name'] == settings['instance_2']['process_engine']
-              engine_2 = entry['url']
-            end
-        end
+
         config['tests'].each do |entry|
           if entry['name'] == 'service_call'
-            doc_url_ins_1 = entry[settings['instance_1']['executionhandler']]
-            doc_url_ins_2 = entry[settings['instance_2']['executionhandler']]
+
+
+            doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
+            doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
             break
           end
         end
-        ruby_log = run_test_case(start_url_ins_1, doc_url_ins_1, data)
+        puts "DOC URL 1: #{doc_url_ins_1}"
+        puts "DOC URL 2: #{doc_url_ins_2}"
+        ruby_log = run_test_case(engine_1, doc_url_ins_1, data)
 
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(start_url_ins_2, doc_url_ins_2, data)
+        rust_log = run_test_case(engine_2, doc_url_ins_2, data)
 
         puts "Rust log"
         p rust_log

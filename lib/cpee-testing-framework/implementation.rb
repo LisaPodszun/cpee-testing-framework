@@ -36,8 +36,8 @@ module CPEE
         p settings
         if settings['test'] == 'all'
           tests = [
-            :test_service_call,
-        #   :test_service_script_call
+            :service_call,
+        #   :service_script_call
           ]
         else
           tests = [settings['test'].to_sym]

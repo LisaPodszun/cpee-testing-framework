@@ -10,7 +10,7 @@ require 'json'
 require 'weel'
 
 module Helpers #{{{
-  
+
 
   def post_testset(start_url, doc_url) #{{{
     ins_id = -1
@@ -20,21 +20,29 @@ module Helpers #{{{
     srv = Riddl::Client.new(start_url)
 
     res = srv.resource('/')
-   
+    puts 'Doc URL'
+    p doc_url
     # create instance
     status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "fork_running"), Riddl::Parameter::Simple.new('url', doc_url)]
+    puts 'Headers:'
+    p headers
+    puts 'status:'
+    p status
+    puts 'Response:'
+    p response
     parsed_content = JSON.parse(headers['CPEE_INSTANTIATION'])
+    p parsed_content
     if status == 200
       ins_id = parsed_content['CPEE-INSTANCE']
       uuid = parsed_content['CPEE-INSTANCE-UUID']
       url = parsed_content['CPEE-INSTANCE-URL']
     end
-     # return instance number and instance uuid 
+     # return instance number and instance uuid
     return ins_id, uuid, url
   end #}}}
   private :post_testset
 
-  
+
   def handle_starting(instance) #{{{
     puts "in handle starting"
     srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
@@ -61,12 +69,12 @@ module Helpers #{{{
           (instance_id, cut_message) = *message.split(" ", 2)
           if instance == instance_id
             hash_message = JSON.parse cut_message
-            if /event:[0-9][0-9]:position\/change/ =~ event 
+            if /event:[0-9][0-9]:position\/change/ =~ event
               puts "Current event read: #{hash_message["content"].include?("unmark")}"
             end
             if /event:[0-9][0-9]:state\/change/ =~ event
               if hash_message["instance-name"] != "subprocess"
-                case hash_message["content"]["state"] 
+                case hash_message["content"]["state"]
                 when "running"
                   seen_state_running = true
                 when "finished", "stopped"
@@ -75,7 +83,7 @@ module Helpers #{{{
               end
             end
             if seen_state_running
-              if /event:[0-9][0-9]:position\/change/ =~ event 
+              if /event:[0-9][0-9]:position\/change/ =~ event
                 puts "Current event read in merge: #{hash_message["content"].include?("unmark")}"
               end
               if event_log.keys.include?(hash_message["timestamp"])
@@ -91,7 +99,7 @@ module Helpers #{{{
             end
           end
           #db.execute( "
-              #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)", 
+              #    INSERT INTO instances_events (instance, channel, m_content, time) VALUES (?,?,?,?)",
               #    [instance, what, message, hash_message['timestamp']])
         end
       end

@@ -4,11 +4,11 @@ require_relative 'fixed_tests'
 module TestCases
   include TestHelpers
   START =  "https://cpee.org/flow/start/url/"
-  
-  def test_service_call(data, testinstance, settings)
-    
+
+  def service_call(data, testinstance, settings)
+
     results = run_tests_on(settings, data)
-    
+
     cf_ruby_result = cf_service_call(results[6])
     cf_rust_result = cf_service_call(results[7])
 
@@ -23,7 +23,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_service_script_call()
+  def service_script_call()
     testdoc = ""
     results = run_tests_on(testdoc)
 
@@ -32,7 +32,7 @@ module TestCases
 
   end
 
-  def test_script_call()
+  def script_call()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -43,7 +43,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_subprocess_call()
+  def subprocess_call()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -57,7 +57,7 @@ module TestCases
   # Workflow patterns fully supported by the CPEE start from here
 
   # Basic Control flow
-  def test_sequence()
+  def sequence()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -68,7 +68,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_exclusive_choice_simple_merge()
+  def exclusive_choice_simple_merge()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -79,7 +79,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_parallel_split_synchronization()
+  def parallel_split_synchronization()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -88,12 +88,12 @@ module TestCases
     cf_rust_result = cf_parallel_split_synchronization(results[7])
 
     # TODO communicate to frontend
-    
+
   end
 
   # Advanced Branching and Synchronization
 
-  def test_multichoice_chained()
+  def multichoice_chained()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -104,7 +104,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_multichoice_parallel()
+  def multichoice_parallel()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -116,7 +116,7 @@ module TestCases
 
   end
 
-  def test_cancelling_discriminator()
+  def cancelling_discriminator()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -128,7 +128,7 @@ module TestCases
 
   end
 
-  def test_thread_split_thread_merge()
+  def thread_split_thread_merge()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -141,7 +141,7 @@ module TestCases
 
   # Multiple Instances
 
-  def test_multiple_instances_with_design_time_knowledge()
+  def multiple_instances_with_design_time_knowledge()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -153,14 +153,14 @@ module TestCases
   end
 
   # Impossible to test against one another
-  def test_multiple_instances_with_runtime_time_knowledge()
+  def multiple_instances_with_runtime_time_knowledge()
   end
 
   # Impossible to test against one another
-  def test_multiple_instances_without_runtime_time_knowledge()
+  def multiple_instances_without_runtime_time_knowledge()
   end
 
-  def test_cancelling_partial_join_multiple_instances()
+  def cancelling_partial_join_multiple_instances()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -173,7 +173,7 @@ module TestCases
 
   # State Based
 
-  def test_interleaved_routing()
+  def interleaved_routing()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -185,7 +185,7 @@ module TestCases
   end
 
 
-  def test_interleaved_parallel_routing()
+  def interleaved_parallel_routing()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -196,7 +196,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_critical_section()
+  def critical_section()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -209,7 +209,7 @@ module TestCases
 
   # Cancellation and Force Completion
 
-  def test_cancel_multiple_instance_activity()
+  def cancel_multiple_instance_activity()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -222,7 +222,7 @@ module TestCases
 
   # Iterations
 
-  def test_loop_posttest()
+  def loop_posttest()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)
@@ -233,7 +233,7 @@ module TestCases
     # TODO communicate to frontend
   end
 
-  def test_loop_pretest()
+  def loop_pretest()
     # TODO: setup doc links
     testdoc = ""
     results = run_tests_on(testdoc)

@@ -17,8 +17,6 @@ function displayResults(data) {
 
 }
 $(document).ready(function () {
-
-
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
 
@@ -28,7 +26,6 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
-        console.log("Done with get config");
         for (let index in data["process_engines"]) {
             let item = data["process_engines"][index]
             // console.log(item);
@@ -43,9 +40,7 @@ $(document).ready(function () {
             let item = data['tests'][index];
             $('#test_case').append($(new Option(item["name"], item['name'])));
         };
-        console.log($('#start').attr('disabled'));
-        $('#start').attr('disabled', 'false');
-        console.log($('#start').attr('disabled'));
+        $('#start').removeAttr('disabled');
     });
 
     $("#start").click(function () {
