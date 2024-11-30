@@ -15,6 +15,7 @@ module TestHelpers
         puts 'after post testset'
         puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
         data[url] = {}
+        data[url][:resource_utilization] = []
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
         handle_starting(instance, url)
@@ -253,8 +254,6 @@ module TestHelpers
             rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
         when "activity/done"
             rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
-        when "status/resource_utilization"
-            true
         end
     end
 
@@ -271,6 +270,7 @@ module TestHelpers
             ruby_event_type = ruby_log[ruby_index]["channel"]
             rust_event_type = rust_log[rust_index]["channel"]
             if missing_events_rust.include?(ruby_event_type)
+                # Rust log does not contain that event type, thus skip it
                 ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
                 ruby_index += 1
             elsif rust_event_type == ruby_event_type
