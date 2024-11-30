@@ -126,9 +126,9 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'settings'
 
           on resource '\d+' do |res|
-            puts "that strange res"
-            p res.keys
-            run Status, opts[:testinstances][res[:results].last] if get
+            puts "that strange res behind :r"
+            p res[:r]
+            run Status, opts[:testinstances][res[:r].last] if get
           end
 
           on resource 'configuration' do
