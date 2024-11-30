@@ -201,7 +201,7 @@ module TestHelpers
         log.values.each do |entry|
             channel = entry["channel"]
             if (["position/change", "gateway/decide", "gateway/join", "gateway/split"].include?(channel) && entry["message"]["instance-name"] != "subprocess")
-                cf_events =  cf_events.merge({index => entry})
+                cf_events.merge!({index => entry})
                 index +=1
             end
         end
