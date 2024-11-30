@@ -299,7 +299,7 @@ module TestHelpers
                 rust_index += 1
             else
                 rust_log_tags = rust_log_tags.merge({rust_index => "no_match"})
-                p "could not find match for #{event_type}, Content ins 1: #{rust_log[rust_index]}"
+                p "could not find match for #{event_type}, Content ins 2: #{rust_log[rust_index]}"
                 rust_index += 1
             end
         end

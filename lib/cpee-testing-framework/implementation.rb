@@ -91,6 +91,7 @@ module CPEE
         event = JSON.parse(@p[3].value.read)
         if topic == 'status'
           data[event['instance-url']][:resource_utilization] << event
+          return
         end
 
         if data[event['instance-url']][:log].key? event['timestamp']
