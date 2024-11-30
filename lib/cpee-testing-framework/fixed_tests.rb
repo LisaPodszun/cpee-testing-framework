@@ -339,6 +339,7 @@ module TestHelpers
             (passed == 0)
         else
             puts "not enough cf events! Expected 3 but got #{cf_events.length}"
+            p cf_events
             # TODO: no control flow test possible, missing events
             false
         end
