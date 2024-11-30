@@ -94,10 +94,10 @@ module CPEE
         puts "event value got in handleevents"
         p event
 
-        data[event['cpee-instance-url']][:log][event['timestamp']] = event
+        data[event['instance-url']][:log][event['timestamp']] = event
 
         if topic =~ 'state' && eventname == 'finished'
-          data[event['cpee-instance-url']][:end].continue
+          data[event['instance-url']][:end].continue
         end
       end
     end # }}}
