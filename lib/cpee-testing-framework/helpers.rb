@@ -44,7 +44,8 @@ module Helpers #{{{
 
 
   def handle_starting(instance, instance_url) #{{{
-    srv = Riddl::Client.new(instance_url)
+    base_url = File.dirname(instance_url)
+    srv = Riddl::Client.new(base_url, File.join(base_url, "?riddl-description"))
     res = srv.resource("/#{instance}/properties/state")
     status, response = res.put Riddl::Parameter::Simple.new('value','running')
     p "Handle starting: status: #{status}, response: #{response}"
