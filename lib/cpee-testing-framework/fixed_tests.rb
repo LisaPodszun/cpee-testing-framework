@@ -215,24 +215,18 @@ module TestHelpers
                 if rust_log_entry["message"]["content"].keys.include?("at")
                     ruby_log_entry["message"]["content"]["at"][0]["position"] == rust_log_entry["message"]["content"]["at"][0]["position"]
                 else
-                    p "Entry 1: #{ruby_log_entry}"
-                    p "Entry 2: #{rust_log_entry}"
                     false
                 end
             elsif content_keys.include?("after")
                 if rust_log_entry["message"]["content"].keys.include?("after")
                     ruby_log_entry["message"]["content"]["after"][0]["position"] == rust_log_entry["message"]["content"]["after"][0]["position"]
                 else
-                    p "Entry 1: #{ruby_log_entry}"
-                    p "Entry 2: #{rust_log_entry}"
                     false
                 end
             elsif content_keys.include?("unmark")
                 if rust_log_entry["message"]["content"].keys.include?("unmark")
                     ruby_log_entry["message"]["content"]["unmark"][0]["position"] == rust_log_entry["message"]["content"]["unmark"][0]["position"]
                 else
-                    p "Entry 1: #{ruby_log_entry}"
-                    p "Entry 2: #{rust_log_entry}"
                     false
                 end
             end
