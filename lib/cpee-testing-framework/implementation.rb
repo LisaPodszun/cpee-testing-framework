@@ -92,6 +92,10 @@ module CPEE
         p "Topic: #{topic}"
         p "Event: #{eventname}"
         p "content: #{event}"
+
+        if data[event['instance-url']][:log].key? event['timestamp']
+          p "ALREADY CONTAINS THE TIMESTAMP"
+        end
         data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
         if topic == 'state' && event['content']['state'] == 'finished'
