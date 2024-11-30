@@ -23,7 +23,7 @@ module Helpers #{{{
     puts 'Doc URL'
     p doc_url
     # create instance
-    status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "fork_running"), Riddl::Parameter::Simple.new('url', doc_url)]
+    status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "wait_running"), Riddl::Parameter::Simple.new('url', doc_url)]
     puts 'Headers:'
     p headers
     puts 'status:'
@@ -43,10 +43,8 @@ module Helpers #{{{
   private :post_testset
 
 
-  def handle_starting(instance) #{{{
-    puts "in handle starting"
-    srv = Riddl::Client.new(@@cpee, File.join(@@cpee,'?riddl-description'))
-    puts "created new client"
+  def handle_starting(instance, instance_rl) #{{{
+    srv = Riddl::Client.new(instance_url, File.join(instance_url,'?riddl-description'))
     res = srv.resource("/#{instance}/properties/state")
     status, response = res.put Riddl::Parameter::Simple.new('value','running')
   end #}}}

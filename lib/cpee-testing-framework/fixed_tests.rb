@@ -17,6 +17,7 @@ module TestHelpers
         data[url] = {}
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
+        handle_starting(instance, url)
 
         puts 'before wait'
         puts "URL-ID: #{url}"
