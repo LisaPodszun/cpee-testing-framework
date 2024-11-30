@@ -93,6 +93,9 @@ module CPEE
           data[event['instance-url']][:resource_utilization] << event
           return
         end
+        if topic == 'transformation' || topic == 'description' || topic == 'endpoints'
+          return
+        end
 
         if data[event['instance-url']][:log].key? event['timestamp']
           p "Topic: #{topic}"
