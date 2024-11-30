@@ -267,32 +267,19 @@ module TestHelpers
         # rust_log_entry => ruby_log_entry
         rust_log_tags = {}
         while (ruby_index < ruby_log.length)
+            rust_index = 0
             ruby_event_type = ruby_log[ruby_index]["channel"]
             rust_event_type = rust_log[rust_index]["channel"]
             if missing_events_rust.include?(ruby_event_type)
                 # Rust log does not contain that event type, thus skip it
                 ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
                 ruby_index += 1
-            elsif rust_event_type == ruby_event_type
-                if events_match?(rust_log[rust_index],ruby_log[ruby_index])
+            elsif rust_event_type == ruby_event_type && events_match?(rust_log[rust_index],ruby_log[ruby_index])
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => rust_index})
                     rust_log_tags = rust_log_tags.merge({rust_index => ruby_index})
                     ruby_index += 1
-                    rust_index += 1
-                    after_last_rust_match = rust_index
-                else
-                    rust_index += 1
-                    if (rust_index == rust_log.length)
-                        ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
-                        rust_index = after_last_rust_match
-                        ruby_index += 1
-                    end
-                end
             else
-                if missing_events_ruby.include?(rust_event_type)
-                    rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
-                    rust_index += 1
-                else
+                if (rust_index >= rust_log.length)
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
                     ruby_index += 1
                 end
