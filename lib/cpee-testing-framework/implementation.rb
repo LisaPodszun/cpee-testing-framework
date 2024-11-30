@@ -89,7 +89,9 @@ module CPEE
         eventname = @p[2].value
         # value
         event = JSON.parse(@p[3].value.read)
-
+        p "Topic: #{topic}"
+        p "Event: #{eventname}"
+        p "content: #{event}"
         data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
         if topic == 'state' && event['content']['state'] == 'finished'
