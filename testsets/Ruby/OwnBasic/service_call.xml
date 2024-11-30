@@ -1,6 +1,6 @@
 <testset xmlns="http://cpee.org/ns/properties/2.0">
     <subscriptions xmlns="http://riddl.org/ns/common-patterns/notifications-producer/2.0">
-	  <subscription id="_testing_service" url="https://echo.bpm.in.tum.de/fulltest/events/">
+	  <subscription id="_testing_service" url="https://echo.bpm.in.tum.de/fulltest/server/events/">
 	  <topic id='activity'>
 	      <event>calling</event>
 	      <event>receiving</event>
