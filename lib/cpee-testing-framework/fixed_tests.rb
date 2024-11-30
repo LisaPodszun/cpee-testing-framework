@@ -282,6 +282,7 @@ module TestHelpers
             else
                 rust_index += 1
                 if (rust_index >= rust_log.length)
+                    p "could not find match for #{ruby_event_type}, Content ins 1: #{ruby_log[ruby_index]}"
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
                     ruby_index += 1
                     rust_index = 0
@@ -298,12 +299,13 @@ module TestHelpers
                 rust_index += 1
             else
                 rust_log_tags = rust_log_tags.merge({rust_index => "no_match"})
+                p "could not find match for #{event_type}, Content ins 1: #{rust_log[rust_index]}"
                 rust_index += 1
             end
         end
         [ruby_log_tags, rust_log_tags]
     end
-    #{{{  # control flow tests
+#{{{  # control flow tests
     def cf_service_call(cf_events)
         passed = 0
         if cf_events.length == 3
