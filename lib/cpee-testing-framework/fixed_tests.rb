@@ -29,7 +29,7 @@ module TestHelpers
         data[url][:end].wait
         puts 'after wait'
         # sort by timestamp from weel
-        data[url][:log].sort_by!{|key, value| key}
+        data[url][:log] = data[url][:log].sort_by{|key, value| key}
         data[url][:log].each_with_index do |entry,i|
             entry[0] = i
         end
