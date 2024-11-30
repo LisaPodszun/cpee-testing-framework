@@ -89,12 +89,14 @@ module CPEE
         eventname = @p[2].value
         # value
         event = JSON.parse(@p[3].value.read)
-        p "Topic: #{topic}"
-        p "Event: #{eventname}"
-        p "content: #{event}"
 
         if data[event['instance-url']][:log].key? event['timestamp']
+          p "Topic: #{topic}"
+          p "Event: #{eventname}"
+          p "content: #{event}"
+
           p "ALREADY CONTAINS THE TIMESTAMP"
+          p "Overwriting value: #{data[event['instance-url']][:log][event['timestamp']]}"
         end
         data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
