@@ -52,6 +52,7 @@ module CPEE
           :finished => 0,
           :results => {}
         }
+        
         testinstance = testinstances[i]
 
         puts "fulltest call"

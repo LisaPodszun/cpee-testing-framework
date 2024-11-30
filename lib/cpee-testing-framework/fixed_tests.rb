@@ -99,7 +99,7 @@ module TestHelpers
         rust_cf_events = extract_cf_events(rust_log)
 
         puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
-        [ruby_log, rust_log, differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
+        [ruby_log, rust_log, differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events].to_h
 
     end
 
@@ -199,8 +199,7 @@ module TestHelpers
         cf_events = {}
         index = 0
         log.values.each do |entry|
-            tmp = entry["channel"].split(":")
-            channel = tmp[2]
+            channel = entry["channel"]
             if (["position/change", "gateway/decide", "gateway/join", "gateway/split"].include?(channel) && entry["message"]["instance-name"] != "subprocess")
                 cf_events =  cf_events.merge({index => entry})
                 index +=1
@@ -212,8 +211,7 @@ module TestHelpers
     end
 
     def events_match?(ruby_log_entry, rust_log_entry)
-        event_type = ruby_log_entry["channel"]
-        channel = event_type.split(":")[2]
+        channel = ruby_log_entry["channel"]
         case channel
         when "state/change"
             rust_log_entry["message"]["content"]["state"] == ruby_log_entry["message"]["content"]["state"]
@@ -277,8 +275,8 @@ module TestHelpers
         # rust_log_entry => ruby_log_entry
         rust_log_tags = {}
         while (ruby_index < ruby_log.length)
-            ruby_event_type = ruby_log[ruby_index]["channel"].split(":")[2]
-            rust_event_type = rust_log[rust_index]["channel"].split(":")[2]
+            ruby_event_type = ruby_log[ruby_index]["channel"]
+            rust_event_type = rust_log[rust_index]["channel"]
             if missing_events_rust.include?(ruby_event_type)
                 ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
                 ruby_index += 1
@@ -309,7 +307,7 @@ module TestHelpers
         end
         rust_index = 0
         while (rust_index < rust_log.length)
-            event_type = rust_log[rust_index]["channel"].split(":")[2]
+            event_type = rust_log[rust_index]["channel"]
             if missing_events_ruby.include?(event_type)
                 rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
                 rust_index += 1
