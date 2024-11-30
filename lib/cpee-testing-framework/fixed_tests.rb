@@ -99,7 +99,7 @@ module TestHelpers
         rust_cf_events = extract_cf_events(rust_log)
 
         puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
-        [ruby_log, rust_log, differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events].to_h
+        [ruby_log, rust_log, differences_log_entries, matches,  structure_differences_ruby, structure_differences_rust, content_differences_ruby, content_differences_rust, ruby_cf_events, rust_cf_events]
 
     end
 
