@@ -25,6 +25,7 @@ module TestHelpers
         data[url][:log] = {}
 
         puts 'before wait'
+        puts "URL-ID: #{url}"
         data[url][:end].wait
         puts 'after wait'
         # sort by timestamp from weel
