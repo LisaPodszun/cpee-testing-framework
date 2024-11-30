@@ -94,11 +94,12 @@ module CPEE
         puts "event value got in handleevents"
         p event
 
-        data[event['instance-url']][:log][event['timestamp']] = event
+        data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
         if topic == 'state' && event['content']['state'] == 'finished'
           puts "seen the state finished"
           p data[event['instance-url']][:end]
+          sleep 5
           data[event['instance-url']][:end].continue
         end
       end

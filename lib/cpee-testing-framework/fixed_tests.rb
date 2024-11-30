@@ -162,7 +162,7 @@ module TestHelpers
         missing_events_rust = []
         # store {event_type: amount}
         rust_log.each do |key, value|
-            channel = value["channel"].split(':')[2]
+            channel = value["channel"]
             if !events_rust.key?(channel)
                 events_rust.store(channel, 0)
             end
@@ -170,7 +170,7 @@ module TestHelpers
         end
         # store {event_type: amount}
         ruby_log.each do |key, value|
-            channel = value["channel"].split(':')[2]
+            channel = value["channel"]
             if !events_ruby.key?(channel)
                 events_ruby.store(channel, 0)
             end
