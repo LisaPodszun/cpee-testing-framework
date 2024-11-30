@@ -97,6 +97,8 @@ module CPEE
         data[event['instance-url']][:log][event['timestamp']] = event
 
         if topic == 'state' && eventname == 'finished'
+          puts "seen the state finished"
+          p data[event['instance-url']][:end]
           data[event['instance-url']][:end].continue
         end
       end
