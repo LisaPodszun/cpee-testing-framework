@@ -8,12 +8,6 @@ module TestHelpers
     NON_TESTABLE_ENTRIES = ["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid",
         "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_unmark_uuid"]
 
-    def instance_finished(event_log)
-        sleep 5
-        @q.enq "done"
-        event_log
-    end
-
     # TODO: find out how to start rust instance
     def run_test_case(start_url, doc_url, data)
         puts 'in run test case'

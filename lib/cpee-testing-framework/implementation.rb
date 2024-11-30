@@ -32,8 +32,6 @@ module CPEE
         data = @a[0]
         testinstances = @a[1]
         settings = JSON.parse(@p[0].value.read)
-        puts "Settings:"
-        p settings
         if settings['test'] == 'all'
           tests = [
             :service_call,
@@ -92,14 +90,10 @@ module CPEE
         # value
         event = JSON.parse(@p[3].value.read)
 
-        puts "event value got in handleevents"
-        p event
-
         data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
         if topic == 'state' && event['content']['state'] == 'finished'
           puts "seen the state finished"
-          p data[event['instance-url']][:end]
           Thread.new do 
             sleep 12
             data[event['instance-url']][:end].continue
@@ -133,7 +127,6 @@ module CPEE
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do
-            p "Test"
             run Configuration if get
           end
         end
