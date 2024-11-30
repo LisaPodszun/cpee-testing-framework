@@ -100,7 +100,7 @@ module CPEE
         if topic == 'state' && event['content']['state'] == 'finished'
           puts "seen the state finished"
           p data[event['instance-url']][:end]
-          sleep 15
+          sleep 30
           data[event['instance-url']][:end].continue
         end
       end
@@ -130,7 +130,6 @@ module CPEE
             p opts[:testinstances]
             run Status, opts[:testinstances][res[:r].last] if get
           end
-
           on resource 'configuration' do
             p "Test"
             run Configuration if get
