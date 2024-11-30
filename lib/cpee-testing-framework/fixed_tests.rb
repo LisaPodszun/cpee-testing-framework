@@ -72,7 +72,7 @@ module TestHelpers
         matches = match_logs(rust_log, ruby_log, differences_log_entries[1], differences_log_entries[2])
 
         puts "matched logs"
-        puts "can match perfectly? #{!(matches[0].include?("no_match") || matches[1].include?("no_match"))}"
+        puts "can match perfectly? #{!(matches[0].values.include?("no_match") || matches[1].values.include?("no_match"))}"
 
         structure_differences_ruby = {}
         structure_differences_rust = {}
