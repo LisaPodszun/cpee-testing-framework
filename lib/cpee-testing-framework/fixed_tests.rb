@@ -325,6 +325,8 @@ module TestHelpers
         passed = 0
         if cf_events.length == 3
             cf_events.each do |key, value|
+                puts key
+                puts value
                 case key
                 when 0
                     if !(value["message"]["content"].key?("at") && value["message"]["content"]["at"][0]["position"] == "a1")
