@@ -101,7 +101,7 @@ module CPEE
           puts "seen the state finished"
           p data[event['instance-url']][:end]
           Thread.new do 
-            sleep 6
+            sleep 12
             data[event['instance-url']][:end].continue
           end
         end
