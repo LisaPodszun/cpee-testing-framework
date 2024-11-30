@@ -14,6 +14,7 @@ module TestHelpers
         instance, uuid, url = post_testset(start_url, doc_url)
         puts 'after post testset'
         puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
+        sleep 8
         data[url] = {}
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
