@@ -107,7 +107,7 @@ module CPEE
         if topic == 'state' && event['content']['state'] == 'finished'
           puts "seen the state finished"
           Thread.new do 
-            sleep 12
+            sleep 5
             data[event['instance-url']][:end].continue
           end
         end
