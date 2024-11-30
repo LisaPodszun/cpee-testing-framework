@@ -23,7 +23,7 @@ module Helpers #{{{
     puts 'Doc URL'
     p doc_url
     # create instance
-    status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "wait_running"), Riddl::Parameter::Simple.new('url', doc_url)]
+    status, response, headers = res.post [Riddl::Parameter::Simple.new("behavior", "fork_wait"), Riddl::Parameter::Simple.new('url', doc_url)]
     puts 'Headers:'
     p headers
     puts 'status:'
