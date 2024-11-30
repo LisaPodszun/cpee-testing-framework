@@ -44,7 +44,7 @@ module Helpers #{{{
 
 
   def handle_starting(instance, instance_url) #{{{
-    srv = Riddl::Client.new(instance_url, File.join(instance_url,'?riddl-description'))
+    srv = Riddl::Client.new(instance_url)
     res = srv.resource("/#{instance}/properties/state")
     status, response = res.put Riddl::Parameter::Simple.new('value','running')
   end #}}}
