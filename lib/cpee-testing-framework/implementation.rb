@@ -127,7 +127,7 @@ module CPEE
 
           on resource '\d+' do |res|
             puts "that strange res behind :r"
-            p res[:r].last
+            p opts[:testinstances]
             run Status, opts[:testinstances][res[:r].last] if get
           end
 
