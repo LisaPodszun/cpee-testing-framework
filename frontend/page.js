@@ -60,7 +60,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             headers: { 'Content-ID': 'settings' },
             success: function (data) {
-                let ins = data["instance"];
+                console.log(data["instance"]);
             }
         });
         /*
