@@ -53,7 +53,6 @@ $(document).ready(function () {
         $("#main").remove();
         const settings = JSON.stringify(form_data);
         console.log(settings);
-        let ins;
         $.ajax({
             url: run_tests_url,
             type: 'POST',
@@ -62,22 +61,30 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
             console.log("post done");
-            ins = data;
-            do {
-                $.ajax({
-                    url: run_tests_url + ins,
-                    type: 'GET',
-                    dataType: 'application/json',
-                    async: false,
-                    success: function (data) {
-                        console.log(data);
-                        if (data["status"] === "finished") {
-                            displayResults(data);
-                        }
-                    }
-                })
-            } while (data["status"] !== "finished");
-
+            getResult(data);
         });
     });
 });
+
+async function getResult(ins) {
+    do {
+        await $.ajax({
+            url: run_tests_url + ins,
+            type: 'GET',
+            dataType: 'application/json',
+            success: function (data) {
+                if (data["status"] === "finished") {
+                    displayResults(data);
+                }
+            }
+        })
+        await delay(700);
+    } while (data["status"] !== "finished");
+}
+
+function delay(t) {
+    return new Promise(resolve => {
+      setTimeout(resolve, t);
+    });
+  }
+  
