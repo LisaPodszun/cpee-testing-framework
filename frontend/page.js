@@ -73,7 +73,7 @@ $(document).ready(function () {
                         if (data["status"] === "finished") {
                             displayResults(data);
                         } else {
-                            sleep(1);
+                            sleep(2000);
                         }
                     }
                 })
