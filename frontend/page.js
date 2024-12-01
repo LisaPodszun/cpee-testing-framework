@@ -5,10 +5,12 @@ async function displayResults(data_promise) {
 
 
     jQuery.each(data['results'], function (key, value) {
-        let row = $('<div class="row justify-content-center text-center slider"></div>').attr('id', key).text(key).click(function () {
+        let row = $('<div class="row justify-content-center text-center slider"></div>').attr('id', key).click(function () {
             $("#" + key + "-content").slideToggle("fast");
         });
-        let row_content = $('<div class="row justify-content-center text-center panel"></div>').attr('id', key + "-content").text(key).click(function () {
+        row.append(`<h3>${key}</h3>`)
+        
+        let row_content = $('<div class="row justify-content-center text-center panel"></div>').attr('id', key + "-content").text("Lorem ipsum").click(function () {
             $("#" + key + "-content").slideToggle("fast");
         });
         $('#results').append(row, row_content);
