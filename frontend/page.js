@@ -5,14 +5,12 @@ async function displayResults(data_promise) {
 
 
     jQuery.each(data['results'], function (key, value) {
+        let row_content = $('<div class="row justify-content-center text-center panel mx-5 border-top-0 border-primary"></div>').attr('id', key + "-content");
         let row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0 border-primary"></div>').attr('id', key).click(function () {
-            $("#" + key + "-content").slideToggle("fast");
+            row_content.slideToggle("fast");
         });
         row.append(`<h4>${key}</h4>`);
         
-        let row_content = $('<div class="row justify-content-center text-center panel mx-5 border-top-0 border-primary"></div>').attr('id', key + "-content").text("Lorem ipsum").click(function () {
-            $("#" + key + "-content").slideToggle("fast");
-        });
         inner_col = $('<div class="col mx-3 my-2"></div>');
         row_content.append(inner_col);
 
@@ -30,32 +28,50 @@ async function displayResults(data_promise) {
             if (index_2 == matches_ins_1[index_1]) {
                 // put matching elements here
                 let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
-                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
+                let inner_row_panel = $('<div class="row justify-content-center text-center panel mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.click(function (e) {
+                    inner_row_panel.slideToggle("fast");
+                    e.stopPropagation();
+                });
+
+                inner_row.append(`<h6>${value['log_instance_1'][index_1]['channel']}</h6>`);
+                
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
-                inner_row.append(ins_1_log,ins_2_log);
-                inner_col.append(inner_row);
+                inner_row_panel.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row, inner_row_panel);
                 index_1 += 1;
                 index_2 += 1;
             }
             else if ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1')) {
-                // put one block [ ins_1_element || matches_ins_1[index_1]]
                 let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
+                let inner_row_panel = $('<div class="row justify-content-center text-center panel mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.click(function () {
+                    inner_row_panel.slideToggle("fast");
+                    e.stopPropagation();
+                });
+
+                // put one block [ ins_1_element || matches_ins_1[index_1]]
                 inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_1[index_1]);
-                inner_row.append(ins_1_log,ins_2_log);
-                inner_col.append(inner_row);
+                inner_row_panel.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row, inner_row_panel);
                 index_1 += 1;
             }
             else {
-                // put one block [matches_ins_2[index_2]  || ins_2_element ]
                 let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
+                let inner_row_panel = $('<div class="row justify-content-center text-center panel mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.click(function () {
+                    inner_row_panel.slideToggle("fast");
+                    e.stopPropagation();
+                });
+                // put one block [matches_ins_2[index_2]  || ins_2_element ]
                 inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_2[index_2]);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
-                inner_row.append(ins_1_log,ins_2_log);
-                inner_col.append(inner_row);
+                inner_row_panel.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row_panel);
                 index_2 += 1;
             };
         }; 
