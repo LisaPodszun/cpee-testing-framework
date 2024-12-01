@@ -67,8 +67,8 @@ $(document).ready(function () {
 });
 
 async function getResult(run_tests_url, ins) {
+    let res = null;
     do {
-        let res = null;
         $.ajax({
             url: run_tests_url + ins,
             type: 'GET',
@@ -80,7 +80,7 @@ async function getResult(run_tests_url, ins) {
         await delay(700);
     } while (res == null || res["status"] !== "finished");
     displayResults(res);
-    
+
 }
 
 function delay(t) {
