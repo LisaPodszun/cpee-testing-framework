@@ -68,18 +68,19 @@ $(document).ready(function () {
 
 async function getResult(run_tests_url, ins) {
     do {
+        let res = null;
         $.ajax({
             url: run_tests_url + ins,
             type: 'GET',
             dataType: 'application/json',
             success: function (data) {
-                if (data["status"] === "finished") {
-                    displayResults(data);
-                }
+                res = data;
             }
         });
         await delay(700);
-    } while (data == null || data["status"] !== "finished");
+    } while (res == null || res["status"] !== "finished");
+    displayResults(res);
+    
 }
 
 function delay(t) {
