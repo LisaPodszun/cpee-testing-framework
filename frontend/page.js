@@ -61,6 +61,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
+            console.log("post done");
             ins = data;
             do {
                 $.ajax({
