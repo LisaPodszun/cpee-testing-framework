@@ -9,8 +9,8 @@ module TestCases
 
     results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_service_call(results[8])
-    cf_rust_result = cf_service_call(results[9])
+    cf_ruby_result = cf_service_call(results['cf_ins_1'])
+    cf_rust_result = cf_service_call(results['cf_ins_2'])
 
     testinstance[:service_call][:results] = results
 
