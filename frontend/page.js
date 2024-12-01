@@ -61,12 +61,12 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
             console.log("post done");
-            getResult(data);
+            getResult(run_tests_url, data);
         });
     });
 });
 
-async function getResult(ins) {
+async function getResult(run_tests_url, ins) {
     do {
         await $.ajax({
             url: run_tests_url + ins,
