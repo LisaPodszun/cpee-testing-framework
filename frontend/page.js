@@ -61,6 +61,7 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' },
             dataType: 'nonNegativeInteger',
             success: function (data) {
+                console.log("POST succeded");
                 console.log(data);
                 alert(data);
             }
