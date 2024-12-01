@@ -59,7 +59,7 @@ $(document).ready(function () {
             data: settings,
             contentType: 'application/json',
             headers: { 'Content-ID': 'settings' },
-            dataType: 'text',
+            dataType: 'nonNegativeInteger',
             success: function (data) {
                 console.log(data);
                 alert(data);
