@@ -14,11 +14,6 @@ module TestCases
 
     testinstance[:service_call][:results] = results
 
-    puts "Passed control flow tests?"
-    puts cf_ruby_result
-    puts "Passed control flow tests a second time?"
-    puts cf_rust_result
-
     p "ran all tests successfully"
     # TODO communicate to frontend
   end
