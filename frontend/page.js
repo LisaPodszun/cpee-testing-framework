@@ -1,4 +1,5 @@
-function displayResults(data) {
+async function displayResults(data_promise) {
+    let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
 
