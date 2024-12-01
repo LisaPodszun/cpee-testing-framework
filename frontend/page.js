@@ -61,6 +61,7 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' },
             success: function (data) {
                 console.log(data);
+                alert(data);
             }
         });
         /*
