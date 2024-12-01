@@ -20,6 +20,7 @@ module CPEE
 
     class Status < Riddl::Implementation #{{{
       def response
+        p @a[0].to_json
         Riddl::Parameter::Complex.new('results','application/json', @a[0].to_json)
       end
     end #}}}
@@ -137,8 +138,6 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'settings'
 
           on resource '\d+' do |res|
-            puts "that strange res behind :r"
-            pp opts[:testinstances]
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do
