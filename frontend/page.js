@@ -5,14 +5,51 @@ async function displayResults(data_promise) {
 
 
     jQuery.each(data['results'], function (key, value) {
-        let row = $('<div class="row justify-content-center text-center slider"></div>').attr('id', key).click(function () {
+        let row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0 border-primary"></div>').attr('id', key).click(function () {
             $("#" + key + "-content").slideToggle("fast");
         });
-        row.append(`<h3>${key}</h3>`)
+        row.append(`<h4>${key}</h4>`);
         
-        let row_content = $('<div class="row justify-content-center text-center panel"></div>').attr('id', key + "-content").text("Lorem ipsum").click(function () {
+        let row_content = $('<div class="row justify-content-center text-center panel mx-5 border-top-0 border-primary"></div>').attr('id', key + "-content").text("Lorem ipsum").click(function () {
             $("#" + key + "-content").slideToggle("fast");
         });
+        inner_col = $('<div class="col mx-3 my-2"></div>');
+        row_content.append(inner_col);
+
+        let matches_ins_1 = value['matches']['0'];
+        let matches_ins_2 = value['matches']['1'];
+        let index_1 = 0;
+        let index_2 = 0;
+        while ((index_1 < matches_ins_1.keys().length) || (index_2 < matches_ins_2.keys().length)) {
+            if (index_2 == matches_ins_1[index_1]) {
+                // put matching elements here
+                let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
+                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
+                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
+                inner_row.append(ins_1_log,ins_2_log);
+                index_1 += 1;
+                index_2 += 1;
+            }
+            else if ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1')) {
+                // put one block [ ins_1_element || matches_ins_1[index_1]]
+                let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
+                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
+                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_1[index_1]);
+                inner_row.append(ins_1_log,ins_2_log);
+                index_1 += 1;
+            }
+            else {
+                // put one block [matches_ins_2[index_2]  || ins_2_element ]
+                let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
+                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
+                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_2[index_2]);
+                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
+                inner_row.append(ins_1_log,ins_2_log);
+                index_2 += 1;
+            };
+        }; 
         $('#results').append(row, row_content);
 
         //jQuery.each()

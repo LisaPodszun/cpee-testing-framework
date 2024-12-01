@@ -270,7 +270,7 @@ module TestHelpers
             rust_event_type = rust_log[rust_index]["channel"]
             if missing_events_rust.include?(ruby_event_type)
                 # Rust log does not contain that event type, thus skip it
-                ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ruby"})
+                ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ins_1"})
                 ruby_index += 1
                 rust_index = 0
             elsif rust_event_type == ruby_event_type && events_match?(rust_log[rust_index],ruby_log[ruby_index])
@@ -292,7 +292,7 @@ module TestHelpers
         while (rust_index < rust_log.length)
             event_type = rust_log[rust_index]["channel"]
             if missing_events_ruby.include?(event_type)
-                rust_log_tags = rust_log_tags.merge({rust_index => "only_rust"})
+                rust_log_tags = rust_log_tags.merge({rust_index => "only_ins_2"})
                 rust_index += 1
             elsif rust_log_tags.keys.include?(rust_index)
                 rust_index += 1

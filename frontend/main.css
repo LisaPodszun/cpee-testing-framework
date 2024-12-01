@@ -17,9 +17,11 @@
 .slider {
   background-color: #0065bd;
 }
+
 .panel {
   display: none;
 }
+
 .cv-spinner {
   height: 100%;
   display: flex;
@@ -38,7 +40,6 @@
 
 @keyframes sp-anime {
   100% {
-      transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
-
