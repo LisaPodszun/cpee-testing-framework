@@ -16,8 +16,8 @@ async function displayResults(data_promise) {
         inner_col = $('<div class="col mx-3 my-2"></div>');
         row_content.append(inner_col);
 
-        let matches_ins_1 = value['matches']['0'];
-        let matches_ins_2 = value['matches']['1'];
+        let matches_ins_1 = value['matches'][0];
+        let matches_ins_2 = value['matches'][1];
         let index_1 = 0;
         let index_2 = 0;
         while ((index_1 < matches_ins_1.keys().length) || (index_2 < matches_ins_2.keys().length)) {
