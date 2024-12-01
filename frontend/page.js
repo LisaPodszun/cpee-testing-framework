@@ -2,10 +2,21 @@ async function displayResults(data_promise) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
-    let main = $("<div class='container-fluid' id='main'></div>");
-    main.append($('<div class="row justify-content-center text-center" id="title"></div>'));
-    $('body').append(main);
 
+
+    jQuery.each(data['results'], function (key, value) {
+        let row = $('<div class="row justify-content-center text-center slide"></div>').id(key).text(key).click(function () {
+            $("#" + key + "-content").slideToggle("fast");
+        });
+        let row_content = $('<div class="row justify-content-center text-center slide"></div>').id(key + "-content").text(key).click(function () {
+            $("#" + key + "-content").slideToggle("fast");
+        });
+        $('#results').append(row, row_content);
+
+        //jQuery.each()
+
+
+    })
 
 }
 
