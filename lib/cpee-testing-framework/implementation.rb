@@ -69,7 +69,7 @@ module CPEE
           end
           testinstance[:status] = :finished
         end
-        Riddl::Parameter::Simple.new('instance', i)
+        Riddl::Parameter::Simple.new('instance', i.to_s)
       end
     end #}}}
 

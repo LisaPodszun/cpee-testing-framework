@@ -3,7 +3,7 @@
     <parameter name="settings" mimetype="application/json"/>
   </message>
   <message name="instance">
-    <parameter name="instance" type="nonNegativeInteger"/>
+    <parameter name="instance" type="text/plain"/>
   </message>
   <message name="results">
     <parameter name="results" mimetype="application/json"/>
