@@ -20,7 +20,7 @@ module CPEE
 
     class Status < Riddl::Implementation #{{{
       def response
-        p @a[0].to_json
+        p @a[0]
         Riddl::Parameter::Complex.new('results','application/json', @a[0].to_json)
       end
     end #}}}
@@ -138,6 +138,8 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'settings'
 
           on resource '\d+' do |res|
+            p "On resource inst id #{res}"
+            p opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do
