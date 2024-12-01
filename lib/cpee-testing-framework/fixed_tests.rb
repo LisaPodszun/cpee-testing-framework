@@ -95,7 +95,7 @@ module TestHelpers
         rust_cf_events = extract_cf_events(rust_log)
 
         puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
-        {{"log_instance_1" => ruby_log},{"log_instance_2" => rust_log}, {'differences_log_entries' => differences_log_entries}, {"matches" => matches},  {'structure_differences' => [structure_differences_ruby, structure_differences_rust]}, {'content_differences' => [content_differences_ruby, content_differences_rust]}, 'cf_ins_1' => ruby_cf_events, 'cf_ins_2' => rust_cf_events}
+        [{"log_instance_1" => ruby_log},{"log_instance_2" => rust_log}, {'differences_log_entries' => differences_log_entries}, {"matches" => matches},  {'structure_differences' => [structure_differences_ruby, structure_differences_rust]}, {'content_differences' => [content_differences_ruby, content_differences_rust]}, {'cf_ins_1' => ruby_cf_events, 'cf_ins_2' => rust_cf_events}]
     end
 
     def structure_test(rust_log_entry, ruby_log_entry)
