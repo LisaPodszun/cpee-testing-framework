@@ -79,7 +79,7 @@ async function getResult(run_tests_url, ins) {
             }
         });
         await delay(700);
-    } while (data["status"] !== "finished");
+    } while (data == null || data["status"] !== "finished");
 }
 
 function delay(t) {
