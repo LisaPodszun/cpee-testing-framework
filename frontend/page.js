@@ -34,6 +34,7 @@ async function displayResults(data_promise) {
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
                 inner_row.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row);
                 index_1 += 1;
                 index_2 += 1;
             }
@@ -44,6 +45,7 @@ async function displayResults(data_promise) {
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_1[index_1]);
                 inner_row.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row);
                 index_1 += 1;
             }
             else {
@@ -53,6 +55,7 @@ async function displayResults(data_promise) {
                 let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_2[index_2]);
                 let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
                 inner_row.append(ins_1_log,ins_2_log);
+                inner_col.append(inner_row);
                 index_2 += 1;
             };
         }; 
