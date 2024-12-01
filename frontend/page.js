@@ -68,6 +68,7 @@ $(document).ready(function () {
                     url: run_tests_url + ins,
                     type: 'GET',
                     dataType: 'application/json',
+                    async: false,
                     success: function (data) {
                         console.log(data);
                         if (data["status"] === "finished") {
