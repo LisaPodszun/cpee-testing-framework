@@ -52,7 +52,7 @@ $(document).ready(function () {
 
         $("#main").remove();
         const settings = JSON.stringify(form_data);
-        console.log(settings)
+        console.log(settings);
         $.ajax({
             url: run_tests_url,
             type: 'POST',
