@@ -11,7 +11,7 @@ async function displayResults(data_promise) {
         });
         row.append(`<h4>${key}</h4>`);
         
-        inner_col = $('<div class="col mx-3 my-2"></div>');
+        inner_col = $('<div class="col"></div>');
         row_content.append(inner_col);
 
         let matches_ins_1 = value['matches'][0];
