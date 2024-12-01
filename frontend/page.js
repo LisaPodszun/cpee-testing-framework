@@ -78,7 +78,8 @@ async function getResult(run_tests_url, ins) {
                 console.log(res);
             }
         });
-        await delay(700);
+        console.log(res);
+        await delay(1500);
     } while (res == null || res["status"] !== "finished");
     displayResults(res);
 
