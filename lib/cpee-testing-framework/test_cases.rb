@@ -12,7 +12,7 @@ module TestCases
     results['cf_ins_1'] = cf_service_call(results['cf_ins_1'])
     results['cf_ins_2'] = cf_service_call(results['cf_ins_2'])
 
-    testinstance[:service_call][:results] = results
+    testinstancex[:results][:service_call] = results
 
     p "ran all tests successfully"
     # TODO communicate to frontend

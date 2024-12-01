@@ -2,8 +2,13 @@ async function displayResults(data_promise) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
+    let main = $("<div class='container-fluid' id='main'></div>");
+    main.append($('<div class="row justify-content-center text-center" id="title"></div>'));
+    $('body').append(main);
+
 
 }
+
 $(document).ready(function () {
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
