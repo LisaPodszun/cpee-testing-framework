@@ -22,6 +22,11 @@ async function displayResults(data_promise) {
         let index_1 = 0;
         let index_2 = 0;
         while ((index_1 < Object.keys(matches_ins_1).length) || (index_2 < Object.keys(matches_ins_2).length)) {
+            console.log(index_1);
+            console.log(index_2);
+            console.log(matches_ins_1[index_1]);
+            console.log(matches_ins_2[index_2]);
+
             if (index_2 == matches_ins_1[index_1]) {
                 // put matching elements here
                 let inner_row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0"></div>');
