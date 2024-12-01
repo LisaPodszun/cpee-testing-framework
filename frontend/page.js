@@ -75,6 +75,7 @@ async function getResult(run_tests_url, ins) {
             dataType: 'application/json',
             success: function (data) {
                 res = data;
+                console.log(res);
             }
         });
         await delay(700);
