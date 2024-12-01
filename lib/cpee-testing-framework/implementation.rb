@@ -138,8 +138,8 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'settings'
 
           on resource '\d+' do |res|
-            p "On resource inst id #{res}"
-            p opts[:testinstances][res[:r].last]
+            p "On resource inst id #{res[:r]}"
+            p "Access:" opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do
