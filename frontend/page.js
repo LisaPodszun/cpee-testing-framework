@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
 
     $("#start").click(function () {
-        const form_data =  {
+        const form_data = {
             instance_1: { process_engine: $("#cpee1").val(), execution_handler: $("#exe1").val() },
             instance_2: { process_engine: $("#cpee2").val(), execution_handler: $("#exe2").val() },
             test: $("#test_case").val()
@@ -53,28 +53,31 @@ $(document).ready(function () {
         $("#main").remove();
         const settings = JSON.stringify(form_data);
         console.log(settings);
+        let ins;
         $.ajax({
             url: run_tests_url,
             type: 'POST',
             data: settings,
             contentType: 'application/json',
-            headers: { 'Content-ID': 'settings' },
-            dataType: 'nonNegativeInteger',
-            success: function (data) {
-                console.log("POST succeded");
-                console.log(data);
-                alert(data);
-            }
+            headers: { 'Content-ID': 'settings' }
+        }).done(function (data) {
+            ins = data;
+            do {
+                $.ajax({
+                    url: run_tests_url + ins,
+                    type: 'GET',
+                    dataType: 'application/json',
+                    success: function (data) {
+                        console.log(data);
+                        if (data["status"] === "finished") {
+                            displayResults(data);
+                        } else {
+                            sleep(1);
+                        }
+                    }
+                })
+            } while (data["status"] !== "finished");
+
         });
-        /*
-        $.ajax({
-            url: run_tests_url + ins,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                displayResults(data);
-            }
-        })
-        */
     });
 });
