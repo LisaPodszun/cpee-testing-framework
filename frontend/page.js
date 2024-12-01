@@ -31,6 +31,7 @@ async function displayResults(data_promise) {
                 let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
+                    inner_row.css("display", "inline-flexbox")
                     e.stopPropagation();
                 });
 
@@ -44,7 +45,7 @@ async function displayResults(data_promise) {
                 index_2 += 1;
             }
             else if ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1')) {
-                let inner_row = $('<div class="row justify-content-center text-center slider mx-3 my-1 border-bottom-0"></div>');
+                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
@@ -60,7 +61,7 @@ async function displayResults(data_promise) {
                 index_1 += 1;
             }
             else {
-                let inner_row = $('<div class="row justify-content-center text-center slider mx-3 my-1 border-bottom-0"></div>');
+                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
