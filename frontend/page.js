@@ -13,7 +13,7 @@ jQuery(function ($) {
     });
 });
 function displayResults(data) {
-    results = JSON.parse(data);
+    console.log(data);
 
 }
 $(document).ready(function () {
@@ -73,20 +73,16 @@ async function getResult(run_tests_url, ins) {
             url: run_tests_url + ins,
             type: 'GET'
         }).done((data) => {
-            console.log(res);
             res = data;
 
         })
-        console.log(res);
-        await delay(1500);
+        if ((res == null || res["status"] !== "finished")) { await delay(1500); }
     } while (res == null || res["status"] !== "finished");
     displayResults(res);
-
 }
 
 function delay(t) {
     return new Promise(resolve => {
-      setTimeout(resolve, t);
+        setTimeout(resolve, t);
     });
-  }
-  
+}
