@@ -142,8 +142,8 @@ module CPEE
             p "Opts instances:"
             p opts[:testinstances]
             p "Access:"
-            p opts[:testinstances][res[:r].last]
-            run Status, opts[:testinstances][res[:r].last] if get
+            p opts[:testinstances][res[:r].last.to_i]
+            run Status, opts[:testinstances][res[:r].last.to_i] if get
           end
           on resource 'configuration' do
             run Configuration if get
