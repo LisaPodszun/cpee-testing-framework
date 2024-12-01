@@ -68,7 +68,7 @@ $(document).ready(function () {
 
 async function getResult(run_tests_url, ins) {
     do {
-        await $.ajax({
+        $.ajax({
             url: run_tests_url + ins,
             type: 'GET',
             dataType: 'application/json',
