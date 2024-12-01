@@ -34,10 +34,10 @@ async function displayResults(data_promise) {
                     e.stopPropagation();
                 });
 
-                inner_row.append(`<h6>${value['log_instance_1'][index_1]['channel']}</h6>`);
+                inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 
-                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
-                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
+                let ins_1_log = $('<div class="col"></div>').text(value['log_instance_1'][index_1]['message']);
+                let ins_2_log = $('<div class="col"></div>').text(value['log_instance_2'][index_2]['message']);
                 inner_row_panel.append(ins_1_log,ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
                 index_1 += 1;
@@ -52,9 +52,9 @@ async function displayResults(data_promise) {
                 });
 
                 // put one block [ ins_1_element || matches_ins_1[index_1]]
-                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
-                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_1'][index_1]['message']);
-                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_1[index_1]);
+                inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
+                let ins_1_log = $('<div class="col"></div>').text(value['log_instance_1'][index_1]['message']);
+                let ins_2_log = $('<div class="col"></div>').text(matches_ins_1[index_1]);
                 inner_row_panel.append(ins_1_log,ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
                 index_1 += 1;
@@ -67,9 +67,9 @@ async function displayResults(data_promise) {
                     e.stopPropagation();
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
-                inner_row.append(`<h4>${value['log_instance_1'][index_1]['channel']}</h4>`);
-                let ins_1_log = $('<div class="col mx-3 my-2"></div>').text(matches_ins_2[index_2]);
-                let ins_2_log = $('<div class="col mx-3 my-2"></div>').text(value['log_instance_2'][index_2]['message']);
+                inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
+                let ins_1_log = $('<div class="col"></div>').text(matches_ins_2[index_2]);
+                let ins_2_log = $('<div class="col"></div>').text(value['log_instance_2'][index_2]['message']);
                 inner_row_panel.append(ins_1_log,ins_2_log);
                 inner_col.append(inner_row_panel);
                 index_2 += 1;
