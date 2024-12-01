@@ -71,13 +71,12 @@ async function getResult(run_tests_url, ins) {
     do {
         $.ajax({
             url: run_tests_url + ins,
-            type: 'GET',
-            dataType: 'application/json',
-            success: function (data) {
-                res = data;
-                console.log(res);
-            }
-        });
+            type: 'GET'
+        }).done((data) => {
+            console.log(res);
+            res = data;
+
+        })
         console.log(res);
         await delay(1500);
     } while (res == null || res["status"] !== "finished");
