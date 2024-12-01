@@ -1,18 +1,5 @@
-
-
-jQuery(function ($) {
-    $(document).ajaxSend(function () {
-        $("#overlay").fadeIn(300);
-    });
-});
-jQuery(function ($) {
-    $(document).ajaxComplete(function () {
-        setTimeout(function () {
-            $("#overlay").fadeOut(300);
-        }, 500);
-    });
-});
 function displayResults(data) {
+    $("#overlay").fadeOut(300);
     console.log(data);
 
 }
@@ -51,6 +38,7 @@ $(document).ready(function () {
         };
 
         $("#main").remove();
+        $("#overlay").fadeIn(300);
         const settings = JSON.stringify(form_data);
         console.log(settings);
         $.ajax({
@@ -61,7 +49,8 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
             console.log("post done");
-            getResult(run_tests_url, data);
+            let res = getResult(run_tests_url, data);
+            displayResults(res);
         });
     });
 });
@@ -78,7 +67,7 @@ async function getResult(run_tests_url, ins) {
         })
         if ((res == null || res["status"] !== "finished")) { await delay(1500); }
     } while (res == null || res["status"] !== "finished");
-    displayResults(res);
+    return res;
 }
 
 function delay(t) {
