@@ -18,6 +18,7 @@ async function displayResults(data_promise) {
         let matches_ins_2 = value['matches'][1];
 
         let index_1 = 0;
+        let maxxed = false;
         let index_2 = 0;
         while ((index_2 < Object.keys(matches_ins_2).length)) {
             console.log(index_1);
@@ -31,7 +32,7 @@ async function displayResults(data_promise) {
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
-                    inner_row_panel.css("display", "inline-flex");
+                    //inner_row_panel.css("display", "inline-flex");
                     e.stopPropagation();
                 });
 
@@ -48,12 +49,12 @@ async function displayResults(data_promise) {
                 index_1 += 1;
                 index_2 += 1;
             }
-            else if ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1')) {
+            else if (!maxxed && ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1'))) {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
-                    inner_row_panel.css("display", "inline-flex");
+                    //inner_row_panel.css("display", "inline-flex");
                     e.stopPropagation();
                 });
 
@@ -66,13 +67,16 @@ async function displayResults(data_promise) {
                 if (index_1 < (Object.keys(matches_ins_1).length-1)) {
                     index_1 += 1;
                 }
+                else {
+                    maxxed = true;
+                } 
             }
             else {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
-                    inner_row_panel.css("display", "inline-flex");
+                    //inner_row_panel.css("display", "inline-flex");
                     e.stopPropagation();
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
