@@ -32,7 +32,7 @@ async function displayResults(data_promise) {
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
-                    //inner_row_panel.css("display", "inline-flex");
+                    inner_row_panel.css("display", "flex");
                     e.stopPropagation();
                 });
 
@@ -54,13 +54,13 @@ async function displayResults(data_promise) {
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
-                    //inner_row_panel.css("display", "inline-flex");
+                    inner_row_panel.css("display", "flex");
                     e.stopPropagation();
                 });
 
                 // put one block [ ins_1_element || matches_ins_1[index_1]]
-                inner_row.append(`<h5 class="headings">${value['log_instance_1'][index_1]['channel']}</h5>`);
-                let ins_1_log = $('<div class="col"></div>').text(JSON.stringify(value['log_instance_1'][index_1]['message'], null, 2));
+                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
+                let ins_1_log = $('<div class="col"></div>').text(JSON.stringify(value['log_instance_1'][index_1]['message'], undefined, 2));
                 let ins_2_log = $('<div class="col"></div>').text(matches_ins_1[index_1]);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
@@ -76,13 +76,13 @@ async function displayResults(data_promise) {
                 let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
-                    //inner_row_panel.css("display", "inline-flex");
+                    inner_row_panel.css("display", "flex");
                     e.stopPropagation();
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
-                inner_row.append(`<h5 class="headings">${value['log_instance_1'][index_1]['channel']}</h5>`);
+                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 let ins_1_log = $('<div class="col"></div>').text(matches_ins_2[index_2]);
-                let ins_2_log = $('<div class="col"></div>').text(JSON.stringify((value['log_instance_2'][index_2]['message']), null, 2));
+                let ins_2_log = $('<div class="col"></div>').text(JSON.stringify((value['log_instance_2'][index_2]['message']), undefined, 2));
                 inner_row_panel.append(ins_1_log,ins_2_log);
                 inner_col.append(inner_row_panel);
                 index_2 += 1;
