@@ -19,7 +19,7 @@ async function displayResults(data_promise) {
 
         let index_1 = 0;
         let index_2 = 0;
-        while ((index_1 < Object.keys(matches_ins_1).length) || (index_2 < Object.keys(matches_ins_2).length)) {
+        while ((index_2 < Object.keys(matches_ins_2).length)) {
             console.log(index_1);
             console.log(index_2);
             console.log(matches_ins_1[index_1]);
@@ -58,7 +58,9 @@ async function displayResults(data_promise) {
                 let ins_2_log = $('<div class="col"></div>').text(matches_ins_1[index_1]);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
-                index_1 += 1;
+                if (index_1 < (Object.keys(matches_ins_1).length-1)) {
+                    index_1 += 1;
+                }
             }
             else {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
