@@ -9,7 +9,7 @@ async function displayResults(data_promise) {
         let row = $('<div class="row justify-content-center text-center slider mt-3 mx-5 border-bottom-0 border-primary"></div>').attr('id', key).click(function () {
             row_content.slideToggle("fast");
         });
-        row.append(`<h4>${key}</h4>`);
+        row.append(`<h4 class="headings">${key}</h4>`);
         
         inner_col = $('<div class="col"></div>');
         row_content.append(inner_col);
@@ -29,14 +29,14 @@ async function displayResults(data_promise) {
             if (index_2 == matches_ins_1[index_1]) {
                 // put matching elements here
                 let inner_row = $('<div class="row justify-content-center text-center slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
                     //inner_row_panel.css("display", "inline-flex");
                     e.stopPropagation();
                 });
 
-                inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
+                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 
                 let ins_1_log = $('<div class="col"></div>')
                 let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][index_1]['message']), undefined, 2));
@@ -51,7 +51,7 @@ async function displayResults(data_promise) {
             }
             else if (!maxxed && ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1'))) {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
                     //inner_row_panel.css("display", "inline-flex");
@@ -73,7 +73,7 @@ async function displayResults(data_promise) {
             }
             else {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
                     //inner_row_panel.css("display", "inline-flex");

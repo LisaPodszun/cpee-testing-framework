@@ -17,11 +17,17 @@
 .slider {
   background-color: #0065bd;
 }
-
+.table [class*="col"] {
+  display: table-cell;
+  vertical-align: top;
+  float: none;
+}
 .panel {
   display: none;
 }
-
+.headings {
+  color: #fff;
+}
 .cv-spinner {
   height: 100%;
   display: flex;
