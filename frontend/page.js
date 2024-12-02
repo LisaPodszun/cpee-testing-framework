@@ -35,6 +35,7 @@ async function displayResults(data_promise) {
                     e.stopPropagation();
                 });
 
+                
                 inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 
                 let ins_1_log = $('<div class="col"></div>').text(value['log_instance_1'][index_1]['message']);

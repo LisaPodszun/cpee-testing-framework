@@ -844,7 +844,8 @@ module TestHelpers
     def cf_cancelling_partial_join_multiple_instances(cf_events)
         passed = 0
         ecid = 0
-        if cf_events.length == 22
+        # Count extra event as error
+        if cf_events.length == 21
             cf_events.each do |key, value|
                 case key
                 when 0
@@ -941,11 +942,13 @@ module TestHelpers
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
-                when 21
+                
+                #when 21
                     # strange extra position/change event sent
-                    if !(value["message"]["content"].key?("unmark"))
-                        passed += 1
-                    end
+                 #   //if !(value["message"]["content"].key?("unmark"))
+                 #       passed += 1
+                #    end
+                    
                 end
             end
             (passed == 0)
@@ -1027,7 +1030,7 @@ module TestHelpers
 
     def cf_interleaved_parallel_routing(cf_events)
         passed = 0
-        if cf_events.length == 11
+        if cf_events.length == 10
             cf_events.each do |key, value|
                 case key
                 when 0
@@ -1074,11 +1077,11 @@ module TestHelpers
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
-                when 10
+               # when 10
                     # strange extra event
-                    if !(value["message"]["content"].key?("unmark"))
-                        passed += 1
-                    end
+                #    if !(value["message"]["content"].key?("unmark"))
+                #        passed += 1
+                #    end
                 end
             end
             (passed == 0)
@@ -1090,7 +1093,7 @@ module TestHelpers
     def cf_critical_section(cf_events)
         passed = 0
         ecid = 0
-        if cf_events.length == 9
+        if cf_events.length == 8
             cf_events.each do |key, value|
                 case key
                 when 0
@@ -1126,11 +1129,11 @@ module TestHelpers
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
-                when 8
+                #when 8
                     # strange extra event
-                    if !(value["message"]["content"].key?("unmark"))
-                        passed += 1
-                    end
+                #    if !(value["message"]["content"].key?("unmark"))
+                #        passed += 1
+                #    end
                 end
             end
             (passed == 0)
@@ -1179,12 +1182,12 @@ module TestHelpers
                     if !(value["channel"] =~ /event:[0-9][0-9]:gateway\/join/ && value["message"]["content"]["ecid"] == ecid)
                         passed += 1
                     end
-                when 8
+                #when 8
                     # strange extra event
-                    if !(value["message"]["content"].key?("unmark"))
-                        passed += 1
-                    end
-                end
+                #    if !(value["message"]["content"].key?("unmark"))
+                #        passed += 1
+                #    end
+                #end
             end
             (passed == 0)
         else

@@ -15,227 +15,210 @@ module TestCases
     testinstance[:results][:service_call] = results
 
     p "ran all tests successfully"
-    # TODO communicate to frontend
   end
 
-  def service_script_call()
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def service_script_call(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_service_script_call(results[6])
-    cf_rust_result = cf_service_script_call(results[7])
+    results['cf_ins_1'] = cf_service_script_call(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_service_script_call(results['cf_ins_2'])
 
+    testinstance[:results][:service_script_call] = results
   end
 
-  def script_call()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def script_call(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_script_call(results[6])
-    cf_rust_result = cf_script_call(results[7])
+    results['cf_ins_1'] = cf_script_call(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_script_call(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:script_call] = results
   end
 
-  def subprocess_call()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def subprocess_call(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_subprocess_call(results[6])
-    cf_rust_result = cf_subprocess_call(results[7])
+    results['cf_ins_1'] = cf_subprocess_call(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_subprocess_call(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:subprocess_call] = results
   end
 
   # Workflow patterns fully supported by the CPEE start from here
 
   # Basic Control flow
-  def sequence()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def sequence(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_sequence(results[6])
-    cf_rust_result = cf_sequence(results[7])
+    results['cf_ins_1'] = cf_sequence(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_sequence(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:sequence] = results
   end
 
-  def exclusive_choice_simple_merge()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def exclusive_choice_simple_merge(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_exclusive_choice_simple_merge(results[6])
-    cf_rust_result = cf_exclusive_choice_simple_merge(results[7])
+    results['cf_ins_1'] = cf_exclusive_choice_simple_merge(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_exclusive_choice_simple_merge(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:exclusive_choice_simple_merge] = results
   end
 
-  def parallel_split_synchronization()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def parallel_split_synchronization(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_parallel_split_synchronization(results[6])
-    cf_rust_result = cf_parallel_split_synchronization(results[7])
+    results['cf_ins_1'] = cf_parallel_split_synchronization(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_parallel_split_synchronization(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:parallel_split_synchronization] = results
 
   end
 
   # Advanced Branching and Synchronization
 
-  def multichoice_chained()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def multichoice_chained(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_multichoice_chained(results[6])
-    cf_rust_result = cf_multichoice_chained(results[7])
+    results['cf_ins_1'] = cf_multichoice_chained(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_multichoice_chained(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:multichoice_chained] = results
   end
 
-  def multichoice_parallel()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def multichoice_parallel(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_multichoice_parallel(results[6])
-    cf_rust_result = cf_multichoice_parallel(results[7])
+    results['cf_ins_1'] = cf_multichoice_parallel(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_multichoice_parallel(results['cf_ins_2'])
 
-    # TODO communicate to frontend
-
-  end
-
-  def cancelling_discriminator()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
-
-    cf_ruby_result = cf_cancelling_discriminator(results[6])
-    cf_rust_result = cf_cancelling_discriminator(results[7])
-
-    # TODO communicate to frontend
+    testinstance[:results][:multichoice_parallel] = results
 
   end
 
-  def thread_split_thread_merge()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def cancelling_discriminator(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_thread_split_thread_merge(results[6])
-    cf_rust_result = cf_thread_split_thread_merge(results[7])
+    results['cf_ins_1'] = cf_cancelling_discriminator(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_cancelling_discriminator(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:cancelling_discriminator] = results
+
+  end
+
+  def thread_split_thread_merge(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
+
+    results['cf_ins_1'] = cf_thread_split_thread_merge(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_thread_split_thread_merge(results['cf_ins_2'])
+
+    testinstance[:results][:thread_split_thread_merge] = results
   end
 
   # Multiple Instances
 
-  def multiple_instances_with_design_time_knowledge()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def multiple_instances_with_design_time_knowledge(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_multiple_instances_with_design_time_knowledge(results[6])
-    cf_rust_result = cf_multiple_instances_with_design_time_knowledge(results[7])
+    results['cf_ins_1'] = cf_multiple_instances_with_design_time_knowledge(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_multiple_instances_with_design_time_knowledge(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:multiple_instances_with_design_time_knowledge] = results
   end
 
   # Impossible to test against one another
-  def multiple_instances_with_runtime_time_knowledge()
+  def multiple_instances_with_runtime_time_knowledge(data, testinstance, settings)
   end
 
   # Impossible to test against one another
-  def multiple_instances_without_runtime_time_knowledge()
+  def multiple_instances_without_runtime_time_knowledge(data, testinstance, settings)
   end
 
-  def cancelling_partial_join_multiple_instances()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def cancelling_partial_join_multiple_instances(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_cancelling_partial_join_multiple_instances(results[6])
-    cf_rust_result = cf_cancelling_partial_join_multiple_instances(results[7])
+    results['cf_ins_1'] = cf_cancelling_partial_join_multiple_instances(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_cancelling_partial_join_multiple_instances(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:cancelling_partial_join_multiple_instances] = results
   end
 
   # State Based
 
-  def interleaved_routing()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def interleaved_routing(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_interleaved_routing(results[6])
-    cf_rust_result = cf_interleaved_routing(results[7])
+    results['cf_ins_1'] = cf_interleaved_routing(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_interleaved_routing(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:interleaved_routing] = results
   end
 
 
-  def interleaved_parallel_routing()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def interleaved_parallel_routing(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_interleaved_parallel_routing(results[6])
-    cf_rust_result = cf_interleaved_parallel_routing(results[7])
+    results['cf_ins_1'] = cf_interleaved_parallel_routing(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_interleaved_parallel_routing(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:interleaved_parallel_routing] = results
   end
 
-  def critical_section()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def critical_section(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_critical_section(results[6])
-    cf_rust_result = cf_critical_section(results[7])
+    results['cf_ins_1'] = cf_critical_section(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_critical_section(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:critical_section] = results
   end
 
   # Cancellation and Force Completion
 
-  def cancel_multiple_instance_activity()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def cancel_multiple_instance_activity(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_cancel_multiple_instance_activity(results[6])
-    cf_rust_result = cf_cancel_multiple_instance_activity(results[7])
+    results['cf_ins_1'] = cf_cancel_multiple_instance_activity(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_cancel_multiple_instance_activity(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:cancel_multiple_instance_activity] = results
   end
 
   # Iterations
 
-  def loop_posttest()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def loop_posttest(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_loop_posttest(results[6])
-    cf_rust_result = cf_loop_posttest(results[7])
+    results['cf_ins_1'] = cf_loop_posttest(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_loop_posttest(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:loop_posttest] = results
   end
 
-  def loop_pretest()
-    # TODO: setup doc links
-    testdoc = ""
-    results = run_tests_on(testdoc)
+  def loop_pretest(data, testinstance, settings)
+    
+    results = run_tests_on(settings, data)
 
-    cf_ruby_result = cf_loop_pretest(results[6])
-    cf_rust_result = cf_loop_prettest(results[7])
+    results['cf_ins_1'] = cf_loop_pretest(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_loop_prettest(results['cf_ins_2'])
 
-    # TODO communicate to frontend
+    testinstance[:results][:loop_pretest] = results
   end
 end
