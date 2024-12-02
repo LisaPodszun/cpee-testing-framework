@@ -39,11 +39,11 @@ async function displayResults(data_promise) {
 
                 inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 
-                let ins_1_log = $('<div class="col"></div>').html('<strong class="text-center my-1">Instance 1</strong>');
+                let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
                 let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][index_1]['message']), undefined, 2));
                 ins_1_log.append(json_1);
-                let ins_2_log = $('<div class="col"></div>').text("Instance 2");
-                let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][index_2]['message'], undefined, 2));
+                let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
+                json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][index_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
@@ -61,10 +61,10 @@ async function displayResults(data_promise) {
 
                 // put one block [ ins_1_element || matches_ins_1[index_1]]
                 inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
-                let ins_1_log = $('<div class="col"></div>').text('Instance 1');
+                let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
                 let json_1 = JSON.stringify(value['log_instance_1'][index_1]['message'], undefined, 2);
                 ins_1_log.append(json_1);
-                let ins_2_log = $('<div class="col"></div>').text('Instance 2'+ matches_ins_1[index_1]);
+                let ins_2_log = $('<div class="col"><h5 class="text-center my-1">Instance 2</h5></div>').text(matches_ins_1[index_1]);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
                 if (index_1 < (Object.keys(matches_ins_1).length-1)) {
@@ -84,8 +84,8 @@ async function displayResults(data_promise) {
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
                 inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
-                let ins_1_log = $('<div class="col"></div>').text("Instance 1" + matches_ins_2[index_2]);
-                let ins_2_log = $('<div class="col"></div>').text("Instance 2");
+                let ins_1_log = $('<div class="col"><h5 class="text-center my-1">Instance 1</h5></div>').text(matches_ins_2[index_2]);
+                let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
                 let json_2 = JSON.stringify((value['log_instance_2'][index_2]['message']), undefined, 2);
                 ins_2_log.append(json_2);
                 inner_row_panel.append(ins_1_log, ins_2_log);
