@@ -28,10 +28,10 @@ async function displayResults(data_promise) {
             if (index_2 == matches_ins_1[index_1]) {
                 // put matching elements here
                 let inner_row = $('<div class="row justify-content-center text-center slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
-                    inner_row.css("display", "inline-flexbox")
+                    inner_row.css("display", "inline-flex")
                     e.stopPropagation();
                 });
 
@@ -46,7 +46,7 @@ async function displayResults(data_promise) {
             }
             else if ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1')) {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
                     e.stopPropagation();
@@ -56,13 +56,13 @@ async function displayResults(data_promise) {
                 inner_row.append(`<h5>${value['log_instance_1'][index_1]['channel']}</h5>`);
                 let ins_1_log = $('<div class="col"></div>').text(value['log_instance_1'][index_1]['message']);
                 let ins_2_log = $('<div class="col"></div>').text(matches_ins_1[index_1]);
-                inner_row_panel.append(ins_1_log,ins_2_log);
+                inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
                 index_1 += 1;
             }
             else {
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel mx-3 my-1 border-bottom-0"></div>');
+                let inner_row_panel = $('<div class="row panel border-bottom-0 border-primary"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
                     e.stopPropagation();
