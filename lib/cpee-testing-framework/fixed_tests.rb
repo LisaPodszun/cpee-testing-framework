@@ -211,6 +211,7 @@ module TestHelpers
                     atFlag = true
                     afterFlag = true
                     unmarkFlag = true
+                    waitFlag = true
                     # For now just check the first in each position/change (unmark, at, after) as the test only include those cases
                     if content_keys.include?("at")
                         if rust_log_entry["message"]["content"].keys.include?("at")
@@ -242,7 +243,17 @@ module TestHelpers
                             unmarkFlag = false
                         end
                     end
-                    return atFlag && afterFlag && unmarkFlag 
+                    if content_keys.include?("wait")
+                        if rust_log_entry["message"]["content"].keys.include?("wait")
+                            unless (ruby_log_entry["message"]["content"]["wait"].length() == 1 && rust_log_entry["message"]["content"]["wait"].length() == 1)
+                                STDERR.puts "position change unmark unexpectedly contained more than 1 entry for the test cases!"
+                            end
+                            waitFlag = ruby_log_entry["message"]["content"]["wait"][0]["position"] == rust_log_entry["message"]["content"]["wait"][0]["position"]
+                        else
+                            waitFlag = false
+                        end
+                    end
+                    return atFlag && afterFlag && unmarkFlag && waitFlag
                 when "gateway/decide"
                     rust_log_entry["message"]["content"]["code"] == ruby_log_entry["message"]["content"]["code"]
 
