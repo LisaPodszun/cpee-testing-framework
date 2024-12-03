@@ -10,7 +10,7 @@ async function displayResults(data_promise) {
             row_content.slideToggle("fast");
         });
         row.append(`<h4 class="headings">${key}</h4>`);
-        
+
         inner_col = $('<div class="col"></div>');
         inner_col.append('<dl><dt>[blue]</dt><dd> - LabelA </dd><dt>[green]</dt><dd> - LabelB </dd><dt>[red]</dt><dd> - LabelC </dd></dl>');
         row_content.append(inner_col);
@@ -22,7 +22,7 @@ async function displayResults(data_promise) {
         let index_2 = 0;
         // Generate all for matches from 1 to 2
 
-        for(const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
+        for (const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
             // put matching elements here
             let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
             let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
@@ -33,7 +33,7 @@ async function displayResults(data_promise) {
             });
 
             inner_row.append(`<h5 class='headings'>${value['log_instance_1'][ind_1]['channel']}</h5>`);
-            
+
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
             ins_1_log.append(json_1);
@@ -48,13 +48,11 @@ async function displayResults(data_promise) {
             inner_row_panel.append(ins_1_log, ins_2_log);
             inner_col.append(inner_row, inner_row_panel);
         }
-        
-        for(const [ind_2, ind_1] of Object.entries(matches_ins_2)) {
-            if (ind_1 != "no_match" && ind_1 != "only_ins_2") {
-                // We already displayed these matched entries in the loop above
-                continue;
-            }
-            let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
+
+        for (const [ind_2, ind_1] of Object.entries(matches_ins_2)) {
+            if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
+                console.log(ind_2)
+                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
@@ -69,8 +67,9 @@ async function displayResults(data_promise) {
                 ins_2_log.append(json_2);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row_panel);
+            }
         }
-        
+
         $('#results').append(row, row_content);
     })
 
