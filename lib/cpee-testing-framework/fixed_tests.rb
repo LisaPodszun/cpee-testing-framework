@@ -214,10 +214,9 @@ module TestHelpers
                     # For now just check the first in each position/change (unmark, at, after) as the test only include those cases
                     if content_keys.include?("at")
                         if rust_log_entry["message"]["content"].keys.include?("at")
-                            
-                            unless (ruby_log_entry["message"]["content"]["at"].length() == 1 && rust_log_entry["message"]["content"]["at"].length() == 1) {
+                            unless (ruby_log_entry["message"]["content"]["at"].length() == 1 && rust_log_entry["message"]["content"]["at"].length() == 1)
                                 STDERR.puts "position change at unexpectedly contained more than 1 entry for the test cases!"
-                            }
+                            end
                             atFlag = ruby_log_entry["message"]["content"]["at"][0]["position"] == rust_log_entry["message"]["content"]["at"][0]["position"]
                         else
                             atFlag = false
@@ -225,9 +224,9 @@ module TestHelpers
                     end
                     if content_keys.include?("after")
                         if rust_log_entry["message"]["content"].keys.include?("after")
-                            unless (ruby_log_entry["message"]["content"]["after"].length() == 1 && rust_log_entry["message"]["content"]["after"].length() == 1) {
+                            unless (ruby_log_entry["message"]["content"]["after"].length() == 1 && rust_log_entry["message"]["content"]["after"].length() == 1)
                                 STDERR.puts "position change after unexpectedly contained more than 1 entry for the test cases!"
-                            }
+                            end
                             afterFlag = ruby_log_entry["message"]["content"]["after"][0]["position"] == rust_log_entry["message"]["content"]["after"][0]["position"]
                         else
                             afterFlag = false
@@ -235,9 +234,9 @@ module TestHelpers
                     end
                     if content_keys.include?("unmark")
                         if rust_log_entry["message"]["content"].keys.include?("unmark")
-                            unless (ruby_log_entry["message"]["content"]["unmark"].length() == 1 && rust_log_entry["message"]["content"]["unmark"].length() == 1) {
+                            unless (ruby_log_entry["message"]["content"]["unmark"].length() == 1 && rust_log_entry["message"]["content"]["unmark"].length() == 1)
                                 STDERR.puts "position change unmark unexpectedly contained more than 1 entry for the test cases!"
-                            }
+                            end
                             unmarkFlag = ruby_log_entry["message"]["content"]["unmark"][0]["position"] == rust_log_entry["message"]["content"]["unmark"][0]["position"]
                         else
                             unmarkFlag = false
