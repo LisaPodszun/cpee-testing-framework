@@ -1187,7 +1187,7 @@ module TestHelpers
                 #    if !(value["message"]["content"].key?("unmark"))
                 #        passed += 1
                 #    end
-                #end
+                end
             end
             (passed == 0)
         else
