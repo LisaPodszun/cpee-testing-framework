@@ -66,7 +66,7 @@ async function displayResults(data_promise) {
                 let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
                 inner_row_panel.append(ins_1_log, ins_2_log);
-                inner_col.append(inner_row_panel);
+                inner_col.append(inner_row, inner_row_panel);
             }
         }
 
