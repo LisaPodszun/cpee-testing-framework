@@ -3,7 +3,6 @@ require_relative 'fixed_tests'
 
 module TestCases
   include TestHelpers
-  START =  "https://cpee.org/flow/start/url/"
 
   def service_call(data, testinstance, settings)
 
