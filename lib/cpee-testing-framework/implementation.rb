@@ -117,10 +117,8 @@ module CPEE
         end
         # filter out empty unmarks
         if topic == 'position' && eventname =='change'
-          if event['content'].key? 'unmark' 
-            if event['content']['unmark'].empty?
-              return
-            end
+          if event['content'].key? 'unmark' && event['content']['unmark'].empty?
+            return
           end
         end
 
