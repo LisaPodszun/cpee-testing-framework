@@ -282,8 +282,6 @@ module TestHelpers
         while (ruby_index < ruby_log.length)
             ruby_event_type = ruby_log[ruby_index]["channel"]
             rust_event_type = rust_log[rust_index]["channel"]
-            puts "Current ins 1 log in matching: #{ruby_log[ruby_index]}"
-            puts "Current ins 2 log in matching: #{rust_log[rust_index]}"
             if missing_events_rust.include?(ruby_event_type)
                 # Rust log does not contain that event type, thus skip it
                 ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ins_1"})
