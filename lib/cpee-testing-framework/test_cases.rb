@@ -82,7 +82,7 @@ module TestCases
 
   # Advanced Branching and Synchronization
 
-  def multichoice_chained(data, testinstance, settings)
+  def multi_choice_chained(data, testinstance, settings)
     
     results = run_tests_on(settings, data, 'multi_choice_chained')
 
