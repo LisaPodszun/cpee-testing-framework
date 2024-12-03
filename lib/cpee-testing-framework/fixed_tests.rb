@@ -219,6 +219,7 @@ module TestHelpers
                 else
                     atFlag = false
                 end
+            end
             if content_keys.include?("after")
                 if rust_log_entry["message"]["content"].keys.include?("after")
                     assert(ruby_log_entry["message"]["content"]["after"].length() == 1 && rust_log_entry["message"]["content"]["after"].length() == 1)
