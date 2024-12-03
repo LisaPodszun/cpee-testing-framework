@@ -290,6 +290,7 @@ module TestHelpers
         ruby_log_tags = {}
         # rust_log_entry => ruby_log_entry
         rust_log_tags = {}
+        matched_entries_rust = Set[]
         while (ruby_index < ruby_log.length)
             ruby_event_type = ruby_log[ruby_index]["channel"]
             rust_event_type = rust_log[rust_index]["channel"]
@@ -298,7 +299,8 @@ module TestHelpers
                 ruby_log_tags = ruby_log_tags.merge({ruby_index => "only_ins_1"})
                 ruby_index += 1
                 rust_index = 0
-            elsif rust_event_type == ruby_event_type && events_match?(rust_log[rust_index],ruby_log[ruby_index])
+            elsif rust_event_type == ruby_event_type && (!matched_entries_rust.include? rust_index) && events_match?(rust_log[rust_index],ruby_log[ruby_index])
+                    matched_entries_rust.add(rust_index)
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => rust_index})
                     rust_log_tags = rust_log_tags.merge({rust_index => ruby_index})
                     ruby_index += 1
