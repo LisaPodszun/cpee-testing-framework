@@ -632,7 +632,7 @@ module TestHelpers
     end
 
     # TODO : fix this test, see if it can execute
-    def cf_multichoice_parallel(cf_events)
+    def cf_multi_choice_parallel(cf_events)
 
         passed = 0
         ecid = 0

@@ -86,20 +86,20 @@ module TestCases
     
     results = run_tests_on(settings, data, 'multi_choice_chained')
 
-    results['cf_ins_1'] = cf_multichoice_chained(results['cf_ins_1'])
-    results['cf_ins_2'] = cf_multichoice_chained(results['cf_ins_2'])
+    results['cf_ins_1'] = cf_multi_choice_chained(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_multi_choice_chained(results['cf_ins_2'])
 
-    testinstance[:results][:multichoice_chained] = results
+    testinstance[:results][:multi_choice_chained] = results
   end
 
-  def multichoice_parallel(data, testinstance, settings)
+  def multi_choice_parallel(data, testinstance, settings)
     
     results = run_tests_on(settings, data, 'multi_choice_parallel')
 
-    results['cf_ins_1'] = cf_multichoice_parallel(results['cf_ins_1'])
-    results['cf_ins_2'] = cf_multichoice_parallel(results['cf_ins_2'])
+    results['cf_ins_1'] = cf_multi_choice_parallel(results['cf_ins_1'])
+    results['cf_ins_2'] = cf_multi_choice_parallel(results['cf_ins_2'])
 
-    testinstance[:results][:multichoice_parallel] = results
+    testinstance[:results][:multi_choice_parallel] = results
 
   end
 
