@@ -18,64 +18,43 @@ async function displayResults(data_promise) {
         let matches_ins_1 = value['matches'][0];
         let matches_ins_2 = value['matches'][1];
 
-        let index_1 = 0;
         let maxxed = false;
         let index_2 = 0;
-        while ((index_2 < Object.keys(matches_ins_2).length)) {
-            console.log(index_1);
-            console.log(index_2);
-            console.log(matches_ins_1[index_1]);
-            console.log(matches_ins_2[index_2]);
+        // Generate all for matches from 1 to 2
 
-            if (index_2 == matches_ins_1[index_1]) {
-                // put matching elements here
-                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
-                inner_row.click(function (e) {
-                    inner_row_panel.slideToggle("fast");
-                    inner_row_panel.css("display", "flex");
-                    e.stopPropagation();
-                });
+        for(const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
+            // put matching elements here
+            let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
+            let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
+            inner_row.click(function (e) {
+                inner_row_panel.slideToggle("fast");
+                inner_row_panel.css("display", "flex");
+                e.stopPropagation();
+            });
 
-                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
-                
-                let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
-                let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][index_1]['message']), undefined, 2));
-                ins_1_log.append(json_1);
-                let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-                json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][index_2]['message'], undefined, 2));
+            inner_row.append(`<h5 class='headings'>${value['log_instance_1'][ind_1]['channel']}</h5>`);
+            
+            let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
+            let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
+            ins_1_log.append(json_1);
+            let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
+            let content_2;
+            if (ind_2 == "no_match" || ind_2 == "only_ins_1") {
+                ins_2_log.append(ind_2);
+            } else {
+                json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
-                inner_row_panel.append(ins_1_log, ins_2_log);
-                inner_col.append(inner_row, inner_row_panel);
-                index_1 += 1;
-                index_2 += 1;
             }
-            else if (!maxxed && ((matches_ins_1[index_1] == 'no_match') || (matches_ins_1[index_1] == 'only_ins_1'))) {
-                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
-                let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
-                inner_row.click(function () {
-                    inner_row_panel.slideToggle("fast");
-                    inner_row_panel.css("display", "flex");
-                    e.stopPropagation();
-                });
+            inner_row_panel.append(ins_1_log, ins_2_log);
+            inner_col.append(inner_row, inner_row_panel);
+        }
 
-                // put one block [ ins_1_element || matches_ins_1[index_1]]
-                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
-                let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
-                let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][index_1]['message']), undefined, 2));
-                ins_1_log.append(json_1);
-                let ins_2_log = $('<div class="col"><h5 class="text-center my-1">Instance 2</h5></div>').append(matches_ins_1[index_1]);
-                inner_row_panel.append(ins_1_log, ins_2_log);
-                inner_col.append(inner_row, inner_row_panel);
-                if (index_1 < (Object.keys(matches_ins_1).length-1)) {
-                    index_1 += 1;
-                }
-                else {
-                    maxxed = true;
-                } 
+        for(const [ind_2, ind_1] of Object.entries(matches_ins_2)) {
+            if (ind_1 != "no_match" || ind_1 != "only_ins_2") {
+                // We already displayed these matched entries in the loop above
+                continue;
             }
-            else {
-                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
+            let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
                 inner_row.click(function () {
                     inner_row_panel.slideToggle("fast");
@@ -83,21 +62,16 @@ async function displayResults(data_promise) {
                     e.stopPropagation();
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
-                inner_row.append(`<h5 class='headings'>${value['log_instance_1'][index_1]['channel']}</h5>`);
-                let ins_1_log = $('<div class="col"><h5 class="text-center my-1">Instance 1</h5></div>').append(matches_ins_2[index_2]);
+                inner_row.append(`<h5 class='headings'>${value['log_instance_2'][ind_2]['channel']}</h5>`);
+                let ins_1_log = $('<div class="col"><h5 class="text-center my-1">Instance 1</h5></div>').append(ind_1);
                 let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-                let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][index_2]['message'], undefined, 2));
+                let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row_panel);
-                index_2 += 1;
-            };
-        }; 
+        }
+        
         $('#results').append(row, row_content);
-
-        //jQuery.each()
-
-
     })
 
 }
