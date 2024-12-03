@@ -828,7 +828,7 @@ module TestHelpers
 
     # no real sequence of events, everything runs random, therefore bare-minimum test
     def cf_multiple_instances_with_design_time_knowledge(cf_events)
-        if cf_eventslength == 22
+        if cf_events.length == 22
             true
         else
             false
