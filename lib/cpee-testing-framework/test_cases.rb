@@ -7,7 +7,7 @@ module TestCases
 
   def service_call(data, testinstance, settings)
 
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'service_call')
 
     results['cf_ins_1'] = cf_service_call(results['cf_ins_1'])
     results['cf_ins_2'] = cf_service_call(results['cf_ins_2'])
@@ -19,7 +19,7 @@ module TestCases
 
   def service_script_call(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'service_script_call')
 
     results['cf_ins_1'] = cf_service_script_call(results['cf_ins_1'])
     results['cf_ins_2'] = cf_service_script_call(results['cf_ins_2'])
@@ -29,7 +29,7 @@ module TestCases
 
   def script_call(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'script_call')
 
     results['cf_ins_1'] = cf_script_call(results['cf_ins_1'])
     results['cf_ins_2'] = cf_script_call(results['cf_ins_2'])
@@ -39,7 +39,7 @@ module TestCases
 
   def subprocess_call(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'subprocess_call')
 
     results['cf_ins_1'] = cf_subprocess_call(results['cf_ins_1'])
     results['cf_ins_2'] = cf_subprocess_call(results['cf_ins_2'])
@@ -52,7 +52,7 @@ module TestCases
   # Basic Control flow
   def sequence(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'sequence')
 
     results['cf_ins_1'] = cf_sequence(results['cf_ins_1'])
     results['cf_ins_2'] = cf_sequence(results['cf_ins_2'])
@@ -62,7 +62,7 @@ module TestCases
 
   def exclusive_choice_simple_merge(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'exclusive_choice_simple_merge')
 
     results['cf_ins_1'] = cf_exclusive_choice_simple_merge(results['cf_ins_1'])
     results['cf_ins_2'] = cf_exclusive_choice_simple_merge(results['cf_ins_2'])
@@ -72,7 +72,7 @@ module TestCases
 
   def parallel_split_synchronization(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'parallel_split_synchronization')
 
     results['cf_ins_1'] = cf_parallel_split_synchronization(results['cf_ins_1'])
     results['cf_ins_2'] = cf_parallel_split_synchronization(results['cf_ins_2'])
@@ -85,7 +85,7 @@ module TestCases
 
   def multichoice_chained(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'multichoice_chained')
 
     results['cf_ins_1'] = cf_multichoice_chained(results['cf_ins_1'])
     results['cf_ins_2'] = cf_multichoice_chained(results['cf_ins_2'])
@@ -95,7 +95,7 @@ module TestCases
 
   def multichoice_parallel(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'multichoice_parallel')
 
     results['cf_ins_1'] = cf_multichoice_parallel(results['cf_ins_1'])
     results['cf_ins_2'] = cf_multichoice_parallel(results['cf_ins_2'])
@@ -106,7 +106,7 @@ module TestCases
 
   def cancelling_discriminator(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'cancelling_discriminator')
 
     results['cf_ins_1'] = cf_cancelling_discriminator(results['cf_ins_1'])
     results['cf_ins_2'] = cf_cancelling_discriminator(results['cf_ins_2'])
@@ -117,7 +117,7 @@ module TestCases
 
   def thread_split_thread_merge(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'thread_split_thread_merge')
 
     results['cf_ins_1'] = cf_thread_split_thread_merge(results['cf_ins_1'])
     results['cf_ins_2'] = cf_thread_split_thread_merge(results['cf_ins_2'])
@@ -129,7 +129,7 @@ module TestCases
 
   def multiple_instances_with_design_time_knowledge(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'multiple_instances_with_design_time_knowledge')
 
     results['cf_ins_1'] = cf_multiple_instances_with_design_time_knowledge(results['cf_ins_1'])
     results['cf_ins_2'] = cf_multiple_instances_with_design_time_knowledge(results['cf_ins_2'])
@@ -147,7 +147,7 @@ module TestCases
 
   def cancelling_partial_join_multiple_instances(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'cancelling_partial_join_multiple_instances')
 
     results['cf_ins_1'] = cf_cancelling_partial_join_multiple_instances(results['cf_ins_1'])
     results['cf_ins_2'] = cf_cancelling_partial_join_multiple_instances(results['cf_ins_2'])
@@ -159,7 +159,7 @@ module TestCases
 
   def interleaved_routing(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'interleaved_routing')
 
     results['cf_ins_1'] = cf_interleaved_routing(results['cf_ins_1'])
     results['cf_ins_2'] = cf_interleaved_routing(results['cf_ins_2'])
@@ -170,7 +170,7 @@ module TestCases
 
   def interleaved_parallel_routing(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'interleaved_parallel_routing')
 
     results['cf_ins_1'] = cf_interleaved_parallel_routing(results['cf_ins_1'])
     results['cf_ins_2'] = cf_interleaved_parallel_routing(results['cf_ins_2'])
@@ -180,7 +180,7 @@ module TestCases
 
   def critical_section(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'critical_section')
 
     results['cf_ins_1'] = cf_critical_section(results['cf_ins_1'])
     results['cf_ins_2'] = cf_critical_section(results['cf_ins_2'])
@@ -192,7 +192,7 @@ module TestCases
 
   def cancel_multiple_instance_activity(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'cancel_multiple_instance_activity')
 
     results['cf_ins_1'] = cf_cancel_multiple_instance_activity(results['cf_ins_1'])
     results['cf_ins_2'] = cf_cancel_multiple_instance_activity(results['cf_ins_2'])
@@ -204,7 +204,7 @@ module TestCases
 
   def loop_posttest(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'loop_posttest')
 
     results['cf_ins_1'] = cf_loop_posttest(results['cf_ins_1'])
     results['cf_ins_2'] = cf_loop_posttest(results['cf_ins_2'])
@@ -214,10 +214,10 @@ module TestCases
 
   def loop_pretest(data, testinstance, settings)
     
-    results = run_tests_on(settings, data)
+    results = run_tests_on(settings, data, 'loop_pretest')
 
     results['cf_ins_1'] = cf_loop_pretest(results['cf_ins_1'])
-    results['cf_ins_2'] = cf_loop_prettest(results['cf_ins_2'])
+    results['cf_ins_2'] = cf_loop_pretest(results['cf_ins_2'])
 
     testinstance[:results][:loop_pretest] = results
   end
