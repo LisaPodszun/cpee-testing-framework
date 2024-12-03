@@ -55,7 +55,7 @@ async function displayResults(data_promise) {
                 console.log(value['log_instance_2'][ind_2]['channel']);
                 let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
                 let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
-                inner_row.click(function () {
+                inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
                     inner_row_panel.css("display", "flex");
                     e.stopPropagation();
