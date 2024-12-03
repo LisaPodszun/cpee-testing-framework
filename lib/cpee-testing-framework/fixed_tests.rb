@@ -569,7 +569,7 @@ module TestHelpers
         end
     end
 
-    def cf_multichoice_chained(cf_events)
+    def cf_multi_choice_chained(cf_events)
         passed = 0
         ecid = 0
         if cf_events.length == 11
