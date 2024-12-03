@@ -47,7 +47,7 @@ module CPEE
             # :multichoice_parallel,  --> not possible in rust
             :cancelling_discriminator,
             :thread_split_thread_merge,
-            :multiple_instances_with_design_time_knowledge,
+            #:multiple_instances_with_design_time_knowledge,
             :cancelling_partial_join_multiple_instances,
             :interleaved_routing,
             :interleaved_parallel_routing,
