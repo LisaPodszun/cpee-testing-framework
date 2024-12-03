@@ -69,9 +69,9 @@ module TestCases
     testinstance[:results][:exclusive_choice_simple_merge] = results
   end
 
-  def parallel_split_synchronization(data, testinstance, settings)
+  def parallel_split_and_synchronization(data, testinstance, settings)
     
-    results = run_tests_on(settings, data, 'parallel_split_synchronization')
+    results = run_tests_on(settings, data, 'parallel_split_and_synchronization')
 
     results['cf_ins_1'] = cf_parallel_split_synchronization(results['cf_ins_1'])
     results['cf_ins_2'] = cf_parallel_split_synchronization(results['cf_ins_2'])
@@ -84,7 +84,7 @@ module TestCases
 
   def multichoice_chained(data, testinstance, settings)
     
-    results = run_tests_on(settings, data, 'multichoice_chained')
+    results = run_tests_on(settings, data, 'multi_choice_chained')
 
     results['cf_ins_1'] = cf_multichoice_chained(results['cf_ins_1'])
     results['cf_ins_2'] = cf_multichoice_chained(results['cf_ins_2'])
@@ -94,7 +94,7 @@ module TestCases
 
   def multichoice_parallel(data, testinstance, settings)
     
-    results = run_tests_on(settings, data, 'multichoice_parallel')
+    results = run_tests_on(settings, data, 'multi_choice_parallel')
 
     results['cf_ins_1'] = cf_multichoice_parallel(results['cf_ins_1'])
     results['cf_ins_2'] = cf_multichoice_parallel(results['cf_ins_2'])

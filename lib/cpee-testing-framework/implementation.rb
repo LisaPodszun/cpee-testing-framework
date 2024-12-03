@@ -41,7 +41,7 @@ module CPEE
             :subprocess_call,
             :sequence,
             :exclusive_choice_simple_merge,
-            :parallel_split_synchronization,
+            :parallel_split_and_synchronization,
             :multichoice_chained,
             # :multichoice_parallel,  --> not possible in rust
             :cancelling_discriminator,
