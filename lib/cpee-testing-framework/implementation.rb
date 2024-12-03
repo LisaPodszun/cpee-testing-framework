@@ -44,15 +44,15 @@ module CPEE
             :exclusive_choice_simple_merge,
             :parallel_split_and_synchronization,
             :multichoice_chained,
-            # :multichoice_parallel,  --> not possible in rust
+            #:multichoice_parallel,  --> not possible in rust
             :cancelling_discriminator,
             :thread_split_thread_merge,
-            #:multiple_instances_with_design_time_knowledge,
+            :multiple_instances_with_design_time_knowledge,
             :cancelling_partial_join_multiple_instances,
             :interleaved_routing,
             :interleaved_parallel_routing,
             :critical_section,
-            #:cancel_multiple_instance_activity, --> strange position change unmark events make this untestable  
+            :cancel_multiple_instance_activity,   
             :loop_posttest,
             :loop_pretest
           ]
@@ -114,6 +114,12 @@ module CPEE
         end
         if topic == 'transformation' || topic == 'description' || topic == 'endpoints'
           return
+        end
+        # filter out empty unmarks
+        if topic == 'position' && eventname =='change'
+          if event['content']['unmark'].empty?
+            return
+          end
         end
 
         if data[event['instance-url']][:log].key? event['timestamp']

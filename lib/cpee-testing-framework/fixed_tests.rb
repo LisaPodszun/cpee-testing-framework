@@ -208,25 +208,34 @@ module TestHelpers
             rust_log_entry["message"]["content"]["state"] == ruby_log_entry["message"]["content"]["state"]
         when "position/change"
             content_keys = ruby_log_entry["message"]["content"].keys
+            atFlag = true
+            afterFlag = true
+            unmarkFlag = true
+            # For now just check the first in each position/change (unmark, at, after) as the test only include those cases
             if content_keys.include?("at")
                 if rust_log_entry["message"]["content"].keys.include?("at")
-                    ruby_log_entry["message"]["content"]["at"][0]["position"] == rust_log_entry["message"]["content"]["at"][0]["position"]
+                    assert(ruby_log_entry["message"]["content"]["at"].length() == 1 && rust_log_entry["message"]["content"]["at"].length() == 1)
+                    atFlag = ruby_log_entry["message"]["content"]["at"][0]["position"] == rust_log_entry["message"]["content"]["at"][0]["position"]
                 else
-                    false
+                    atFlag = false
                 end
-            elsif content_keys.include?("after")
+            if content_keys.include?("after")
                 if rust_log_entry["message"]["content"].keys.include?("after")
-                    ruby_log_entry["message"]["content"]["after"][0]["position"] == rust_log_entry["message"]["content"]["after"][0]["position"]
+                    assert(ruby_log_entry["message"]["content"]["after"].length() == 1 && rust_log_entry["message"]["content"]["after"].length() == 1)
+                    afterFlag = ruby_log_entry["message"]["content"]["after"][0]["position"] == rust_log_entry["message"]["content"]["after"][0]["position"]
                 else
-                    false
-                end
-            elsif content_keys.include?("unmark")
-                if rust_log_entry["message"]["content"].keys.include?("unmark")
-                    ruby_log_entry["message"]["content"]["unmark"][0]["position"] == rust_log_entry["message"]["content"]["unmark"][0]["position"]
-                else
-                    false
+                    afterFlag = false
                 end
             end
+            if content_keys.include?("unmark")
+                if rust_log_entry["message"]["content"].keys.include?("unmark")
+                    assert(ruby_log_entry["message"]["content"]["unmark"].length() == 1 && rust_log_entry["message"]["content"]["unmark"].length() == 1)
+                    unmarkFlag = ruby_log_entry["message"]["content"]["unmark"][0]["position"] == rust_log_entry["message"]["content"]["unmark"][0]["position"]
+                else
+                    unmarkFlag = false
+                end
+            end
+            return atFlag && afterFlag && unmarkFlag 
         when "gateway/decide"
             rust_log_entry["message"]["content"]["code"] == ruby_log_entry["message"]["content"]["code"]
 
