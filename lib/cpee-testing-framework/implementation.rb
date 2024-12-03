@@ -43,7 +43,7 @@ module CPEE
             :sequence,
             :exclusive_choice_simple_merge,
             :parallel_split_and_synchronization,
-            :multichoice_chained,
+            :multi_choice_chained,
             #:multichoice_parallel,  --> not possible in rust
             :cancelling_discriminator,
             :thread_split_thread_merge,
