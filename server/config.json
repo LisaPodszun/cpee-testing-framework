@@ -70,7 +70,7 @@
                         "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/AdvancedBranchingandSynchronization/thread_split_thread_merge.xml"
                 },
                 {
-                        "name": "cancel_multiple_instance_activity",
+                        "name": "cancel_multiple_instance_activity(notavailable)",
                         "ruby": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Ruby/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml",
                         "rust": "https://raw.githubusercontent.com/LisaPodszun/cpee-testing-framework/refs/heads/main/testsets/Rust/CancellationAndForceCompletion/cancel_multiple_instance_activity.xml"
                 },
