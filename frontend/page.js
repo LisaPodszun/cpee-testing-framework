@@ -6,7 +6,7 @@ async function displayResults(data_promise) {
 
     jQuery.each(data['results'], function (key, value) {
         let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', key + "-content");
-        let row = $('<div class="row justify-content-center slider mt-3 mx-5 border-bottom-0 border-primary"></div>').attr('id', key).click(function () {
+        let row = $('<div class="row justify-content-center slider mt-3 mx-5"></div>').attr('id', key).click(function () {
             row_content.slideToggle("fast");
         });
         row.append(`<h4 class="headings">${key}</h4>`);
@@ -23,7 +23,7 @@ async function displayResults(data_promise) {
 
         for (const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
             // put matching elements here
-            let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
+            let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${ind_1.toString() + ind_2.toString()}></div>`);
             let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
             inner_row.click(function (e) {
                 inner_row_panel.slideToggle("fast");
@@ -38,9 +38,15 @@ async function displayResults(data_promise) {
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             let content_2;
-            if (ind_2 == "no_match" || ind_2 == "only_ins_1") {
+            if (ind_2 == "only_ins_1") {
+                $(`#${ind_1.toString() + ind_2.toString()}`).css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 50%, #fc6262 50%,#fc6262 100%);')
                 ins_2_log.append(ind_2);
-            } else {
+            } 
+            else if (ind_2 == "no_match") {
+                $(`#${ind_1.toString() + ind_2.toString()}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 50%, #fefa77 50%,#fefa77 100%);')
+                ins_2_log.append(ind_2);
+            }
+            else {
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
             }
@@ -52,7 +58,7 @@ async function displayResults(data_promise) {
             if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
                 console.log(ind_2)
                 console.log(value['log_instance_2'][ind_2]['channel']);
-                let inner_row = $('<div class="row slider mx-3 my-1 border-bottom-0"></div>');
+                let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0 id=${ind_2.toString() + ind_1.toString()}"></div>`);
                 let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
