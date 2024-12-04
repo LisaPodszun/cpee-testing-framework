@@ -41,17 +41,17 @@ async function displayResults(data_promise) {
             let content_2;
             if (ind_2 == "only_ins_1") {
                 console.log(log_match_id);
-                $(`#${log_match_id}`).css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 20%, #fc6262 50%,#fc6262 100%);');
+                $(document.getElementById(log_match_id)).css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 20%, #fc6262 50%,#fc6262 100%);');
                 ins_2_log.append(ind_2);
             } 
             else if (ind_2 == "no_match") {
                 console.log(log_match_id);
-                $(`#${log_match_id}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #fefa77 50%,#fefa77 100%);');
+                $(document.getElementById(log_match_id)).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #fefa77 50%,#fefa77 100%);');
                 ins_2_log.append(ind_2);
             }
             else {
                 console.log(log_match_id);
-                $(`#${log_match_id}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #88fe77 50%,#88fe77 100%);');
+                $(document.getElementById(log_match_id)).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #88fe77 50%,#88fe77 100%);');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
             }
