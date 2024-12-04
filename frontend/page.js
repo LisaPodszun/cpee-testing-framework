@@ -1,3 +1,12 @@
+
+function markInnerStructureResults (log_entry, index, differences_hash) {
+    if ((!Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
+        
+    }
+}
+function markInnerContentResults (log_entry, index, differences_hash) {
+
+}
 async function displayResults(data_promise) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
