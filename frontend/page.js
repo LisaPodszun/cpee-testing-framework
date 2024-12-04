@@ -38,17 +38,16 @@ async function displayResults(data_promise) {
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-            let content_2;
             if (ind_2 == "only_ins_1") {
-                inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 20%, #fc6262 50%,#fc6262 100%);');
+                //inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 20%, #fc6262 50%,#fc6262 100%);');
                 ins_2_log.append(ind_2);
             } 
             else if (ind_2 == "no_match") {
-                inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #fefa77 50%,#fefa77 100%);');
+                //inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #fefa77 50%,#fefa77 100%);');
                 ins_2_log.append(ind_2);
             }
             else {
-                inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #88fe77 50%,#88fe77 100%);');
+                //inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #88fe77 50%,#88fe77 100%);');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
             }
