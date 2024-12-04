@@ -118,6 +118,8 @@ module TestHelpers
                 diff << path.join("_")
             elsif value.class == Hash
                 diff << hash_structure_test(path, value, hash_2[key])
+            elsif value.class == Array
+                diff << hash_structure_test(path, value[0], hash_2[key])
             end
             path.pop
         end
@@ -134,12 +136,14 @@ module TestHelpers
         # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
-            if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash)
+            if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash || value.class == Array)
                 if (value != hash_2[key])
                     diff << path.join("_")
                 end
             elsif value.class == Hash
                 diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
+            elsif value.class == Array
+                diff << (hash_content_test(path, value[0], hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
             end
             path.pop
         end
