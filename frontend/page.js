@@ -23,8 +23,8 @@ async function displayResults(data_promise) {
 
         for (const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
             // put matching elements here
-            let log_match_id = ind_1.toString() + ind_2.toString()
-            let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
+            let log_match_id = ind_1.toString() + ind_2.toString();
+            let inner_row = $(`<div class="row mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
             let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
             inner_row.click(function (e) {
                 inner_row_panel.slideToggle("fast");
@@ -63,7 +63,8 @@ async function displayResults(data_promise) {
             if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
                 console.log(ind_2)
                 console.log(value['log_instance_2'][ind_2]['channel']);
-                let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0 id=${ind_2.toString() + ind_1.toString()}"></div>`);
+                let log_match_id = ind_2.toString() + ind_1.toString();
+                let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0 id=${log_match_id}"></div>`);
                 let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
