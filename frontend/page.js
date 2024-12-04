@@ -23,7 +23,8 @@ async function displayResults(data_promise) {
 
         for (const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
             // put matching elements here
-            let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${ind_1.toString() + ind_2.toString()}></div>`);
+            log_match_id = ind_1.toString() + ind_2.toString()
+            let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
             let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
             inner_row.click(function (e) {
                 inner_row_panel.slideToggle("fast");
@@ -39,14 +40,15 @@ async function displayResults(data_promise) {
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             let content_2;
             if (ind_2 == "only_ins_1") {
-                $(`#${ind_1.toString() + ind_2.toString()}`).css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 50%, #fc6262 50%,#fc6262 100%);')
+                $(`#${log_match_id}`).css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 20%, #fc6262 50%,#fc6262 100%);')
                 ins_2_log.append(ind_2);
             } 
             else if (ind_2 == "no_match") {
-                $(`#${ind_1.toString() + ind_2.toString()}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 50%, #fefa77 50%,#fefa77 100%);')
+                $(`#${log_match_id}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #fefa77 50%,#fefa77 100%);')
                 ins_2_log.append(ind_2);
             }
             else {
+                $(`#${log_match_id}`).css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 20%, #88fe77 50%,#88fe77 100%);')
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
             }
