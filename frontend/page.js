@@ -24,7 +24,7 @@ async function displayResults(data_promise) {
         for (const [ind_1, ind_2] of Object.entries(matches_ins_1)) {
             // put matching elements here
             let log_match_id = ind_1.toString() + ind_2.toString();
-            let inner_row = $(`<div class="row mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
+            let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
             let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
             inner_row.click(function (e) {
                 inner_row_panel.slideToggle("fast");
