@@ -12,10 +12,10 @@ async function displayResults(data_promise) {
         row.append(`<h4 class="headings">${key}</h4>`);
 
         inner_col = $('<div class="col"></div>');
-        inner_col.append("<div class='legend'><div class='legend-title'>The Title or Explanation of your Map</div><div class='legend-scale'>" +
-                         "<ul class='legend-labels'><li><span style='background:#8DD3C7;'></span>One</li><li><span style='background:#FFFFB3;'></span>Two</li>" +
-                         "<li><span style='background:#BEBADA;'></span>Three</li><li><span style='background:#FB8072;'></span>Four</li>" + 
-                         "<li><span style='background:#80B1D3;'></span>etc</li></ul></div><div class='legend-source'>Source: <a href='Me'>Name of source</a></div></div>'");
+        inner_col.append("<div class='legend'><div class='legend-title'>Colorcode of results</div><div class='legend-scale'>" +
+                         "<ul class='legend-labels'><li><span style='background: #fc6262;'></span>One</li><li><span style='background: #fefa77;'></span>Two</li>" +
+                         "<li><span style='background: #88fe77;'></span>Three</li>" + 
+                         "</ul></div><div class='legend-source'>Source:<a>Me</a></div></div>");
         row_content.append(inner_col);
 
         let matches_ins_1 = value['matches'][0];
