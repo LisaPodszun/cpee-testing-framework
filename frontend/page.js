@@ -1,10 +1,49 @@
 
 function markInnerStructureResults (log_entry, index, differences_hash) {
     if ((!Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
+        // Differences instance 1 > instance 2
+        for (const [ind_1, ind_2] of Object.entries(differences_hash[0][index])) {
+            
+        }
+        // Differences instance 2 > instance 1
+        for (const [ind_1, ind_2] of Object.entries(differences_hash[1][index])) {
+            
+        }
         
     }
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
+    if ((!Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
+        // Differences instance 1 > instance 2
+        for (const [index, value] of Object.entries(differences_hash[0][index])) {
+            keys = value.split("_");
+            element_index = 0;
+            for (i = 0; i < keys.length; i++) {
+                element_index = log_entry.text.indexof(keys[i], element_index);
+            }
+            element_index = log_entry.text.indexof(' ', element_index);
+            end_index = log_entry.text.indexof(/\n/, element_index);
+            text_to_highlight = log_entry.text.substring(element_index, end_index);
+            log_entry.mark(text_to_highlight, {"element": "span",
+                "className" : "dif_highlight"
+            });
+        }
+        // Differences instance 2 > instance 1
+        for (const [index, value] of Object.entries(differences_hash[1][index])) {
+            keys = value.split("_");
+            element_index = 0;
+            for (i = 0; i < keys.length; i++) {
+                element_index = log_entry.text.indexof(keys[i], element_index);
+            }
+            element_index = log_entry.text.indexof(' ', element_index);
+            end_index = log_entry.text.indexof(/\n/, element_index);
+            text_to_highlight = log_entry.text.substring(element_index, end_index);
+            log_entry.mark(text_to_highlight, 
+            {   "element": "span",
+                "className" : "dif_highlight"
+            });
+        }
+    }
 
 }
 async function displayResults(data_promise) {
