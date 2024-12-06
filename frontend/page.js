@@ -17,7 +17,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     console.log(log_entry.text);
     if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
-        for (const [index, value] of Object.entries(differences_hash[0][index])) {
+        for (const [ind, value] of Object.entries(differences_hash[0][index])) {
             console.log("in first for loop");
             keys = value.split("_");
             element_index = 0;
@@ -32,7 +32,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             });
         }
         // Differences instance 2 > instance 1
-        for (const [index, value] of Object.entries(differences_hash[1][index])) {
+        for (const [idx, value] of Object.entries(differences_hash[1][index])) {
             keys = value.split("_");
             element_index = 0;
             for (i = 0; i < keys.length; i++) {
