@@ -84,6 +84,7 @@ async function displayResults(data_promise) {
             
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
+            markInnerContentResults(json_1, ind_1, value['content_differences'][0]);
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             if (ind_2 == "only_ins_1") {
@@ -97,6 +98,7 @@ async function displayResults(data_promise) {
             else {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
+                markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
                 ins_2_log.append(json_2);
             }
             inner_row_panel.append(ins_1_log, ins_2_log);
