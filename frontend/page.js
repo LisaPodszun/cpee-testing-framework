@@ -13,9 +13,9 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
     }
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
-    console.log(differences_hash);
-    console.log(log_entry);
-    if ((!Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
+    console.log("Current index:" + index);
+    console.log(log_entry.text);
+    if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
         for (const [index, value] of Object.entries(differences_hash[0][index])) {
             console.log("in first for loop");
