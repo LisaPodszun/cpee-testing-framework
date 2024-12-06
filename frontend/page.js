@@ -14,7 +14,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
     console.log("Current index:" + index);
-    console.log(log_entry.text);
+    console.log(log_entry.className);
     if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
         for (const [ind, value] of Object.entries(differences_hash[index])) {
@@ -25,7 +25,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
                 element_index = log_entry.text.indexof(keys[i], element_index);
             }
             element_index = log_entry.text.indexof(' ', element_index);
-            end_index = log_entry.text.indexof(/\n/, element_index);
+            end_index = log_entry.textContent.indexof(/\n/, element_index);
             text_to_highlight = log_entry.text.substring(element_index, end_index);
             log_entry.mark(text_to_highlight, {"element": "span",
                 "className" : "dif_highlight"
