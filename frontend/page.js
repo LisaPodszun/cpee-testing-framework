@@ -28,7 +28,8 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             }
             element_index = log_entry.indexOf(' ', element_index);
             console.log("Current Search Index:" + element_index);
-            end_index = log_entry.indexOf(/\n/, element_index);
+            tmp = log_entry.substring(element_index, log_entry.length-1);
+            end_index = tmp.search(/\n/);
             console.log("Current End Index:" + end_index);
             text_to_highlight = log_entry.substring(element_index, end_index);
             console.log("Corresponding text to hightlight:" + text_to_highlight);
