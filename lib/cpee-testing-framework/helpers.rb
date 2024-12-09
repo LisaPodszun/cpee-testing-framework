@@ -11,6 +11,19 @@ require 'weel'
 
 module Helpers #{{{
 
+  def write_test_result(json, instance_id)
+    File.open("./results/#{i}", 'w') {
+      do |file| 
+        file.write(json)
+      end
+    }
+  end
+
+  def load_test_instances(instances)
+    instances = Dir.children("./results")
+    instances.sort! {|a, b| b <=> a}
+    p instances
+  end
 
   def post_testset(start_url, doc_url) #{{{
     ins_id = -1

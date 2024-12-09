@@ -67,7 +67,8 @@ module CPEE
           :currently_running => '',
           :total => tests.length,
           :finished => 0,
-          :results => {}
+          :results => {},
+          :start => Time.now
         }
         
         testinstance = testinstances[i]
@@ -87,6 +88,8 @@ module CPEE
           end
           testinstance[:status] = :finished
         end
+        json = JSON.generate(test_instances[i])
+        write_test_result(json, i)
         Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
@@ -154,6 +157,7 @@ module CPEE
 
       opts[:data] = {}
       opts[:testinstances] = {}
+      load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
