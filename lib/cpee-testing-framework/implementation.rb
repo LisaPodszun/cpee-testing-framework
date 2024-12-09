@@ -27,6 +27,7 @@ module CPEE
 
     class FullTest < Riddl::Implementation #{{{
       include TestCases
+      include Helpers
 
       def response
         data = @a[0]
@@ -34,7 +35,6 @@ module CPEE
         settings = JSON.parse(@p[0].value.read)
         if settings['test'] == 'all'
           tests = [
-            
             :service_call,
             :service_script_call,
             :script_call,
