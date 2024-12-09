@@ -92,6 +92,7 @@ async function displayResults(data_promise) {
             } 
             else if (marked) {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
+                json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 let marked_content_2 = markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
                 json_2.html(marked_content_2);
                 ins_2_log.append(ind_2);
