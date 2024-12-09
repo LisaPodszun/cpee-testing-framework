@@ -67,7 +67,7 @@ async function displayResults(data_promise) {
             // put matching elements here
             let log_match_id = ind_1.toString() + ind_2.toString();
             let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0" id=${log_match_id}></div>`);
-            let inner_row_panel = $('<div class="row panel mx-3 table"></div>');
+            let inner_row_panel = $('<div class="row panel mx-3"></div>');
             inner_row.click(function (e) {
                 inner_row_panel.slideToggle("fast");
                 inner_row_panel.css("display", "flex");
@@ -95,7 +95,7 @@ async function displayResults(data_promise) {
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 let marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
                 json_2.html(marked_content_2);
-                ins_2_log.append(ind_2);
+                ins_2_log.append(json_2);
             }
             else {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%)');
@@ -110,7 +110,7 @@ async function displayResults(data_promise) {
             if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
                 let log_match_id = ind_2.toString() + ind_1.toString();
                 let inner_row = $(`<div class="row slider mx-3 my-1 border-bottom-0 id=${log_match_id}"></div>`);
-                let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary table"></div>');
+                let inner_row_panel = $('<div class="row panel mx-3 border-bottom-0 border-primary"></div>');
                 inner_row.click(function (e) {
                     inner_row_panel.slideToggle("fast");
                     inner_row_panel.css("display", "flex");
@@ -122,10 +122,7 @@ async function displayResults(data_promise) {
                 let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
                 let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
-                if (ind_1 == "no_match") {
-                    inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
-                }
-                else {
+                if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
                     inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 60%, #fc6262 80%,#fc6262 100%)');
                 }
                 inner_row_panel.append(ins_1_log, ins_2_log);
