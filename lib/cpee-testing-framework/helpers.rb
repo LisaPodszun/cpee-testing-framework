@@ -12,11 +12,9 @@ require 'weel'
 module Helpers #{{{
 
   def write_test_result(json, instance_id)
-    File.open("./results/#{i}", 'w') {
-      do |file| 
-        file.write(json)
-      end
-    }
+    File.open("./results/#{i}", 'w') do |file| 
+      file.write(json)
+    end
   end
 
   def load_test_instances(instances)
