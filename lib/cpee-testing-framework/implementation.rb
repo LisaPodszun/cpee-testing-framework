@@ -160,7 +160,7 @@ module CPEE
       opts[:testinstances] = {}
       p Helpers.instance_methods
       p Helpers.methods
-      Helpers::load_test_instances(opts[:testinstances])
+      load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
