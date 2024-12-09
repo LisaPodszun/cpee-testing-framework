@@ -12,6 +12,8 @@ require 'weel'
 module Helpers #{{{
 
   def self::write_test_result(json, instance_id)
+    p "Trying to write json:"
+    pp json
     File.open("./results/#{i}", 'w') do |file| 
       file.write(json)
     end
