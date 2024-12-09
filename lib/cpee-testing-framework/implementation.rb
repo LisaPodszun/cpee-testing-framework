@@ -87,14 +87,6 @@ module CPEE
           end
           testinstance[:status] = :finished
         end
-        """
-          p "Before generate json"
-          json = JSON.generate(test_instances[i])
-          p "After generate json"
-          pp json
-          Helpers::write_test_result(json, i)
-          p "After test"
-        """
         Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
