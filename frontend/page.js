@@ -87,7 +87,11 @@ async function displayResults(data_promise) {
                 marked = true;
             }
             if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
+                if (marked) {
                 marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
+                } else {
+                marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                }
                 json_1.html(marked_content);
                 marked = true;
             }
