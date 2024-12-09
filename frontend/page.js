@@ -23,18 +23,15 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             keys = value.split("_");
             element_index = 0;
             for (i = 0; i < keys.length; i++) {
-                element_index = log_entry.text.indexof(keys[i], element_index);
+                element_index = log_entry.indexof(keys[i], element_index);
             }
-            element_index = log_entry.text.indexof(' ', element_index);
-            end_index = log_entry.textContent.indexof(/\n/, element_index);
+            element_index = log_entry.indexof(' ', element_index);
+            end_index = log_entry.indexof(/\n/, element_index);
             text_to_highlight = log_entry.text.substring(element_index, end_index);
-            log_entry.mark(text_to_highlight, {"element": "span",
-                "className" : "dif_highlight"
-            });
+            log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
         }
-        
     }
-
+    return log_entry
 }
 async function displayResults(data_promise) {
     let data = await data_promise;
