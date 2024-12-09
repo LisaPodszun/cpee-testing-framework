@@ -21,8 +21,8 @@ module Helpers #{{{
   def self::load_test_instances(instances)
     instances = Dir.children('./results')
     instances.sort! {|a, b| b <=> a}
-
-    instances.slice(0, 5).map do |instance| 
+    instances = instances.slice(0, 5)
+    instances.map do |instance| 
       result = File.read("./results/#{instance}")
       JSON::parse(result)
     end
