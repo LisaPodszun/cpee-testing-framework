@@ -9,7 +9,6 @@ require 'uri'
 require 'redis'
 require 'json'
 require_relative 'test_cases'
-require_relative 'helpers'
 
 
 module CPEE
@@ -90,7 +89,7 @@ module CPEE
           testinstance[:status] = :finished
         end
         json = JSON.generate(test_instances[i])
-        write_test_result(json, i)
+        Helpers::write_test_result(json, i)
         Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
@@ -158,7 +157,7 @@ module CPEE
 
       opts[:data] = {}
       opts[:testinstances] = {}
-      load_test_instances(opts[:testinstances])
+      Helpers::load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
