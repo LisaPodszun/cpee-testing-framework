@@ -22,7 +22,7 @@ module Helpers #{{{
     instances = Dir.children('./results')
     instances.sort! {|a, b| b <=> a}
     instances = instances.slice(0, 5)
-    instances.map do |instance| 
+    instances.map! do |instance| 
       result = File.read("./results/#{instance}")
       json = JSON::parse(result)
       p json
