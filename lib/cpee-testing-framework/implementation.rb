@@ -177,18 +177,18 @@ module CPEE
         end
       end
     end
-  end #}}}
 
-  def write_test_result(json, instance_id)
-    File.open("./results/#{i}", 'w') do |file| 
-      file.write(json)
+    def write_test_result(json, instance_id)
+      File.open("./results/#{i}", 'w') do |file| 
+        file.write(json)
+      end
     end
-  end
-
-  def load_test_instances(instances)
-    instances = Dir.children("./results")
-    instances.sort! {|a, b| b <=> a}
-    p instances
-  end
+  
+    def load_test_instances(instances)
+      instances = Dir.children("./results")
+      instances.sort! {|a, b| b <=> a}
+      p instances
+    end
+  end #}}}
 
 end
