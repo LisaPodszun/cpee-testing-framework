@@ -24,9 +24,7 @@ module Helpers #{{{
     instances = instances.slice(0, 5)
     instances.map! do |instance| 
       result = File.read("./results/#{instance}")
-      json = JSON::parse(result)
-      p json
-      json
+      JSON::parse(result)
     end
     p instances
     instances
