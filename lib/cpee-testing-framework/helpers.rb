@@ -17,10 +17,12 @@ module Helpers #{{{
     end
   end
 
+  # Loads the 5 most recent test runs
   def self::load_test_instances(instances)
     instances = Dir.children("./results")
     instances.sort! {|a, b| b <=> a}
-    p instances
+
+    p instances.slice(0, 5)
   end
 
   def post_testset(start_url, doc_url) #{{{
