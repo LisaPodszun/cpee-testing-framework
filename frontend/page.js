@@ -31,6 +31,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
         }
     }
+    console.log("Result:" + log_entry);
     return log_entry
 }
 async function displayResults(data_promise) {
@@ -85,7 +86,7 @@ async function displayResults(data_promise) {
             else {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
-                markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
+                //markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
                 ins_2_log.append(json_2);
             }
             inner_row_panel.append(ins_1_log, ins_2_log);
