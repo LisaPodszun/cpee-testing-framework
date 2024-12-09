@@ -104,8 +104,22 @@ async function displayResults(data_promise) {
             else if (marked) {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
-                let marked_content_2 = markInnerStructureResults(json_2.html(), ind_2, value['structure_differences'][1]);
-                marked_content_2 = markInnerContentResults(marked_content_2, ind_2, value['structure_differences'][1]);
+                let marked_content_2 = "";
+                let marked_2 = false;
+                if ((Array.isArray(value['structure_differences'][1][ind_2]) && value['structure_differences'][1][ind_2].length)) {
+                    console.log("detected structure differences");
+                    marked_content_2 = markInnerStructureResults(json_2.html(), ind_2, value['structure_differences'][1]);
+                    json_2.html(marked_content_2);
+                    marked_2 = true;
+                }
+                if ((Array.isArray(value['content_differences'][1][ind_2]) && value['content_differences'][1][ind_2].length)) {
+                    if (marked_2) {
+                    marked_content_2 = markInnerContentResults(marked_content_2, ind_2, value['content_differences'][1]);
+                    } else {
+                    marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
+                    }
+                    json_1.html(marked_content_2);
+                }
                 json_2.html(marked_content_2);
                 ins_2_log.append(json_2);
             }
