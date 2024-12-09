@@ -24,7 +24,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             element_index = 0;
             for (i = 0; i < keys.length; i++) {
                 console.log("Current element to search for: " + keys[i]);
-                element_index = log_entry.indexOf(keys[i], element_index);
+                element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
                 console.log("Current Search Index:" + element_index);
             }
             element_index = log_entry.indexOf(' ', element_index);
