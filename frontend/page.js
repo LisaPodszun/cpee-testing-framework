@@ -16,6 +16,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
     return log_entry
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
+    console.log("in content marking");
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
         element_index = 0;
@@ -23,10 +24,11 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
+        console.log("Current content element index" + element_index);
         tmp = log_entry.substring(element_index, log_entry.length-1);
         end_index = tmp.search(/\n/);
         if (tmp[end_index] == ','){
-            console.log(tmp[end_index]);
+            console.log("Is the last letter a , ?" + tmp[end_index]);
             end_index = end_index -1;
         }
         end_index = end_index + element_index;
@@ -79,6 +81,7 @@ async function displayResults(data_promise) {
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
             let marked_content = "";
             if ((Array.isArray(value['structure_differences'][0][ind_1]) && value['structure_differences'][0][ind_1].length)) {
+                console.log("detected structure differences");
                 marked_content = markInnerStructureResults(json_1.html(), ind_1, value['structure_differences'][0]);
                 json_1.html(marked_content);
                 marked = true;
