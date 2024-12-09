@@ -9,7 +9,6 @@ require 'uri'
 require 'redis'
 require 'json'
 require_relative 'test_cases'
-require_relative 'helpers'
 
 
 module CPEE
