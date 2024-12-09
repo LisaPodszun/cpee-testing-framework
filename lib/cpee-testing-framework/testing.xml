@@ -2,6 +2,9 @@
   <message name="settings">
     <parameter name="settings" mimetype="application/json"/>
   </message>
+  <message name="instances">
+    <parameter name="instances" mimetype="application/json"/>
+  </message>
   <message name="instance">
     <parameter name="instance" type="nonNegativeInteger"/>
   </message>
@@ -13,6 +16,7 @@
   </message>
   <resource>
     <post in="settings"  out="instance"/>
+    <get out="instances"/>
     <resource relative="\d+">
       <get out="results"/>
     </resource>

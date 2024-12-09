@@ -106,6 +106,12 @@ module CPEE
       end
     end #}}}
 
+    class Instances < Riddl::Implementation #{{{
+      def response
+        Riddl::Parameter::Complex.new("instances", "application/json", @a[0])
+      end
+    end #}}}
+
     class HandleEvents < Riddl::Implementation # {{{
       include Helpers
 
@@ -165,7 +171,7 @@ module CPEE
 
       opts[:data] = {}
       opts[:testinstances] = {}
-      instances = Helpers::load_test_instances(opts[:testinstances])
+      Helpers::load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
@@ -174,6 +180,7 @@ module CPEE
 
         interface 'testing' do
           run FullTest, opts[:data], opts[:testinstances] if post 'settings'
+          run Instances, opts[:testinstances] if get
 
           on resource '\d+' do |res|
             run Status, opts[:testinstances][res[:r].last.to_i] if get
