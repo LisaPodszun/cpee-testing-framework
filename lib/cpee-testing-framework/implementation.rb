@@ -158,7 +158,7 @@ module CPEE
       opts[:testinstances] = {}
       p Helpers.instance_methods
       p Helpers.methods
-      Helpers::load_test_instances({})
+      load_test_instances({})
 
       Proc.new do
         interface 'events' do
@@ -178,5 +178,17 @@ module CPEE
       end
     end
   end #}}}
+
+  def write_test_result(json, instance_id)
+    File.open("./results/#{i}", 'w') do |file| 
+      file.write(json)
+    end
+  end
+
+  def load_test_instances(instances)
+    instances = Dir.children("./results")
+    instances.sort! {|a, b| b <=> a}
+    p instances
+  end
 
 end
