@@ -14,7 +14,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
     console.log("Current index:" + index);
-    console.log(log_entry);
+    console.log(typeof log_entry);
     console.log("Print object:" + log_entry);
     if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
@@ -72,7 +72,6 @@ async function displayResults(data_promise) {
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
             markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
-            markInnerContentResults
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             if (ind_2 == "only_ins_1") {
