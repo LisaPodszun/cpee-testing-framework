@@ -15,6 +15,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
 function markInnerContentResults (log_entry, index, differences_hash) {
     console.log("Current index:" + index);
     console.log(typeof log_entry);
+    console.log(log_entry);
     if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
         for (const [ind, value] of Object.entries(differences_hash[index])) {
