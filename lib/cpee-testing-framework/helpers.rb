@@ -16,21 +16,19 @@ module Helpers #{{{
   end
 
   def self::write_test_result(json, instance_id)
-    p "Trying to write json:"
-    pp json
     File.open("./results/#{instance_id}", 'w') do |file| 
       file.write(json)
     end
   end
 
   # Loads the 5 most recent test runs
-  def self::load_test_instances
+  def self::load_test_instances(instance_hash)
     instances = Dir.children('./results')
     instances.sort! {|a, b| b <=> a}
     instances = instances.slice(0, 5)
     instances.map! do |instance| 
       result = File.read("./results/#{instance}")
-      JSON::parse(result)
+      instance_hash[instance] = JSON::parse(result)
     end
     instances
   end

@@ -59,8 +59,9 @@ module CPEE
           tests = [settings['test'].to_sym]
         end
 
-        i  = 0
-        i += 1 while testinstances.key?(i)
+        instance_ids_desc = testinstances.keys.sort(|a, b| b <=> a)
+        i = instance_ids_desc[0] + 1
+        p "Computed instance id: #{i}"
         testinstances[i] = {
           :status => :running,
           :currently_running => '',
@@ -160,8 +161,7 @@ module CPEE
 
       opts[:data] = {}
       opts[:testinstances] = {}
-      instances = Helpers::load_test_instances()
-      pp instances
+      instances = Helpers::load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
