@@ -1,37 +1,32 @@
 
 function markInnerStructureResults (log_entry, index, differences_hash) {
-    if ((!Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
-        // Differences instance 1 > instance 2
-        for (const [ind_1, ind_2] of Object.entries(differences_hash[0][index])) {
-            
-        }
-        // Differences instance 2 > instance 1
-        for (const [ind_1, ind_2] of Object.entries(differences_hash[1][index])) {
-            
-        }
-        
-    }
-}
-function markInnerContentResults (log_entry, index, differences_hash) {
-    console.log("Current index:" + index);
-    console.log(typeof log_entry);
-    console.log("Print object:" + log_entry);
-        // Differences instance 1 > instance 2
     for (const [ind, value] of Object.entries(differences_hash[index])) {
-        console.log("in first for loop");
         keys = value.split("_");
         element_index = 0;
         for (i = 0; i < keys.length; i++) {
-            console.log("Current element to search for: " + "\"" + keys[i] + "\"");
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
-            console.log("Current Search Index:" + element_index);
+            end_index = log_entry.lastIndexOf("\"" + keys[i] + "\"", element_index);
+        }
+        console.log("Current End Index:" + end_index);
+        text_to_highlight = log_entry.substring(element_index, end_index);
+        console.log("Corresponding text to hightlight:" + text_to_highlight);
+        log_entry = log_entry.replace(text_to_highlight, "<span class='red'>" + text_to_highlight + "</span>");
+    }
+    console.log("Result:" + log_entry);
+    return log_entry
+}
+function markInnerContentResults (log_entry, index, differences_hash) {
+    for (const [ind, value] of Object.entries(differences_hash[index])) {
+        keys = value.split("_");
+        element_index = 0;
+        for (i = 0; i < keys.length; i++) {
+            element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
-        console.log("Current Search Index:" + element_index);
         tmp = log_entry.substring(element_index, log_entry.length-1);
-        console.log("TMP string: " + tmp);
         end_index = tmp.search(/\n/);
         if (tmp[end_index] == ','){
+            console.log(tmp[end_index]);
             end_index = end_index -1;
         }
         end_index = end_index + element_index;
@@ -82,8 +77,14 @@ async function displayResults(data_promise) {
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let marked = false;
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
+            let marked_content = "";
+            if ((Array.isArray(value['structure_differences'][0][ind_1]) && value['structure_differences'][0][ind_1].length)) {
+                marked_content = markInnerStructureResults(json_1.html(), ind_1, value['structure_differences'][0]);
+                json_1.html(marked_content);
+                marked = true;
+            }
             if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
-                let marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
                 json_1.html(marked_content);
                 marked = true;
             }
@@ -96,7 +97,8 @@ async function displayResults(data_promise) {
             else if (marked) {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
-                let marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
+                let marked_content_2 = markInnerStructureResults(json_2.html(), ind_2, value['structure_differences'][1]);
+                marked_content_2 = markInnerContentResults(marked_content_2, ind_2, value['structure_differences'][1]);
                 json_2.html(marked_content_2);
                 ins_2_log.append(json_2);
             }
