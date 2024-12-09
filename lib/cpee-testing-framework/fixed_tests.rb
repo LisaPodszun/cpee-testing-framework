@@ -2,7 +2,7 @@ require_relative 'helpers'
 require 'xml/smart'
 require 'pathname'
 module TestHelpers
-    NON_TESTABLE_ENTRIES = ["instance-uuid", "content_attributes_uuid", "content_at_uuid","content_unmark_uuid","content_after_uuid", "uuid"] #["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
+    NON_TESTABLE_ENTRIES = ["instance-uuid", "content_at_uuid","content_unmark_uuid","content_after_uuid", "uuid"] #["instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
         #"timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid"]
 
     # TODO: find out how to start rust instance
