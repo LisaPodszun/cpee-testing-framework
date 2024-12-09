@@ -58,9 +58,13 @@ module CPEE
         else
           tests = [settings['test'].to_sym]
         end
-
-        instance_ids_desc = testinstances.keys.sort {|a, b| b <=> a}
-        i = instance_ids_desc[0] + 1
+        
+        if testinstances.keys.empty? 
+          i = 0
+        else 
+          instance_ids_desc = testinstances.keys.sort {|a, b| b <=> a}
+          i = instance_ids_desc[0] + 1
+        end
         p "Computed instance id: #{i}"
         testinstances[i] = {
           :status => :running,
