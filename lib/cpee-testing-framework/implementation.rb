@@ -67,7 +67,7 @@ module CPEE
           :total => tests.length,
           :finished => 0,
           :results => {},
-          :start => Time.now
+          :start => Time.now,
         }
         
         testinstance = testinstances[i]
