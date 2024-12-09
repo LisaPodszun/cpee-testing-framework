@@ -16,28 +16,26 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     console.log("Current index:" + index);
     console.log(typeof log_entry);
     console.log("Print object:" + log_entry);
-    if ((Array.isArray(differences_hash[index]) && differences_hash[index].length)) {
         // Differences instance 1 > instance 2
-        for (const [ind, value] of Object.entries(differences_hash[index])) {
-            console.log("in first for loop");
-            keys = value.split("_");
-            element_index = 0;
-            for (i = 0; i < keys.length; i++) {
-                console.log("Current element to search for: " + "\"" + keys[i] + "\"");
-                element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
-                console.log("Current Search Index:" + element_index);
-            }
-            element_index = log_entry.indexOf(' ', element_index);
+    for (const [ind, value] of Object.entries(differences_hash[index])) {
+        console.log("in first for loop");
+        keys = value.split("_");
+        element_index = 0;
+        for (i = 0; i < keys.length; i++) {
+            console.log("Current element to search for: " + "\"" + keys[i] + "\"");
+            element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
             console.log("Current Search Index:" + element_index);
-            tmp = log_entry.substring(element_index, log_entry.length-1);
-            console.log("TMP string: " + tmp);
-            end_index = tmp.search(/\n/);
-            end_index = end_index + element_index;
-            console.log("Current End Index:" + end_index);
-            text_to_highlight = log_entry.substring(element_index, end_index);
-            console.log("Corresponding text to hightlight:" + text_to_highlight);
-            log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
         }
+        element_index = log_entry.indexOf(' ', element_index);
+        console.log("Current Search Index:" + element_index);
+        tmp = log_entry.substring(element_index, log_entry.length-1);
+        console.log("TMP string: " + tmp);
+        end_index = tmp.search(/\n/);
+        end_index = end_index + element_index;
+        console.log("Current End Index:" + end_index);
+        text_to_highlight = log_entry.substring(element_index, end_index);
+        console.log("Corresponding text to hightlight:" + text_to_highlight);
+        log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
     }
     console.log("Result:" + log_entry);
     return log_entry
@@ -79,23 +77,28 @@ async function displayResults(data_promise) {
             inner_row.append(`<h5 class='headings'>${value['log_instance_1'][ind_1]['channel']}</h5>`);
             
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
+            let marked = false;
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
-            let marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
-            json_1.html(marked_content);
+            if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
+                let marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                json_1.html(marked_content);
+                marked = true;
+            }
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-            if (ind_2 == "only_ins_1") {
+            if (ind_2 == "only_ins_1" || ind_2 == "no_match") {
                 inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 60%, #fc6262 80%,#fc6262 100%)');
                 ins_2_log.append(ind_2);
             } 
-            else if (ind_2 == "no_match") {
+            else if (marked) {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
+                let marked_content_2 = markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
+                json_2.html(marked_content_2);
                 ins_2_log.append(ind_2);
             }
             else {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
-                //markInnerContentResults(json_2, ind_2, value['content_differences'][1]);
                 ins_2_log.append(json_2);
             }
             inner_row_panel.append(ins_1_log, ins_2_log);

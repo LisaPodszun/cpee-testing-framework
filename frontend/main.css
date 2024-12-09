@@ -7,6 +7,12 @@
 
 .yellow {
   background: rgba(255, 230, 0, 0.6);
+  padding: .1rem .1rem;
+}
+
+.red {
+  background: rgba(255, 230, 0, 0.6);
+  padding: .1rem .1rem;
 }
 
 #overlay {
