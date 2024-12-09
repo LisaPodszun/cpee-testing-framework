@@ -8,8 +8,12 @@ require 'uri'
 require 'redis'
 require 'json'
 require 'weel'
-
+require 'fileutils'
 module Helpers #{{{
+
+  def self::create_test_file(instance_id)
+    FileUtils.touch("./results/#{instance_id}")
+  end
 
   def self::write_test_result(json, instance_id)
     p "Trying to write json:"

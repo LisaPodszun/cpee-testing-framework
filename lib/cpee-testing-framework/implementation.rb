@@ -76,6 +76,7 @@ module CPEE
         # Own Basic Tests
 
         Thread.new do
+          Helpers::create_test_file(i)
           tests.each do |testname|
             testinstance[testname] = {}
             testinstance[testname][:start] = Time.now
@@ -86,10 +87,9 @@ module CPEE
             testinstance[:finished] += 1
           end
           testinstance[:status] = :finished
+          json = JSON::generate(testinstance)
+          Helpers::write_test_result(json, i)
         end
-
-        json = JSON::generate(testinstance)
-        Helpers::write_test_result(json, i)
         
         Riddl::Parameter::Simple.new('instance', i)
       end
