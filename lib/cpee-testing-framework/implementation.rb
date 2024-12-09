@@ -89,7 +89,7 @@ module CPEE
           testinstance[:status] = :finished
         end
         json = JSON.generate(test_instances[i])
-        Helpers::write_test_result(json, i)
+        write_test_result(json, i)
         Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
@@ -159,7 +159,7 @@ module CPEE
       opts[:testinstances] = {}
       p Helpers.instance_methods
       p Helpers.methods
-      Helpers.load_test_instances(opts[:testinstances])
+      load_test_instances(opts[:testinstances])
 
       Proc.new do
         interface 'events' do
