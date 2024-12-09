@@ -26,7 +26,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
                 element_index = log_entry.indexOf(keys[i], element_index);
             }
             element_index = log_entry.indexOf(' ', element_index);
-            end_index = log_entry.indexof(/\n/, element_index);
+            end_index = log_entry.indexOf(/\n/, element_index);
             text_to_highlight = log_entry.text.substring(element_index, end_index);
             log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
         }
