@@ -32,6 +32,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             tmp = log_entry.substring(element_index, log_entry.length-1);
             console.log("TMP string: " + tmp);
             end_index = tmp.search(/\n/);
+            end_index = end_index + element_index;
             console.log("Current End Index:" + end_index);
             text_to_highlight = log_entry.substring(element_index, end_index);
             console.log("Corresponding text to hightlight:" + text_to_highlight);
@@ -79,7 +80,8 @@ async function displayResults(data_promise) {
             
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
-            markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+            let marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+            json_1.html(marked_content);
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             if (ind_2 == "only_ins_1") {
