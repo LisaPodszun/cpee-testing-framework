@@ -87,13 +87,6 @@ module CPEE
           end
           testinstance[:status] = :finished
         end
-        p "Before generate json"
-        json = JSON.generate(test_instances[i])
-        p "After generate json"
-        pp json
-        Helpers::write_test_result(json, i)
-        p "After test"
-        Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
 
@@ -159,6 +152,14 @@ module CPEE
       opts[:redis_pid]  ||= 'redis.pid'
       opts[:self]       ||= "http#{opts[:secure] ? 's' : ''}://#{opts[:host]}:#{opts[:port]}/"
       opts[:cblist]       = Redis.new(path: opts[:redis_path], db: opts[:redis_db])
+
+      p "Before generate json"
+      json = "{}"
+      p "After generate json"
+      pp json
+      Helpers::write_test_result(json, i)
+      p "After test"
+      Riddl::Parameter::Simple.new('instance', i)
 
       opts[:data] = {}
       opts[:testinstances] = {}
