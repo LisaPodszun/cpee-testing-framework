@@ -26,7 +26,6 @@ module Helpers #{{{
       result = File.read("./results/#{instance}")
       JSON::parse(result)
     end
-    p instances
     instances
   end
 
