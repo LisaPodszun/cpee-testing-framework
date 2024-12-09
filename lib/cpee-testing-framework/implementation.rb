@@ -158,6 +158,8 @@ module CPEE
 
       opts[:data] = {}
       opts[:testinstances] = {}
+      p Helpers.instance_methods
+      p Helpers.methods
       Helpers::load_test_instances(opts[:testinstances])
 
       Proc.new do
