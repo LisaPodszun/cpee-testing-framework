@@ -99,6 +99,18 @@ module CPEE
       end
     end #}}}
 
+    def write_test_result(json, instance_id)
+      File.open("./results/#{i}", 'w') do |file| 
+        file.write(json)
+      end
+    end
+  
+    def load_test_instances(instances)
+      instances = Dir.children("./results")
+      instances.sort! {|a, b| b <=> a}
+      p instances
+    end
+
     class HandleEvents < Riddl::Implementation # {{{
       def response
         data = @a[0]
@@ -145,18 +157,6 @@ module CPEE
         end
       end
     end # }}}
-
-    def write_test_result(json, instance_id)
-      File.open("./results/#{i}", 'w') do |file| 
-        file.write(json)
-      end
-    end
-  
-    def load_test_instances(instances)
-      instances = Dir.children("./results")
-      instances.sort! {|a, b| b <=> a}
-      p instances
-    end
 
     def self::implementation(opts) #{{{
       opts[:cpee]       ||= 'http://localhost:8298/'
