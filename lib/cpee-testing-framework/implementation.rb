@@ -157,7 +157,7 @@ module CPEE
       json = "{}"
       p "After generate json"
       pp json
-      Helpers::write_test_result(json, i)
+      Helpers::write_test_result(json, 2)
       p "After test"
       Riddl::Parameter::Simple.new('instance', i)
 
