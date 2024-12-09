@@ -18,7 +18,7 @@ module Helpers #{{{
   end
 
   # Loads the 5 most recent test runs
-  def self::load_test_instances(instances)
+  def self::load_test_instances
     instances = Dir.children('./results')
     instances.sort! {|a, b| b <=> a}
     instances = instances.slice(0, 5)
