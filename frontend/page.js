@@ -23,12 +23,14 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             keys = value.split("_");
             element_index = 0;
             for (i = 0; i < keys.length; i++) {
+                console.log("Current element to search for: " + keys[i]);
                 element_index = log_entry.indexOf(keys[i], element_index);
                 console.log("Current Search Index:" + element_index);
             }
             element_index = log_entry.indexOf(' ', element_index);
             console.log("Current Search Index:" + element_index);
             tmp = log_entry.substring(element_index, log_entry.length-1);
+            console.log("TMP string: " + tmp);
             end_index = tmp.search(/\n/);
             console.log("Current End Index:" + end_index);
             text_to_highlight = log_entry.substring(element_index, end_index);
