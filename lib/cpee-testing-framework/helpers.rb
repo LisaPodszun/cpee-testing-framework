@@ -19,10 +19,15 @@ module Helpers #{{{
 
   # Loads the 5 most recent test runs
   def self::load_test_instances(instances)
-    instances = Dir.children("./results")
+    instances = Dir.children('./results')
     instances.sort! {|a, b| b <=> a}
 
-    p instances.slice(0, 5)
+    instances.slice(0, 5).map do |instance| 
+      result = File.read("./results/#{instance}")
+      JSON::parse(result)
+    end
+    p instances
+    instances
   end
 
   def post_testset(start_url, doc_url) #{{{
