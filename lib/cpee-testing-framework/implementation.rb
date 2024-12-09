@@ -14,7 +14,6 @@ require_relative 'helpers'
 
 module CPEE
   module InstanceTesting
-    include Helpers
 
     SERVER = File.expand_path(File.join(__dir__,'implementation.xml'))
 
