@@ -73,6 +73,7 @@ module CPEE
           :finished => 0,
           :results => {},
           :start => Time.now,
+          :settings => settings
         }
         
         testinstance = testinstances[i]
