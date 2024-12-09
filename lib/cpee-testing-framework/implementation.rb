@@ -9,10 +9,12 @@ require 'uri'
 require 'redis'
 require 'json'
 require_relative 'test_cases'
+require_relative 'helpers'
 
 
 module CPEE
   module InstanceTesting
+    include Helpers
 
     SERVER = File.expand_path(File.join(__dir__,'implementation.xml'))
 
@@ -26,7 +28,6 @@ module CPEE
     end #}}}
 
     class FullTest < Riddl::Implementation #{{{
-      include Helpers
       include TestCases
 
       def response
