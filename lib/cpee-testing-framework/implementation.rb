@@ -100,6 +100,8 @@ module CPEE
     end #}}}
 
     class HandleEvents < Riddl::Implementation # {{{
+      use Helpers
+
       def response
         data = @a[0]
 
