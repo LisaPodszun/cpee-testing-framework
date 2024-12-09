@@ -159,6 +159,7 @@ module CPEE
       opts[:data] = {}
       opts[:testinstances] = {}
       instances = Helpers::load_test_instances()
+      pp instances
 
       Proc.new do
         interface 'events' do
