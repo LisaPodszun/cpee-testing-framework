@@ -125,6 +125,8 @@ module TestHelpers
 
     def content_test(rust_log_entry, dif_rust_to_ruby, ruby_log_entry, dif_ruby_to_rust)
         # save all common keys and if they hold the same or different values
+        p dif_ruby_to_rust
+        p dif_rust_to_ruby
         dif_content_keys = hash_content_test([], rust_log_entry, ruby_log_entry, dif_rust_to_ruby, dif_ruby_to_rust)
     end
 
