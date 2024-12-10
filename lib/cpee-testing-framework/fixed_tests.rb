@@ -140,7 +140,8 @@ module TestHelpers
             elsif value.class == Hash
                 diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
             elsif value.class == Array
-                p value
+                p value[0]
+                p hash_2[key]
                 diff << (hash_content_test(path, value[0], hash_2[key][0], dif_rust_to_ruby, dif_ruby_to_rust))
             end
             path.pop
