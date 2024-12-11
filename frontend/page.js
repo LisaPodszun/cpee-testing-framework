@@ -177,11 +177,6 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
-        for (let index in data['execution_handlers']) {
-            let item = data['execution_handlers'][index];
-            // console.log(item);
-            $('select[name="executionhandler"]').append($(new Option(item, item)));
-        };
         for (let index in data['tests']) {
             let item = data['tests'][index];
             $('#test_case').append($(new Option(item["name"], item['name'])));
@@ -222,10 +217,9 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
-            console.log(typeof data);
-            let xmlDoc = $.parseXML(data);
-            $xml = $(xmlDoc);
-            console.log($xml.each().text());
+            $(data).find('handler').each(function () {
+                $('select[name="executionhandler"]').append($(new Option($(this).text(), $(this).text())));
+            })
         });
     });
     $("#start").click(function () {
