@@ -337,6 +337,7 @@ module TestHelpers
         end
         # (possibly) wrong match for testing
         ruby_log_tags.merge!({1 => 3})
+        rust_log_tags.merge!({3 => 1})
         [ruby_log_tags, rust_log_tags]
     end
 #{{{  # control flow tests
