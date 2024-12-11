@@ -191,7 +191,7 @@ $(document).ready(function () {
 
     $("#pe_1").blur(function() {
         if ($("#pe_1").val().length == 0) {
-            target = $("#pe_1").placeholder;
+            target = $("#pe_1").attr('placeholder');
         }
         else {
             target = $("#pe_1").val();
