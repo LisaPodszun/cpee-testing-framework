@@ -144,9 +144,9 @@ module TestHelpers
                 if (value != hash_2[key])
                     diff << path.join("_")
                 end
-            elsif value.class == Hash
+            elsif value.class == Hash && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
                 diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
-            elsif value.class == Array
+            elsif value.class == Array && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
                 p value[0]
                 p hash_2[key]
                 diff << (hash_content_test(path, value[0], hash_2[key][0], dif_rust_to_ruby, dif_ruby_to_rust))
