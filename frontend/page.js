@@ -8,8 +8,8 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
         for (i = 0; i < keys.length; i++) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
             console.log("Current start index" + element_index);
+            end_index = log_entry.lastIndexOf("\"" + keys[i] + "\"", element_index);
         }
-        end_index = log_entry.lastIndexOf("\"" + keys[i] + "\"", element_index);
         console.log("Current End Index:" + end_index);
         text_to_highlight = log_entry.substring(element_index, end_index);
         console.log("Corresponding text to hightlight:" + text_to_highlight);
