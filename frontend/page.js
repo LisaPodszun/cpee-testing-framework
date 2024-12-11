@@ -92,6 +92,7 @@ async function displayResults(data_promise) {
                 }
                 json_1.html(marked_content);
                 marked = true;
+                console.log("Current marked value" + marked);
             }
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
@@ -104,6 +105,8 @@ async function displayResults(data_promise) {
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 let marked_content_2 = "";
                 let marked_2 = false;
+                console.log("In marked if branch");
+                console.log("Strukturdifferenz" + value['structure_differences'][1][ind_2]);
                 if ((Array.isArray(value['structure_differences'][1][ind_2]) && value['structure_differences'][1][ind_2].length)) {
                     console.log("detected structure differences in second instance log");
                     console.log(value['structure_differences'][1][ind_2]);
