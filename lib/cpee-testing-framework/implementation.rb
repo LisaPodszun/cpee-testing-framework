@@ -173,7 +173,7 @@ module CPEE
       opts[:data] = {}
       opts[:testinstances] = {}
       Helpers::load_test_instances(opts[:testinstances])
-      p "Loaded test instances: #{opts[:load_test_instances].keys?}"
+      p "Loaded test instances: #{opts[:load_test_instances].keys}"
 
       Proc.new do
         interface 'events' do
