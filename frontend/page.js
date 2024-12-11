@@ -203,7 +203,8 @@ $(document).ready(function () {
             dataType: 'xml'
         }).done(function (data) {
             console.log(data);
-            let xmlDoc = $.parseXML(data);
+            var xmlDoc = $.parseXML(data);
+            console.log(xmlDoc);
             $xml = $(xmlDoc);
             console.log($xml);
         });
