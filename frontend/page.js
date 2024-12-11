@@ -188,6 +188,9 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
+    
+
+
     $("#start").click(function () {
         const form_data = {
             instance_1: { process_engine: $("#cpee1").val(), execution_handler: $("#exe1").val() },
