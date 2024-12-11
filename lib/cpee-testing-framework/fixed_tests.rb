@@ -103,6 +103,9 @@ module TestHelpers
 
         dif_rust_to_ruby = hash_structure_test([], rust_log_entry, ruby_log_entry)
 
+        puts "Structure Differences found"
+        p dif_ruby_to_rust
+        p dif_rust_to_ruby
         [dif_rust_to_ruby, dif_ruby_to_rust]
     end
 
@@ -125,10 +128,6 @@ module TestHelpers
 
     def content_test(rust_log_entry, dif_rust_to_ruby, ruby_log_entry, dif_ruby_to_rust)
         # save all common keys and if they hold the same or different values
-        puts "Keys to not include ins 1 > ins 2"
-        p dif_ruby_to_rust
-        puts "Keys to not include ins 2 > ins 1"
-        p dif_rust_to_ruby
         dif_content_keys = hash_content_test([], rust_log_entry, ruby_log_entry, dif_rust_to_ruby, dif_ruby_to_rust)
     end
 
@@ -137,9 +136,6 @@ module TestHelpers
         # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
-            current_key = path.join("_")
-            puts "Current content key"
-            p current_key
             if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash || value.class == Array)
                 if (value != hash_2[key])
                     diff << path.join("_")
