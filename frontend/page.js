@@ -205,7 +205,7 @@ $(document).ready(function () {
             console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log($xml.find('handler').text());
+            console.log($xml.each().text());
         });
     });
     $("#pe_2").blur(function() {
@@ -224,7 +224,7 @@ $(document).ready(function () {
             console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log($xml.find('handler').text());
+            console.log($xml.each().text());
         });
     });
     $("#start").click(function () {
