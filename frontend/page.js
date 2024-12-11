@@ -184,6 +184,10 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
+    $('pe_1').focus(function () {
+        $('#exe1').append($(new Option($(this).text(), $(this).text())));
+    })
+
     $("#pe_1").blur(function() {
         if ($("#pe_1").val().length == 0) {
             target = $("#pe_1").attr('placeholder');
@@ -197,11 +201,9 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
-            console.log(data);
-            var xmlDoc = $.parseXML(data);
-            console.log(xmlDoc);
-            $xml = $(xmlDoc);
-            console.log($xml);
+            $(data).find('handler').each(function () {
+                $('#exe1').append($(new Option($(this).text(), $(this).text())));
+            })
         });
     });
     $("#pe_2").blur(function() {
@@ -218,7 +220,7 @@ $(document).ready(function () {
             dataType: 'xml'
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('select[name="executionhandler"]').append($(new Option($(this).text(), $(this).text())));
+                $('exe2').append($(new Option($(this).text(), $(this).text())));
             })
         });
     });
