@@ -191,7 +191,7 @@ $(document).ready(function () {
 
     $("#pe_1").blur(function() {
         $.ajax({
-            url: this.val()+"executionhandlers/",
+            url: $(this).val() + "executionhandlers/",
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
