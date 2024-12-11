@@ -189,6 +189,15 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
+    $("#pe_1").blur(function() {
+        $.ajax({
+            url: this.val()+"executionhandlers/",
+            type: 'GET',
+            dataType: 'xml'
+        }).done(function (data) {
+            console.log(data);
+        });
+    });
 
     $("#start").click(function () {
         const form_data = {
@@ -208,7 +217,6 @@ $(document).ready(function () {
             contentType: 'application/json',
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
-            console.log("post done");
             let res = getResult(run_tests_url, data);
             displayResults(res);
         });
