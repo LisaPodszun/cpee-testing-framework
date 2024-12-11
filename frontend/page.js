@@ -118,7 +118,7 @@ async function displayResults(data_promise) {
                     } else {
                     marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
                     }
-                    json_1.html(marked_content_2);
+                    json_2.html(marked_content_2);
                 }
                 json_2.html(marked_content_2);
                 ins_2_log.append(json_2);
