@@ -202,6 +202,7 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
+            console.log(data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
             console.log($xml);
