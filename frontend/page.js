@@ -190,6 +190,7 @@ $(document).ready(function () {
     });
 
     $("#pe_1").blur(function() {
+        console.log("Value of input field: " + $("pe_1").val())
         $.ajax({
             url: $("pe_1").val() + "executionhandlers/",
             type: 'GET',
