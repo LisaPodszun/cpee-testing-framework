@@ -202,9 +202,10 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
+            console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log(xmlDoc);
+            console.log($xml.find('handler').text());
         });
     });
     $("#pe_2").blur(function() {
@@ -220,9 +221,10 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
+            console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log(xmlDoc);
+            console.log($xml.find('handler').text());
         });
     });
     $("#start").click(function () {
