@@ -141,6 +141,9 @@ module TestHelpers
         # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
+            current_key = path.join("_")
+            puts "Current content key"
+            p current_key
             if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash || value.class == Array)
                 if (value != hash_2[key])
                     diff << path.join("_")
