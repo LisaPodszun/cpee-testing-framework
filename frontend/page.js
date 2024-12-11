@@ -192,7 +192,17 @@ $(document).ready(function () {
     $("#pe_1").blur(function() {
         console.log("Value of input field: " + $("#pe_1").val())
         $.ajax({
-            url: $("#pe_1").val() + "executionhandlers/",
+            url: $("#pe_1").val() + "/executionhandlers/",
+            type: 'GET',
+            dataType: 'xml'
+        }).done(function (data) {
+            console.log(data);
+        });
+    });
+    $("#pe_2").blur(function() {
+        console.log("Value of input field: " + $("#pe_2").val())
+        $.ajax({
+            url: $("#pe_2").val() + "/executionhandlers/",
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
