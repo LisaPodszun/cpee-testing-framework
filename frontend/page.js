@@ -198,21 +198,31 @@ $(document).ready(function () {
         }
         console.log("Value of input field: " + target)
         $.ajax({
-            url: target + "/executionhandlers/",
+            url: target + "executionhandlers/",
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
-            console.log(data);
+            let xmlDoc = $.parseXML(data);
+            $xml = $(xmlDoc);
+            console.log(xmlDoc);
         });
     });
     $("#pe_2").blur(function() {
-        console.log("Value of input field: " + $("#pe_2").val())
+        if ($("#pe_2").val().length == 0) {
+            target = $("#pe_2").attr('placeholder');
+        }
+        else {
+            target = $("#pe_2").val();
+        }
+        console.log("Value of input field: " + target)
         $.ajax({
-            url: $("#pe_2").val() + "/executionhandlers/",
+            url: target + "executionhandlers/",
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
-            console.log(data);
+            let xmlDoc = $.parseXML(data);
+            $xml = $(xmlDoc);
+            console.log(xmlDoc);
         });
     });
     $("#start").click(function () {
