@@ -194,8 +194,6 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
-    
-
 
     $("#start").click(function () {
         const form_data = {
