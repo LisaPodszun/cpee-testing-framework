@@ -3,6 +3,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
     console.log("In structure marking");
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
+        console.log("Current key to find:" + keys)
         element_index = 0;
         for (i = 0; i < keys.length; i++) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
@@ -34,7 +35,6 @@ function markInnerContentResults (log_entry, index, differences_hash) {
         text_to_highlight = log_entry.substring(element_index, end_index);
         log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
     }
-    console.log("Result:" + log_entry);
     return log_entry
 }
 async function displayResults(data_promise) {
