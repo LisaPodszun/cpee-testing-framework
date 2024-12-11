@@ -205,7 +205,7 @@ $(document).ready(function () {
             console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log($xml.each().text());
+            console.log(typeof $xml);
         });
     });
     $("#pe_2").blur(function() {
