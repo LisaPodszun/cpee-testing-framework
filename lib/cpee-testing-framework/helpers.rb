@@ -24,7 +24,8 @@ module Helpers #{{{
   # Loads the 5 most recent test runs
   def self::load_test_instances(instance_hash)
     instances = Dir.children('./results')
-    instances.sort! {|a, b| b <=> a}
+    instances.sort! {|a, b| b.to_i <=> a.to_i}
+    p "Sorted instances: #{instances}"
     instances = instances.slice(0, 5)
     instances.map! do |instance| 
       result = File.read("./results/#{instance}")
