@@ -108,6 +108,10 @@ module TestHelpers
 
     def hash_structure_test(path, hash_1, hash_2)
         diff = []
+        puts "Hash 1 to compare"
+        p hash_1
+        puts "Hash 2 to compare"
+        p hash_2
         # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
