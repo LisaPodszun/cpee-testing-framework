@@ -105,7 +105,8 @@ async function displayResults(data_promise) {
                 let marked_content_2 = "";
                 let marked_2 = false;
                 if ((Array.isArray(value['structure_differences'][1][ind_2]) && value['structure_differences'][1][ind_2].length)) {
-                    console.log("detected structure differences");
+                    console.log("detected structure differences in second instance log");
+                    console.log(value['structure_differences'][1][ind_2]);
                     marked_content_2 = markInnerStructureResults(json_2.html(), ind_2, value['structure_differences'][1]);
                     json_2.html(marked_content_2);
                     marked_2 = true;
