@@ -1,3 +1,6 @@
+String.prototype.replaceAt = function(index, end_index, replacement) {
+    return this.substring(0, index) + replacement + this.substring(end_index);
+}
 
 function markInnerStructureResults (log_entry, index, differences_hash) {
     console.log("In structure marking");
@@ -13,7 +16,8 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
         console.log("Current End Index:" + end_index);
         text_to_highlight = log_entry.substring(element_index, end_index);
         console.log("Corresponding text to hightlight:" + text_to_highlight);
-        log_entry = log_entry.replace(text_to_highlight, "<span class='red'>" + text_to_highlight + "</span>");
+
+        log_entry = log_entry.replaceAt(element_index, end_index, "<span class='red'>" + text_to_highlight + "</span>");
     }
     console.log("Result:" + log_entry);
     return log_entry
