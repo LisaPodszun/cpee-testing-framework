@@ -190,9 +190,15 @@ $(document).ready(function () {
     });
 
     $("#pe_1").blur(function() {
-        console.log("Value of input field: " + $("#pe_1").val())
+        if ($("#pe_1").val().length == 0) {
+            target = $("#pe_1").placeholder;
+        }
+        else {
+            target = $("#pe_1").val();
+        }
+        console.log("Value of input field: " + target)
         $.ajax({
-            url: $("#pe_1").val() + "/executionhandlers/",
+            url: target + "/executionhandlers/",
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
