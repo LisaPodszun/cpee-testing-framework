@@ -202,10 +202,9 @@ $(document).ready(function () {
             type: 'GET',
             dataType: 'xml'
         }).done(function (data) {
-            console.log(typeof data);
             let xmlDoc = $.parseXML(data);
             $xml = $(xmlDoc);
-            console.log(typeof $xml);
+            console.log($xml);
         });
     });
     $("#pe_2").blur(function() {
