@@ -177,11 +177,6 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
-        for (let index in data["process_engines"]) {
-            let item = data["process_engines"][index]
-            // console.log(item);
-            $('select[name="process-engine-form"]').append($(new Option(item["name"], item["url"])));
-        };
         for (let index in data['execution_handlers']) {
             let item = data['execution_handlers'][index];
             // console.log(item);
