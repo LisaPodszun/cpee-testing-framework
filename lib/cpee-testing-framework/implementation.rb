@@ -62,7 +62,7 @@ module CPEE
         if testinstances.keys.empty? 
           i = 0
         else 
-          instance_ids_desc = testinstances.keys.sort {|a, b| b <=> a}
+          instance_ids_desc = testinstances.keys.sort {|a, b| b.to_i <=> a.to_i}
           i = instance_ids_desc[0].to_i + 1
         end
         p "Computed instance id: #{i}"
