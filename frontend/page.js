@@ -1,5 +1,6 @@
 
 function markInnerStructureResults (log_entry, index, differences_hash) {
+    console.log("In structure marking");
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
         element_index = 0;
@@ -16,7 +17,6 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
     return log_entry
 }
 function markInnerContentResults (log_entry, index, differences_hash) {
-    console.log("in content marking");
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
         element_index = 0;
@@ -24,7 +24,6 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
-        console.log("Current content element index" + element_index);
         tmp = log_entry.substring(element_index, log_entry.length-1);
         end_index = tmp.search(/\n/);
         if (tmp[end_index] == ','){
@@ -32,9 +31,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             end_index = end_index -1;
         }
         end_index = end_index + element_index;
-        console.log("Current End Index:" + end_index);
         text_to_highlight = log_entry.substring(element_index, end_index);
-        console.log("Corresponding text to hightlight:" + text_to_highlight);
         log_entry = log_entry.replace(text_to_highlight, "<span class='yellow'>" + text_to_highlight + "</span>");
     }
     console.log("Result:" + log_entry);
