@@ -185,8 +185,11 @@ $(document).ready(function () {
     });
 
     $('pe_1').focus(function () {
-        $('#exe1').append($(new Option($(this).text(), $(this).text())));
-    })
+        let options = $('pe_1');
+        for(i=0; i < $('pe_1').length; i++){
+            options[i].remove();
+        }
+    });
 
     $("#pe_1").blur(function() {
         if ($("#pe_1").val().length == 0) {
@@ -205,6 +208,12 @@ $(document).ready(function () {
                 $('#exe1').append($(new Option($(this).text(), $(this).text())));
             })
         });
+    });
+    $('pe_2').focus(function () {
+        let options = $('pe_2');
+        for(i=0; i < $('pe_2').length; i++){
+            options[i].remove();
+        }
     });
     $("#pe_2").blur(function() {
         if ($("#pe_2").val().length == 0) {
