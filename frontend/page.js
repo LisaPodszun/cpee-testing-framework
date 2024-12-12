@@ -206,10 +206,10 @@ $(document).ready(function () {
             dataType: 'xml',
             error: function(request, status, error) {
                 $('#pe_1').addClass('is-invalid');
-                $('#start').addAttr('disabled');
+                $('#start').prop('disabled', true);
             },
             success: function() {
-                $('#start').removeAttr('disabled');
+                $('#start').prop('disabled', false);
                 $('#pe_1').removeClass('is-invalid');
                 $('#pe_1').addClass('is-valid');
             }
@@ -239,7 +239,7 @@ $(document).ready(function () {
             dataType: 'xml',
             error: function(request, status, error) {
                 $('#pe_2').addClass('is-invalid');
-                $('#start').addAttr('disabled');
+                $('#start').prop('disabled', true);
             },
             success: function() {
                 $('#start').removeAttr('disabled');
