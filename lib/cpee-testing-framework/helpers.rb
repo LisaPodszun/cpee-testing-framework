@@ -38,6 +38,9 @@ module Helpers #{{{
     uuid = nil
     url = ""
     puts "in post testset"
+    puts start_url
+    puts engine
+    puts doc_url
     srv = Riddl::Client.new(start_url)
 
     res = srv.resource('/')
