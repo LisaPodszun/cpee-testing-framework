@@ -186,6 +186,7 @@ $(document).ready(function () {
 
     
     $('#pe_1').focus(function () {
+        $('#pe_1').removeClass('is-valid');
         $('.exe1').each(function(){
             $(this).remove();
         })
@@ -208,6 +209,7 @@ $(document).ready(function () {
             },
             success: function() {
                 $('#pe_1').removeClass('is-invalid');
+                $('#pe_1').addClass('is-valid');
             }
         }).done(function (data) {
             $(data).find('handler').each(function () {
