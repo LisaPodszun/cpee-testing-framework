@@ -185,11 +185,9 @@ $(document).ready(function () {
     });
 
     $('#pe_1').focus(function () {
-        let options = $('#exe1').options;
-        console.log(options);
-        for(i=0; i < $('#exe1').length; i++){
-            options[i].remove();
-        }
+        $('.exe').each(function(){
+            $(this).remove();
+        })
     });
 
     $("#pe_1").blur(function() {
@@ -206,7 +204,7 @@ $(document).ready(function () {
             dataType: 'xml'
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('#exe1').append($(new Option($(this).text(), $(this).text())));
+                $('#exe1').append('<option class="exe" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
             })
         });
     });
