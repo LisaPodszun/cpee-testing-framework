@@ -184,25 +184,6 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (function () {'use strict'
-  
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
-  
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-      .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-  
-          form.classList.add('was-validated')
-        }, false)
-      })
-    } )()
     
     $('#pe_1').focus(function () {
         $('.exe1').each(function(){
@@ -221,8 +202,13 @@ $(document).ready(function () {
         $.ajax({
             url: target + "executionhandlers/",
             type: 'GET',
-            dataType: 'xml'
-
+            dataType: 'xml',
+            error: function(request, status, error) {
+                $('#pe_1').addClass('is-invalid');
+            },
+            success: function() {
+                $('#pe_1').removeClass('is-invalid');
+            }
         }).done(function (data) {
             $(data).find('handler').each(function () {
                 $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
