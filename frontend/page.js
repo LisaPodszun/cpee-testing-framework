@@ -186,6 +186,7 @@ $(document).ready(function () {
 
     $('pe_1').focus(function () {
         let options = $('#exe1');
+        console.log(options);
         for(i=0; i < $('#exe1').length; i++){
             options[i].remove();
         }
@@ -229,7 +230,7 @@ $(document).ready(function () {
             dataType: 'xml'
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('exe2').append($(new Option($(this).text(), $(this).text())));
+                $('#exe2').append($(new Option($(this).text(), $(this).text())));
             })
         });
     });
