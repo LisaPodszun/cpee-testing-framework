@@ -42,7 +42,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     }
     return log_entry
 }
-async function displayResults(data_promise) {
+async function displayResults(data_promise, settings) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
@@ -222,6 +222,20 @@ $(document).ready(function () {
             $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
         })
     });
+
+    $('#start_service').blur(function () {
+        $('#start_service').removeClass('is-invalid');
+    });
+    $('#start_service').blur(function () {
+        let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
+        if (url.test($('#start_service').val())) {
+            $('#start_service').removeClass('is-invalid');
+        } else {
+            $('#start_service').addClass('is-invalid');
+        }
+    });
+
+
     $('#pe_1').focus(function () {
         $('#pe_1').removeClass('is-valid');
         $('.exe1').each(function(){
@@ -325,7 +339,7 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'settings' }
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
-            displayResults(res);
+            displayResults(res, settings);
         });
     });
 });
