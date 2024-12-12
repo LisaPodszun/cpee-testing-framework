@@ -183,8 +183,45 @@ $(document).ready(function () {
         };
         $('#start').removeAttr('disabled');
     });
-
     
+    target = $("#pe_1").attr('placeholder');
+    $.ajax({
+        url: target + "executionhandlers/",
+        type: 'GET',
+        dataType: 'xml',
+        error: function(request, status, error) {
+            $('#pe_1').addClass('is-invalid');
+            $('#start').prop('disabled', true);
+        },
+        success: function() {
+            $('#start').prop('disabled', false);
+            $('#pe_1').removeClass('is-invalid');
+            $('#pe_1').addClass('is-valid');
+        }
+    }).done(function (data) {
+        $(data).find('handler').each(function () {
+            $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+        })
+    });
+    target = $("#pe_2").attr('placeholder');
+    $.ajax({
+        url: target + "executionhandlers/",
+        type: 'GET',
+        dataType: 'xml',
+        error: function(request, status, error) {
+            $('#pe_2').addClass('is-invalid');
+            $('#start').prop('disabled', true);
+        },
+        success: function() {
+            $('#start').removeAttr('disabled');
+            $('#pe_2').removeClass('is-invalid');
+            $('#pe_2').addClass('is-valid');
+        }
+    }).done(function (data) {
+        $(data).find('handler').each(function () {
+            $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+        })
+    });
     $('#pe_1').focus(function () {
         $('#pe_1').removeClass('is-valid');
         $('.exe1').each(function(){
@@ -199,7 +236,6 @@ $(document).ready(function () {
         else {
             target = $("#pe_1").val();
         }
-        console.log("Value of input field: " + target)
         $.ajax({
             url: target + "executionhandlers/",
             type: 'GET',
@@ -255,6 +291,7 @@ $(document).ready(function () {
     $("#start").click(function () {
         let target_1 = '';
         let target_2 = '';
+        let start_service = '';
         if ($("#pe_1").val().length == 0) {
             target_1 = $("#pe_1").attr('placeholder');
         } else {
@@ -265,8 +302,13 @@ $(document).ready(function () {
         } else {
             target_2 = $("#pe_2").val();
         }
+        if ($("#start_service").val().length == 0) {
+            start_service = $("#start_service").attr('placeholder');
+        } else {
+            start_service = $("#pe_2").val();
+        }
         const form_data = {
-            start: $("#start_service").val(),
+            start: start_service,
             instance_1: { process_engine: target_1, execution_handler: $("#exe1").val() },
             instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
             test: $("#test_case").val()
