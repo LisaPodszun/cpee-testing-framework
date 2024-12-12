@@ -206,8 +206,10 @@ $(document).ready(function () {
             dataType: 'xml',
             error: function(request, status, error) {
                 $('#pe_1').addClass('is-invalid');
+                $('#start').addAttr('disabled');
             },
             success: function() {
+                $('#start').removeAttr('disabled');
                 $('#pe_1').removeClass('is-invalid');
                 $('#pe_1').addClass('is-valid');
             }
@@ -218,6 +220,7 @@ $(document).ready(function () {
         });
     });
     $('#pe_2').focus(function () {
+        $('#pe_2').removeClass('is-valid');
         $('.exe2').each(function(){
             $(this).remove();
         })
@@ -233,7 +236,16 @@ $(document).ready(function () {
         $.ajax({
             url: target + "executionhandlers/",
             type: 'GET',
-            dataType: 'xml'
+            dataType: 'xml',
+            error: function(request, status, error) {
+                $('#pe_2').addClass('is-invalid');
+                $('#start').addAttr('disabled');
+            },
+            success: function() {
+                $('#start').removeAttr('disabled');
+                $('#pe_2').removeClass('is-invalid');
+                $('#pe_2').addClass('is-valid');
+            }
         }).done(function (data) {
             $(data).find('handler').each(function () {
                 $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
