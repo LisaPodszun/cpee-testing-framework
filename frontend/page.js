@@ -184,7 +184,7 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
-    $('pe_1').focus(function () {
+    $('#pe_1').focus(function () {
         let options = $('#exe1');
         console.log(options);
         for(i=0; i < $('#exe1').length; i++){
@@ -210,7 +210,7 @@ $(document).ready(function () {
             })
         });
     });
-    $('pe_2').focus(function () {
+    $('#pe_2').focus(function () {
         let options = $('#exe2');
         for(i=0; i < $('#exe2').length; i++){
             options[i].remove();
