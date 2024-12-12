@@ -185,7 +185,7 @@ $(document).ready(function () {
     });
 
     $('#pe_1').focus(function () {
-        let options = $('#exe1');
+        let options = $('#exe1').options;
         console.log(options);
         for(i=0; i < $('#exe1').length; i++){
             options[i].remove();
@@ -211,7 +211,7 @@ $(document).ready(function () {
         });
     });
     $('#pe_2').focus(function () {
-        let options = $('#exe2');
+        let options = $('#exe2').options;
         for(i=0; i < $('#exe2').length; i++){
             options[i].remove();
         }
