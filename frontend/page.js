@@ -184,8 +184,28 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {'use strict'
+  
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
+  
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+      .forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+          if (!form.checkValidity()) {
+            event.preventDefault()
+            event.stopPropagation()
+          }
+  
+          form.classList.add('was-validated')
+        }, false)
+      })
+    } )()
+    
     $('#pe_1').focus(function () {
-        $('.exe').each(function(){
+        $('.exe1').each(function(){
             $(this).remove();
         })
     });
@@ -202,17 +222,17 @@ $(document).ready(function () {
             url: target + "executionhandlers/",
             type: 'GET',
             dataType: 'xml'
+
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('#exe1').append('<option class="exe" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+                $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
             })
         });
     });
     $('#pe_2').focus(function () {
-        let options = $('#exe2').options;
-        for(i=0; i < $('#exe2').length; i++){
-            options[i].remove();
-        }
+        $('.exe2').each(function(){
+            $(this).remove();
+        })
     });
     $("#pe_2").blur(function() {
         if ($("#pe_2").val().length == 0) {
@@ -228,7 +248,7 @@ $(document).ready(function () {
             dataType: 'xml'
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('#exe2').append($(new Option($(this).text(), $(this).text())));
+                $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
             })
         });
     });
