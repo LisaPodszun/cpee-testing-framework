@@ -253,12 +253,24 @@ $(document).ready(function () {
         });
     });
     $("#start").click(function () {
+        let target_1 = '';
+        let target_2 = '';
+        if ($("#pe_1").val().length == 0) {
+            target_1 = $("#pe_1").attr('placeholder');
+        } else {
+            target_1 = $("#pe_1").val();
+        }
+        if ($("#pe_2").val().length == 0) {
+            target_2 = $("#pe_2").attr('placeholder');
+        } else {
+            target_2 = $("#pe_2").val();
+        }
         const form_data = {
-            instance_1: { process_engine: $("#cpee1").val(), execution_handler: $("#exe1").val() },
-            instance_2: { process_engine: $("#cpee2").val(), execution_handler: $("#exe2").val() },
+            start: $("#start_service").val(),
+            instance_1: { process_engine: target_1, execution_handler: $("#exe1").val() },
+            instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
             test: $("#test_case").val()
         };
-
         $("#main").remove();
         $("#overlay").fadeIn(300);
         const settings = JSON.stringify(form_data);

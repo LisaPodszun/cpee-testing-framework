@@ -6,9 +6,9 @@ module TestHelpers
         #"timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid"]
 
     # TODO: find out how to start rust instance
-    def run_test_case(start_url, doc_url, data)
+    def run_test_case(start_url, engine, doc_url, data)
         puts 'in run test case'
-        instance, uuid, url = post_testset(start_url, doc_url)
+        instance, uuid, url = post_testset(start_url, engine, doc_url)
         puts 'after post testset'
         puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
         data[url] = {}
@@ -31,7 +31,7 @@ module TestHelpers
     
     def run_tests_on(settings, data, testcase)
         puts "in run tests on"
-
+        start_url = settings['start']
         engine_1 = settings['instance_1']['process_engine']
         engine_2 = settings['instance_2']['process_engine']
         doc_url_ins_1 = ''
@@ -53,11 +53,11 @@ module TestHelpers
         end
         puts "DOC URL 1: #{doc_url_ins_1}"
         puts "DOC URL 2: #{doc_url_ins_2}"
-        ruby_log = run_test_case(engine_1, doc_url_ins_1, data)
+        ruby_log = run_test_case(start_url, engine_1, doc_url_ins_1, data)
 
         puts "Ruby log"
         p ruby_log
-        rust_log = run_test_case(engine_2, doc_url_ins_2, data)
+        rust_log = run_test_case(start_url, engine_2, doc_url_ins_2, data)
 
         puts "Rust log"
         p rust_log
