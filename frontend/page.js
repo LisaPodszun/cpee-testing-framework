@@ -183,8 +183,13 @@ $(document).ready(function () {
         };
         $('#start').removeAttr('disabled');
     });
-    
-    target = $("#pe_1").attr('placeholder');
+    target = "";
+    if ($("#pe_1").val().length == 0) {
+        target = $("#pe_1").attr('placeholder');
+    }
+    else {
+        target = $("#pe_1").val();
+    }
     $.ajax({
         url: target + "executionhandlers/",
         type: 'GET',
@@ -203,7 +208,13 @@ $(document).ready(function () {
             $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
         })
     });
-    target = $("#pe_2").attr('placeholder');
+    target = "";
+    if ($("#pe_2").val().length == 0) {
+        target = $("#pe_2").attr('placeholder');
+    }
+    else {
+        target = $("#pe_2").val();
+    }
     $.ajax({
         url: target + "executionhandlers/",
         type: 'GET',
@@ -223,7 +234,7 @@ $(document).ready(function () {
         })
     });
 
-    $('#start_service').blur(function () {
+    $('#start_service').focus(function () {
         $('#start_service').removeClass('is-invalid');
     });
     $('#start_service').blur(function () {
@@ -302,6 +313,17 @@ $(document).ready(function () {
             })
         });
     });
+
+
+    if($("#fixed_file").is(':checked')) {
+        $('#tests').show();
+    } else {
+        $('#upload').show();
+    }
+
+
+
+
     $("#start").click(function () {
         let target_1 = '';
         let target_2 = '';
