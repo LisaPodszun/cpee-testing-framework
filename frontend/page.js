@@ -317,10 +317,17 @@ $(document).ready(function () {
         });
     });
 
+  $('#fixed_file').click(function () {
+    $('#upload').hide();
+    $('#tests').show();
+  })
+
+  $('#own_file').click(function () {
+    
+  })
 
     if($("#fixed_file").is(':checked')) {
-        $('#upload').hide();
-        $('#tests').show();
+       
     } else if ($("#fixed_file").is(':checked')){
         $('#tests').hide();
         $('#upload').show();
