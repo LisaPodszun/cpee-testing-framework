@@ -177,6 +177,17 @@ function isXML(filename) {
         return true;
     }
 }
+function enableStart() {
+    let pe_1 = document.getElementById('pe_1').classList.contains('is-invalid');
+    let pe_2 = document.getElementById('pe_2').classList.contains('is-invalid');
+    let stas = document.getElementById('start_service').classList.contains('is-invalid');
+
+    if (!(pe_1 || pe_2 || stas)) {
+        $('#start').prop('diabled', false);
+    } else {
+        $('#start').prop('diabled', true);
+    }
+}
 
 
 
@@ -297,10 +308,10 @@ $(document).ready(function () {
             dataType: 'xml',
             error: function(request, status, error) {
                 $('#pe_1').addClass('is-invalid');
-                $('#start').prop('disabled', true);
+                enableStart();
             },
             success: function() {
-                $('#start').prop('disabled', false);
+                enableStart();
                 $('#pe_1').removeClass('is-invalid');
                 $('#pe_1').addClass('is-valid');
             }
@@ -330,10 +341,10 @@ $(document).ready(function () {
             dataType: 'xml',
             error: function(request, status, error) {
                 $('#pe_2').addClass('is-invalid');
-                $('#start').prop('disabled', true);
+                enableStart();
             },
             success: function() {
-                $('#start').removeAttr('disabled');
+                enableStart();
                 $('#pe_2').removeClass('is-invalid');
                 $('#pe_2').addClass('is-valid');
             }
@@ -354,12 +365,12 @@ $(document).ready(function () {
     $('#upload').show();
     let filename = document.getElementById('file_input').files[0].name;
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        $("#start").prop('disabled', true);
+        enableStart();
         $('#file_input').addClass('is-invalid');
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
-        $('#start').prop('disabled', false);
+        enableStart();
         $('#file-error').remove();
     }
   }
@@ -369,13 +380,13 @@ $(document).ready(function () {
   $('#fixed_file').click(function () {
     $('#upload').hide();
     $('#tests').show();
-    $("#start").prop('disabled', false);
+    enableStart();
   })
 
   $('#own_file').click(function () {
     $('#tests').hide();
     $('#upload').show();
-    $("#start").prop('disabled', true);
+    enableStart();
   })
 
 
@@ -384,12 +395,12 @@ $(document).ready(function () {
     let filename = document.getElementById('file_input').files[0].name;
     console.log(filename);
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        $("#start").prop('disabled', true);
+        enableStart();
         $('#file_input').addClass('is-invalid');
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
-        $('#start').prop('disabled', false);
+        enableStart();
         $('#file-error').remove();
     }
   });
