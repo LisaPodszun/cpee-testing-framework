@@ -337,6 +337,7 @@ $(document).ready(function () {
   } else if ($('#own_file').is(':checked')) {
     $('#tests').hide();
     $('#upload').show();
+    let filename = document.getElementById('file_input').files[0].name;
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
         $('#file_input').addClass('is-invalid');
