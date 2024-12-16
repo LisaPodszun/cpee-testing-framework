@@ -249,12 +249,27 @@ $(document).ready(function () {
         })
     });
 
+    let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?');
+    let start_service = $('#start_service').val();
+    if (start_service.length == 0){
+        start_service = $('#start_service').attr('placeholder');
+    }
+    if (url.test(start_service)) {
+        $('#start_service').removeClass('is-invalid');
+    } else {
+        $('#start_service').addClass('is-invalid');
+    }
+
     $('#start_service').focus(function () {
         $('#start_service').removeClass('is-invalid');
     });
     $('#start_service').blur(function () {
         let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
-        if (url.test($('#start_service').val())) {
+        let start_service = $('#start_service').val();
+        if (start_service.length == 0){
+            start_service = $('#start_service').attr('placeholder');
+        }
+        if (url.test(start_service)) {
             $('#start_service').removeClass('is-invalid');
         } else {
             $('#start_service').addClass('is-invalid');
@@ -397,7 +412,7 @@ $(document).ready(function () {
         if ($("#start_service").val().length == 0) {
             start_service = $("#start_service").attr('placeholder');
         } else {
-            start_service = $("#pe_2").val();
+            start_service = $("#start_service").val();
         }
         const form_data = {
             start: start_service,
