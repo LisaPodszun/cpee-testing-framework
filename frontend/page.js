@@ -167,7 +167,7 @@ async function displayResults(data_promise, settings) {
 
 }
 
-function checkFileType(filename) {
+function isXML(filename) {
     fileextension = filename.split(".").pop();
     if (fileextension != 'xml') {
         return false;
@@ -343,7 +343,7 @@ $(document).ready(function () {
 
   $('#file_input').blur(function () {
     let filename = $('file_input').files[0].name;
-    if ($("#file_input").prop('files').length == 0 || checkFileType(filename)) {
+    if ($("#file_input").prop('files').length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
         $('file_input').addClass('is-invalid');
     } else {   
