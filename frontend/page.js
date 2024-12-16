@@ -169,6 +169,8 @@ async function displayResults(data_promise, settings) {
 
 function isXML(filename) {
     fileextension = filename.split(".").pop();
+
+    console.log('file_extension', fileextension);
     if (fileextension != 'xml') {
         return false;
     } else {
@@ -331,6 +333,7 @@ $(document).ready(function () {
   $('#fixed_file').click(function () {
     $('#upload').hide();
     $('#tests').show();
+    $("#start").prop('disabled', false);
   })
 
   $('#own_file').click(function () {
@@ -343,6 +346,7 @@ $(document).ready(function () {
 
   $('#file_input').blur(function () {
     let filename = $('file_input').files[0].name;
+    console.log(filename);
     if ($("#file_input").prop('files').length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
         $('file_input').addClass('is-invalid');
