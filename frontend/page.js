@@ -208,6 +208,9 @@ $(document).ready(function () {
             $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
         })
     });
+    
+    $('#upload').hide();
+
     target = "";
     if ($("#pe_2").val().length == 0) {
         target = $("#pe_2").attr('placeholder');
@@ -316,8 +319,10 @@ $(document).ready(function () {
 
 
     if($("#fixed_file").is(':checked')) {
+        $('#upload').hide();
         $('#tests').show();
-    } else {
+    } else if ($("#fixed_file").is(':checked')){
+        $('#tests').hide();
         $('#upload').show();
     }
 
