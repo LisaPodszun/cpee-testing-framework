@@ -345,13 +345,13 @@ $(document).ready(function () {
 
 
   $('#file_input').blur(function () {
-    let filename = $('file_input').prop('files')[0];
+    let filename = document.getElementById('file_input').files[0].name;
     console.log(filename);
-    if ($("#file_input").prop('files').length == 0 || !isXML(filename)) {
+    if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
-        $('file_input').addClass('is-invalid');
+        $('#file_input').addClass('is-invalid');
     } else {   
-        $('file_input').removeClass('is-invalid');
+        $('#file_input').removeClass('is-invalid');
         $('#start').prop('disabled', false);
     }
   });
