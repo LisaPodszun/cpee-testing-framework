@@ -222,7 +222,6 @@ $(document).ready(function () {
         })
     });
     
-    $('#upload').hide();
 
     target = "";
     if ($("#pe_2").val().length == 0) {
@@ -330,6 +329,27 @@ $(document).ready(function () {
         });
     });
 
+
+  if ($('#fixed_file').is(':checked')) {
+    $('#upload').hide();
+    $('#tests').show();
+    $("#start").prop('disabled', false);
+  } else if ($('#own_file').is(':checked')) {
+    $('#tests').hide();
+    $('#upload').show();
+    if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
+        $("#start").prop('disabled', true);
+        $('#file_input').addClass('is-invalid');
+        $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
+    } else {   
+        $('#file_input').removeClass('is-invalid');
+        $('#start').prop('disabled', false);
+        $('#file-error').remove();
+    }
+  }
+
+
+
   $('#fixed_file').click(function () {
     $('#upload').hide();
     $('#tests').show();
@@ -350,7 +370,7 @@ $(document).ready(function () {
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
         $('#file_input').addClass('is-invalid');
-        $('#file_input').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
+        $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
         $('#start').prop('disabled', false);

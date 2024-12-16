@@ -4,6 +4,9 @@
   color: #000;
 }
 
+.error-text {
+  color: red;
+}
 
 .yellow {
   background: rgba(254, 250, 119, 0.6);
