@@ -183,10 +183,10 @@ function enableStart() {
     let stas = document.getElementById('start_service').classList.contains('is-invalid');
     console.log('in enable start');
     console.log('values : ', pe_1 , pe_2 , stas);
-    if (!(pe_1 || pe_2 || stas)) {
-        $('#start').prop('diabled', false);
-    } else {
+    if ((pe_1 || pe_2 || stas)) {
         $('#start').prop('diabled', true);
+    } else {
+        $('#start').prop('diabled', false);
     }
 }
 
