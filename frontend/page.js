@@ -167,6 +167,17 @@ async function displayResults(data_promise, settings) {
 
 }
 
+function checkFileType(filename) {
+    fileextension = filename.split(".").pop();
+    if (fileextension != 'xml') {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+
+
 $(document).ready(function () {
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
@@ -325,8 +336,21 @@ $(document).ready(function () {
   $('#own_file').click(function () {
     $('#tests').hide();
     $('#upload').show();
+    $("#start").prop('disabled', true);
   })
 
+
+
+  $('#file_input').blur(function () {
+    let filename = $('file_input').files[0].name;
+    if ($("#file_input").prop('files').length == 0 || checkFileType(filename)) {
+        $("#start").prop('disabled', true);
+        $('file_input').addClass('is-invalid');
+    } else {   
+        $('file_input').removeClass('is-invalid');
+        $('#start').prop('disabled', false);
+    }
+  });
     
 
     $("#start").click(function () {
