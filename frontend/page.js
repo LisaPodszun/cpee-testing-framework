@@ -345,7 +345,7 @@ $(document).ready(function () {
 
 
   $('#file_input').blur(function () {
-    let filename = $('file_input').prop('files')[0].val();
+    let filename = $('file_input').prop('files')[0];
     console.log(filename);
     if ($("#file_input").prop('files').length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
