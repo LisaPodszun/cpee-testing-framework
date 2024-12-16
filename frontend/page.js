@@ -323,18 +323,11 @@ $(document).ready(function () {
   })
 
   $('#own_file').click(function () {
-    
+    $('#tests').hide();
+    $('#upload').show();
   })
 
-    if($("#fixed_file").is(':checked')) {
-       
-    } else if ($("#fixed_file").is(':checked')){
-        $('#tests').hide();
-        $('#upload').show();
-    }
-
-
-
+    
 
     $("#start").click(function () {
         let target_1 = '';
