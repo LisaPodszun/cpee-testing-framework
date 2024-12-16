@@ -344,15 +344,17 @@ $(document).ready(function () {
 
 
 
-  $('#file_input').blur(function () {
+  $('#file_input').change(function () {
     let filename = document.getElementById('file_input').files[0].name;
     console.log(filename);
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
         $("#start").prop('disabled', true);
         $('#file_input').addClass('is-invalid');
+        $('#file_input').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
         $('#start').prop('disabled', false);
+        $('#file-error').remove();
     }
   });
     
