@@ -417,6 +417,8 @@ $(document).ready(function () {
     
 
     $("#start").click(function () {
+
+        var data = new FormData();
         let target_1 = '';
         let target_2 = '';
         let start_service = '';
@@ -449,13 +451,12 @@ $(document).ready(function () {
             instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
             test: test_name
         };
+        data.append("settings", form_data);
         $("#main").remove();
         $("#overlay").fadeIn(300);
         const settings = JSON.stringify(form_data);
         console.log(settings);
 
-        var data = new FormData();
-        data.append("settings", form_data);
         $.ajax({
             url: run_tests_url,
             type: 'POST',
