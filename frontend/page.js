@@ -198,7 +198,7 @@ function enableStart() {
 $(document).ready(function () {
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
-    $('#results').hide();
+    
     $.ajax({
         url: config_url,
         type: 'GET',
