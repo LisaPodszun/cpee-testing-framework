@@ -419,7 +419,11 @@ $(document).ready(function () {
   $.ajax({
     url: run_tests_url,
     type: 'GET',
-    dataType: 'json'
+    dataType: 'json',
+    success: function (data) {
+        console.log("made get request for prev data");
+        console.log(data);
+    }
     }).done(function (data) {
         console.log("made get request for prev data");
         console.log(data);
