@@ -453,7 +453,10 @@ $(document).ready(function () {
         };
         $("#main").remove();
         $("#overlay").fadeIn(300);
-        const settings = JSON.stringify(form_data);
+        settings = JSON.stringify(form_data);
+        settings = new Blob([settings], {
+            type: 'application/json'
+          });
         data.append("settings", settings);
         console.log(settings);
 
