@@ -111,7 +111,9 @@ module Helpers #{{{
     res = srv.resource('/')
     puts 'Doc URL'
     p doc
-    
+    status = 0
+    response = nil
+    headers = nil
     # create instance
     if doc.is_a? String
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
