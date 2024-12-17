@@ -42,7 +42,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     }
     return log_entry
 }
-async function displayResults(data_promise, settings) {
+async function displayResults(data_promise, appendto) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
@@ -162,7 +162,7 @@ async function displayResults(data_promise, settings) {
             }
         }
 
-        $('#results').append(row, row_content);
+        $(`#${appendto}`).append(row, row_content);
     })
 
 }
@@ -198,7 +198,7 @@ function enableStart() {
 $(document).ready(function () {
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
-
+    $('#results').hide();
     $.ajax({
         url: config_url,
         type: 'GET',
@@ -215,15 +215,18 @@ $(document).ready(function () {
     // get previous results
     $.ajax({
     url: run_tests_url,
-    type: 'GET',
-    success: function (data) {
-        console.log("made get request for prev data");
-        console.log(data);
-    }
+    type: 'GET'
     }).done(function (data) {
         console.log("made get request for prev data");
-        console.log(data);
-        //displayResults(res, settings);
+        jQuery.each(data, function (key, value) {
+            let row_content = $('<div class="row justify-content-center panel border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
+            let row = $('<div class="row justify-content-center slider mt-3"></div>').attr('id', key).click(function () {
+                row_content.slideToggle("fast");
+            });
+            row.append(`<h4 class="headings">Test ${key}</h4>`);
+            let row_id = "testcase-" + key
+            displayResults(value, row_id);
+        })
     });
 
 
