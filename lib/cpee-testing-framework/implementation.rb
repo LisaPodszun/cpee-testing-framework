@@ -37,6 +37,7 @@ module CPEE
         testfile = @p[1].value.read || nil
         settings = JSON.parse(@p[0].value.read)
         
+
         puts testfile.class
         
         if settings['test'] == 'all'
@@ -63,6 +64,7 @@ module CPEE
           ]
         elsif settings['test'].split('.')[-1] == 'xml'
           tests = [:custom]
+          testfile = augment_testset(testfile)
         else
           tests = [settings['test'].to_sym]
         end
@@ -86,6 +88,7 @@ module CPEE
         
         testinstance = testinstances[i]
 
+        testfile = XML::Smart.string(testfile)
         puts "fulltest call"
         # Own Basic Tests
 
