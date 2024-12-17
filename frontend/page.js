@@ -407,7 +407,8 @@ $(document).ready(function () {
         $('#file_input').addClass('is-invalid');
         enableStart();
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
-    } else {   
+    } else { 
+        console.log(d$("#file_input").prop('files')[0]);  
         $('#file_input').removeClass('is-invalid');
         enableStart();
         $('#file-error').remove();
@@ -434,11 +435,17 @@ $(document).ready(function () {
         } else {
             start_service = $("#start_service").val();
         }
+        if (($('#fixed_file').is(':checked'))) {
+            testcase = $("#test_case").val();
+        } else {
+            testcase = $("#file_input").prop('files')[0];
+            console.log(typeof testcase);
+        }
         const form_data = {
             start: start_service,
             instance_1: { process_engine: target_1, execution_handler: $("#exe1").val() },
             instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
-            test: $("#test_case").val()
+            test: testcase
         };
         $("#main").remove();
         $("#overlay").fadeIn(300);
