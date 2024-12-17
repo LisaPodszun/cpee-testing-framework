@@ -190,7 +190,6 @@ module CPEE
         interface 'events' do
           run HandleEvents, opts[:data] if post 'event'
         end
-
         interface 'testing' do
           run FullTest, opts[:data], opts[:testinstances] if post 'test-config'
           run Instances, opts[:testinstances] if get
