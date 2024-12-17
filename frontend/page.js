@@ -415,6 +415,19 @@ $(document).ready(function () {
     }
   });
     
+  // get previous results
+  $.ajax({
+    url: run_tests_url,
+    type: 'GET',
+    dataType: 'application/json'
+    }).done(function (data) {
+        console.log(data);
+        //displayResults(res, settings);
+    });
+
+
+
+
 
     $("#start").click(function () {
 
@@ -463,7 +476,6 @@ $(document).ready(function () {
             data.append("model", model)
             console.log(typeof model);
         }
-
         $.ajax({
             url: run_tests_url,
             type: 'POST',
