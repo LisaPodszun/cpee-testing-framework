@@ -436,27 +436,33 @@ $(document).ready(function () {
             start_service = $("#start_service").val();
         }
         if (($('#fixed_file').is(':checked'))) {
-            testcase = $("#test_case").val();
+            test_name = $("#test_case").val();
         } else {
-            testcase = $("#file_input").prop('files')[0];
-            console.log(typeof testcase);
+            test_name = $("#file_input").prop('files')[0].name;
+            model = $("#file_input").prop('files')[0];
+            data.append("model", model)
+            console.log(typeof model);
         }
         const form_data = {
             start: start_service,
             instance_1: { process_engine: target_1, execution_handler: $("#exe1").val() },
             instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
-            test: testcase
+            test: test_name
         };
         $("#main").remove();
         $("#overlay").fadeIn(300);
         const settings = JSON.stringify(form_data);
         console.log(settings);
+
+        var data = new FormData();
+        data.append("settings", form_data);
         $.ajax({
             url: run_tests_url,
             type: 'POST',
-            data: settings,
-            contentType: 'application/json',
-            headers: { 'Content-ID': 'settings' }
+            data: data,
+            contentType: false,
+            processData: false,
+            headers: {'Content-ID': 'configuration'}
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
             displayResults(res, settings);

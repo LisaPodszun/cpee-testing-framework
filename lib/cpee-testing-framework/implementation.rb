@@ -33,6 +33,7 @@ module CPEE
         data = @a[0]
         testinstances = @a[1]
         settings = JSON.parse(@p[0].value.read)
+        pp @p
         if settings['test'] == 'all'
           tests = [
             :service_call,

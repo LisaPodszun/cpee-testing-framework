@@ -1,6 +1,9 @@
 <description datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://riddl.org/ns/description/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <message name="settings">
+  <message name="configuration">
     <parameter name="settings" mimetype="application/json"/>
+    <optional>
+      <parameter name="model" mimetype="application/xml"/>
+    </optional>
   </message>
   <message name="instances">
     <parameter name="instances" mimetype="application/json"/>
@@ -15,7 +18,7 @@
     <parameter name="configuration" mimetype="application/json"/>
   </message>
   <resource>
-    <post in="settings"  out="instance"/>
+    <post in="configuration"  out="instance"/>
     <get out="instances"/>
     <resource relative="\d+">
       <get out="results"/>
