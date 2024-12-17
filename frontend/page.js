@@ -185,10 +185,10 @@ function enableStart() {
     console.log('values : ', pe_1 , pe_2 , stas);
     if ((pe_1 || pe_2 || stas)) {
         console.log("in first if");
-        $('#start').prop('diabled', true);
+        $('#start').prop('disabled', true);
     } else {
         console.log("in else");
-        $('#start').prop('diabled', false);
+        $('#start').prop('disabled', false);
     }
 }
 
@@ -270,12 +270,15 @@ $(document).ready(function () {
     }
     if (url.test(start_service)) {
         $('#start_service').removeClass('is-invalid');
+        enableStart();
     } else {
         $('#start_service').addClass('is-invalid');
+        enableStart();
     }
 
     $('#start_service').focus(function () {
         $('#start_service').removeClass('is-invalid');
+        enableStart();
     });
     $('#start_service').blur(function () {
         let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
@@ -285,8 +288,10 @@ $(document).ready(function () {
         }
         if (url.test(start_service)) {
             $('#start_service').removeClass('is-invalid');
+            enableStart();
         } else {
             $('#start_service').addClass('is-invalid');
+            enableStart();
         }
     });
 
