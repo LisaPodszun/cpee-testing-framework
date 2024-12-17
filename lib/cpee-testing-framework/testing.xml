@@ -1,5 +1,5 @@
 <description datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://riddl.org/ns/description/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
-  <message name="configuration">
+  <message name="test_config">
     <parameter name="settings" mimetype="application/json"/>
     <optional>
       <parameter name="model" mimetype="application/xml"/>
@@ -18,7 +18,7 @@
     <parameter name="configuration" mimetype="application/json"/>
   </message>
   <resource>
-    <post in="configuration"  out="instance"/>
+    <post in="test_config"  out="instance"/>
     <get out="instances"/>
     <resource relative="\d+">
       <get out="results"/>
