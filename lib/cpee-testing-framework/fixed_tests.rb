@@ -29,7 +29,7 @@ module TestHelpers
         data[url][:log].to_h
     end
     
-    def run_tests_on(settings, data, testcase)
+    def run_tests_on(settings, testinstance, data, testcase)
         puts "in run tests on"
         start_url = settings['start']
         engine_1 = settings['instance_1']['process_engine']
@@ -43,26 +43,32 @@ module TestHelpers
         file = File.read(pn.join('server/config.json'))
         config = JSON.parse(file)
 
-
-        config['tests'].each do |testgroup|
-            testgroup.each do |entry|
-                if entry['name'] == testcase
-                    doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
-                    doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
-                    break
+        if testcase != 'custom'
+            config['tests'].each do |testgroup|
+                testgroup.each do |entry|
+                    if entry['name'] == testcase
+                        doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
+                        doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
+                        break
+                    end
                 end
             end
+            ruby_log = run_test_case(start_url, engine_1, doc_url_ins_1, data)
+            puts "Ruby log"
+            p ruby_log
+            rust_log = run_test_case(start_url, engine_2, doc_url_ins_2, data)
+            puts "Rust log"
+            p rust_log
+        else
+            ruby_log = run_test_case(start_url, engine_1, testcase[:custom], data)
+            puts "Ruby log"
+            p ruby_log
+            rust_log = run_test_case(start_url, engine_2, testcase[:custom], data)
         end
         puts "DOC URL 1: #{doc_url_ins_1}"
         puts "DOC URL 2: #{doc_url_ins_2}"
-        ruby_log = run_test_case(start_url, engine_1, doc_url_ins_1, data)
 
-        puts "Ruby log"
-        p ruby_log
-        rust_log = run_test_case(start_url, engine_2, doc_url_ins_2, data)
 
-        puts "Rust log"
-        p rust_log
         puts "finished running tests"
 
         differences_log_entries = completeness_test(rust_log, ruby_log)

@@ -34,7 +34,10 @@ module CPEE
         pp @p
         data = @a[0]
         testinstances = @a[1]
+        testfile = @p[1] || nil
         settings = JSON.parse(@p[0].value.read)
+        
+        
         if settings['test'] == 'all'
           tests = [
             :service_call,
@@ -57,6 +60,8 @@ module CPEE
             :loop_posttest,
             :loop_pretest
           ]
+        elsif settings['test'].split('.')[-1] == 'xml'
+          tests = [:custom]
         else
           tests = [settings['test'].to_sym]
         end
@@ -86,6 +91,9 @@ module CPEE
         Thread.new do
           Helpers::create_test_file(i)
           tests.each do |testname|
+            if testname == :custom
+              testinstance[:xml] = testfile
+            end
             testinstance[testname] = {}
             testinstance[testname][:start] = Time.now
             testinstance[:currently_running] = testname

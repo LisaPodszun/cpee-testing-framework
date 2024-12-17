@@ -33,11 +33,13 @@ module Helpers #{{{
     instances
   end
 
-  def post_testset(start_url, engine, doc_url) #{{{
+ 
+
+  def post_testset(start_url, engine, doc) #{{{
     ins_id = -1
     uuid = nil
     url = ""
-    puts "in post testset"
+    puts "in post testset url"
     puts start_url
     puts engine
     puts doc_url
@@ -45,9 +47,14 @@ module Helpers #{{{
 
     res = srv.resource('/')
     puts 'Doc URL'
-    p doc_url
+    p doc
+    
     # create instance
-    status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc_url)]
+    if doc.is_a? String
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
+    else
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('xml', doc)]
+    end
     puts 'Headers:'
     p headers
     puts 'status:'
