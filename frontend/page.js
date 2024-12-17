@@ -184,8 +184,10 @@ function enableStart() {
     console.log('in enable start');
     console.log('values : ', pe_1 , pe_2 , stas);
     if ((pe_1 || pe_2 || stas)) {
+        console.log("in first if");
         $('#start').prop('diabled', true);
     } else {
+        console.log("in else");
         $('#start').prop('diabled', false);
     }
 }
