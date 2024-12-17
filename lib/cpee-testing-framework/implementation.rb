@@ -183,7 +183,7 @@ module CPEE
         end
 
         interface 'testing' do
-          run FullTest, opts[:data], opts[:testinstances] if post 'settings'
+          run FullTest, opts[:data], opts[:testinstances] if post 'test-config'
           run Instances, opts[:testinstances] if get
           on resource '\d+' do |res|
             run Status, opts[:testinstances][res[:r].last.to_i] if get

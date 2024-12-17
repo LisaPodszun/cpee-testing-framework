@@ -44,12 +44,14 @@ module TestHelpers
         config = JSON.parse(file)
 
 
-        config['tests'].each do |entry|
-          if entry['name'] == testcase
-            doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
-            doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
-            break
-          end
+        config['tests'].each do |testgroup|
+            testgroup.each do |entry|
+                if entry['name'] == testcase
+                    doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
+                    doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
+                    break
+                end
+            end
         end
         puts "DOC URL 1: #{doc_url_ins_1}"
         puts "DOC URL 2: #{doc_url_ins_2}"

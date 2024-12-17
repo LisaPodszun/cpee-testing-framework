@@ -1,8 +1,8 @@
-String.prototype.replaceAt = function(index, end_index, replacement) {
+String.prototype.replaceAt = function (index, end_index, replacement) {
     return this.substring(0, index) + replacement + this.substring(end_index);
 }
 
-function markInnerStructureResults (log_entry, index, differences_hash) {
+function markInnerStructureResults(log_entry, index, differences_hash) {
     console.log("In structure marking");
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
@@ -22,7 +22,7 @@ function markInnerStructureResults (log_entry, index, differences_hash) {
     console.log("Result:" + log_entry);
     return log_entry
 }
-function markInnerContentResults (log_entry, index, differences_hash) {
+function markInnerContentResults(log_entry, index, differences_hash) {
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
         element_index = 0;
@@ -30,11 +30,11 @@ function markInnerContentResults (log_entry, index, differences_hash) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
-        tmp = log_entry.substring(element_index, log_entry.length-1);
+        tmp = log_entry.substring(element_index, log_entry.length - 1);
         end_index = tmp.search(/\n/);
-        if (tmp[end_index] == ','){
+        if (tmp[end_index] == ',') {
             console.log("Is the last letter a , ?" + tmp[end_index]);
-            end_index = end_index -1;
+            end_index = end_index - 1;
         }
         end_index = end_index + element_index;
         text_to_highlight = log_entry.substring(element_index, end_index);
@@ -45,8 +45,6 @@ function markInnerContentResults (log_entry, index, differences_hash) {
 async function displayResults(data_promise, appendto) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
-    console.log(data);
-
 
     jQuery.each(data['results'], function (key, value) {
         let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', key + "-content");
@@ -77,7 +75,7 @@ async function displayResults(data_promise, appendto) {
             });
 
             inner_row.append(`<h5 class='headings'>${value['log_instance_1'][ind_1]['channel']}</h5>`);
-            
+
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let marked = false;
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
@@ -90,9 +88,9 @@ async function displayResults(data_promise, appendto) {
             }
             if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
                 if (marked) {
-                marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
+                    marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
                 } else {
-                marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                    marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
                 }
                 json_1.html(marked_content);
                 marked = true;
@@ -103,7 +101,7 @@ async function displayResults(data_promise, appendto) {
             if (ind_2 == "only_ins_1" || ind_2 == "no_match") {
                 inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 60%, #fc6262 80%,#fc6262 100%)');
                 ins_2_log.append(ind_2);
-            } 
+            }
             else if (marked) {
                 inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
@@ -120,9 +118,9 @@ async function displayResults(data_promise, appendto) {
                 }
                 if ((Array.isArray(value['content_differences'][1][ind_2]) && value['content_differences'][1][ind_2].length)) {
                     if (marked_2) {
-                    marked_content_2 = markInnerContentResults(marked_content_2, ind_2, value['content_differences'][1]);
+                        marked_content_2 = markInnerContentResults(marked_content_2, ind_2, value['content_differences'][1]);
                     } else {
-                    marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
+                        marked_content_2 = markInnerContentResults(json_2.html(), ind_2, value['content_differences'][1]);
                     }
                     json_2.html(marked_content_2);
                 }
@@ -183,7 +181,7 @@ function enableStart() {
     let stas = document.getElementById('start_service').classList.contains('is-invalid');
     let file = document.getElementById('file_input').classList.contains('is-invalid');
     console.log('in enable start');
-    console.log('values : ', pe_1 , pe_2 , stas);
+    console.log('values : ', pe_1, pe_2, stas);
     if ((pe_1 || pe_2 || stas || file)) {
         console.log("in first if");
         $('#start').prop('disabled', true);
@@ -198,7 +196,7 @@ function enableStart() {
 $(document).ready(function () {
     let config_url = "https://echo.bpm.in.tum.de/fulltest/server/configuration";
     let run_tests_url = "https://echo.bpm.in.tum.de/fulltest/server/";
-    
+
     $.ajax({
         url: config_url,
         type: 'GET',
@@ -222,26 +220,25 @@ $(document).ready(function () {
 
     // get previous results
     $.ajax({
-    url: run_tests_url,
-    type: 'GET'
+        url: run_tests_url,
+        type: 'GET'
     }).done(function (data) {
-        console.log("made get request for prev data");
-        jQuery.each(data, function (key, value) {
-            let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
-            let row = $('<div class="row slider mx-5 mt-3"></div>').attr('id', key).click(function () {
-                row_content.slideToggle("fast");
-            });
-            row.append(`<h4 class="headings">Test ${key}</h4>`);
-            inner_col = $(`<div id='col-${key}' class="col"></div>`);
-            row_content.append(inner_col);
-            let col_id = "col-" + key
-            displayResults(value, col_id);
-            $('#results').append(row, row_content);
-        })
+        if (data != null) {
+            console.log("made get request for prev data");
+            jQuery.each(data, function (key, value) {
+                let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
+                let row = $('<div class="row slider mx-5 mt-3"></div>').attr('id', key).click(function () {
+                    row_content.slideToggle("fast");
+                });
+                row.append(`<h4 class="headings">Test ${key}</h4>`);
+                inner_col = $(`<div id='col-${key}' class="col"></div>`);
+                row_content.append(inner_col);
+                let col_id = "col-" + key
+                displayResults(value, col_id);
+                $('#results').append(row, row_content);
+            })
+        }
     });
-
-
-
 
     target = "";
     if ($("#pe_1").val().length == 0) {
@@ -254,21 +251,21 @@ $(document).ready(function () {
         url: target + "executionhandlers/",
         type: 'GET',
         dataType: 'xml',
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             $('#pe_1').addClass('is-invalid');
             $('#start').prop('disabled', true);
         },
-        success: function() {
+        success: function () {
             $('#start').prop('disabled', false);
             $('#pe_1').removeClass('is-invalid');
             $('#pe_1').addClass('is-valid');
         }
     }).done(function (data) {
         $(data).find('handler').each(function () {
-            $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+            $('#exe1').append('<option class="exe1" value="' + $(this).text() + '">' + $(this).text() + '</option>');
         })
     });
-    
+
 
     target = "";
     if ($("#pe_2").val().length == 0) {
@@ -281,24 +278,24 @@ $(document).ready(function () {
         url: target + "executionhandlers/",
         type: 'GET',
         dataType: 'xml',
-        error: function(request, status, error) {
+        error: function (request, status, error) {
             $('#pe_2').addClass('is-invalid');
             $('#start').prop('disabled', true);
         },
-        success: function() {
+        success: function () {
             $('#start').removeAttr('disabled');
             $('#pe_2').removeClass('is-invalid');
             $('#pe_2').addClass('is-valid');
         }
     }).done(function (data) {
         $(data).find('handler').each(function () {
-            $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+            $('#exe2').append('<option class="exe2" value="' + $(this).text() + '">' + $(this).text() + '</option>');
         })
     });
 
     let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?');
     let start_service = $('#start_service').val();
-    if (start_service.length == 0){
+    if (start_service.length == 0) {
         start_service = $('#start_service').attr('placeholder');
     }
     if (url.test(start_service)) {
@@ -316,7 +313,7 @@ $(document).ready(function () {
     $('#start_service').blur(function () {
         let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
         let start_service = $('#start_service').val();
-        if (start_service.length == 0){
+        if (start_service.length == 0) {
             start_service = $('#start_service').attr('placeholder');
         }
         if (url.test(start_service)) {
@@ -331,12 +328,12 @@ $(document).ready(function () {
 
     $('#pe_1').focus(function () {
         $('#pe_1').removeClass('is-valid');
-        $('.exe1').each(function(){
+        $('.exe1').each(function () {
             $(this).remove();
         })
     });
 
-    $("#pe_1").blur(function() {
+    $("#pe_1").blur(function () {
         if ($("#pe_1").val().length == 0) {
             target = $("#pe_1").attr('placeholder');
         }
@@ -347,28 +344,28 @@ $(document).ready(function () {
             url: target + "executionhandlers/",
             type: 'GET',
             dataType: 'xml',
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 $('#pe_1').addClass('is-invalid');
                 enableStart();
             },
-            success: function() {
+            success: function () {
                 $('#pe_1').removeClass('is-invalid');
                 enableStart();
                 $('#pe_1').addClass('is-valid');
             }
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('#exe1').append('<option class="exe1" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+                $('#exe1').append('<option class="exe1" value="' + $(this).text() + '">' + $(this).text() + '</option>');
             })
         });
     });
     $('#pe_2').focus(function () {
         $('#pe_2').removeClass('is-valid');
-        $('.exe2').each(function(){
+        $('.exe2').each(function () {
             $(this).remove();
         })
     });
-    $("#pe_2").blur(function() {
+    $("#pe_2").blur(function () {
         if ($("#pe_2").val().length == 0) {
             target = $("#pe_2").attr('placeholder');
         }
@@ -380,72 +377,72 @@ $(document).ready(function () {
             url: target + "executionhandlers/",
             type: 'GET',
             dataType: 'xml',
-            error: function(request, status, error) {
+            error: function (request, status, error) {
                 $('#pe_2').addClass('is-invalid');
                 enableStart();
             },
-            success: function() {
+            success: function () {
                 $('#pe_2').removeClass('is-invalid');
                 enableStart();
                 $('#pe_2').addClass('is-valid');
             }
         }).done(function (data) {
             $(data).find('handler').each(function () {
-                $('#exe2').append('<option class="exe2" value="'+ $(this).text() + '">'+ $(this).text() + '</option>');
+                $('#exe2').append('<option class="exe2" value="' + $(this).text() + '">' + $(this).text() + '</option>');
             })
         });
     });
 
 
-  if ($('#fixed_file').is(':checked')) {
-    $('#upload').hide();
-    $('#tests').show();
-    $("#start").prop('disabled', false);
-  } else if ($('#own_file').is(':checked')) {
-    $('#tests').hide();
-    $('#upload').show();
-    let filename = document.getElementById('file_input').files[0].name;
-    if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        $('#file_input').addClass('is-invalid');
-        enableStart();
-        $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
-    } else {   
-        $('#file_input').removeClass('is-invalid');
-        enableStart();
-        $('#file-error').remove();
+    if ($('#fixed_file').is(':checked')) {
+        $('#upload').hide();
+        $('#tests').show();
+        $("#start").prop('disabled', false);
+    } else if ($('#own_file').is(':checked')) {
+        $('#tests').hide();
+        $('#upload').show();
+        let filename = document.getElementById('file_input').files[0].name;
+        if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
+            $('#file_input').addClass('is-invalid');
+            enableStart();
+            $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
+        } else {
+            $('#file_input').removeClass('is-invalid');
+            enableStart();
+            $('#file-error').remove();
+        }
     }
-  }
 
 
 
-  $('#fixed_file').click(function () {
-    $('#upload').hide();
-    $('#tests').show();
-    enableStart();
-  });
-
-  $('#own_file').click(function () {
-    $('#tests').hide();
-    $('#upload').show();
-    enableStart();
-  });
-
-
-
-  $('#file_input').change(function () {
-    let filename = document.getElementById('file_input').files[0].name;
-    console.log(filename);
-    if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        $('#file_input').addClass('is-invalid');
+    $('#fixed_file').click(function () {
+        $('#upload').hide();
+        $('#tests').show();
         enableStart();
-        $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
-    } else { 
-        console.log($("#file_input").prop('files')[0]);  
-        $('#file_input').removeClass('is-invalid');
+    });
+
+    $('#own_file').click(function () {
+        $('#tests').hide();
+        $('#upload').show();
         enableStart();
-        $('#file-error').remove();
-    }
-  });
+    });
+
+
+
+    $('#file_input').change(function () {
+        let filename = document.getElementById('file_input').files[0].name;
+        console.log(filename);
+        if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
+            $('#file_input').addClass('is-invalid');
+            enableStart();
+            $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
+        } else {
+            console.log($("#file_input").prop('files')[0]);
+            $('#file_input').removeClass('is-invalid');
+            enableStart();
+            $('#file-error').remove();
+        }
+    });
 
     $("#start").click(function () {
 
@@ -487,7 +484,7 @@ $(document).ready(function () {
         settings = JSON.stringify(form_data);
         settings = new Blob([settings], {
             type: 'application/json'
-          });
+        });
         data.append("settings", settings);
         console.log(settings);
         if (model != null) {
@@ -500,7 +497,7 @@ $(document).ready(function () {
             data: data,
             contentType: false,
             processData: false,
-            headers: {'Content-ID': 'test-config'}
+            headers: { 'Content-ID': 'test-config' }
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
             displayResults(res, 'results');
