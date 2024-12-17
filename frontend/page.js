@@ -408,7 +408,7 @@ $(document).ready(function () {
         enableStart();
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else { 
-        console.log(d$("#file_input").prop('files')[0]);  
+        console.log($("#file_input").prop('files')[0]);  
         $('#file_input').removeClass('is-invalid');
         enableStart();
         $('#file-error').remove();
