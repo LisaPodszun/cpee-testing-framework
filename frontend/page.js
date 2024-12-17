@@ -42,7 +42,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     }
     return log_entry
 }
-async function displayResults(data_promise) {
+async function displayResults(data_promise, appendto) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
@@ -219,8 +219,8 @@ $(document).ready(function () {
     }).done(function (data) {
         console.log("made get request for prev data");
         jQuery.each(data, function (key, value) {
-            let row_content = $('<div class="row justify-content-center panel border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
-            let row = $('<div class="row justify-content-center slider mt-3"></div>').attr('id', key).click(function () {
+            let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
+            let row = $('<div class="row justify-content-center slider mx-5 mt-3"></div>').attr('id', key).click(function () {
                 row_content.slideToggle("fast");
             });
             row.append(`<h4 class="headings">Test ${key}</h4>`);
