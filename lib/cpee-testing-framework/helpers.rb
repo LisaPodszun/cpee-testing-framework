@@ -47,7 +47,6 @@ module Helpers #{{{
     puts "in post testset url"
     puts start_url
     puts engine
-    puts doc_url
     srv = Riddl::Client.new(start_url)
 
     res = srv.resource('/')
