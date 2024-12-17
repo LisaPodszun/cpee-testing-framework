@@ -34,7 +34,7 @@ module CPEE
         pp @p
         data = @a[0]
         testinstances = @a[1]
-        testfile = @p[1] || nil
+        testfile = @p[1].value.read || nil
         settings = JSON.parse(@p[0].value.read)
         
         puts testfile.class
