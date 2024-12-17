@@ -42,7 +42,7 @@ function markInnerContentResults (log_entry, index, differences_hash) {
     }
     return log_entry
 }
-async function displayResults(data_promise, appendto) {
+async function displayResults(data_promise) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
     console.log(data);
@@ -226,6 +226,7 @@ $(document).ready(function () {
             row.append(`<h4 class="headings">Test ${key}</h4>`);
             let row_id = "testcase-" + key
             displayResults(value, row_id);
+            $('#results').append(row, row_content);
         })
     });
 
@@ -492,7 +493,7 @@ $(document).ready(function () {
             headers: {'Content-ID': 'test-config'}
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
-            displayResults(res, settings);
+            displayResults(res, 'results');
         });
     });
 });
