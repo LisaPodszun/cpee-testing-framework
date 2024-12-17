@@ -220,12 +220,14 @@ $(document).ready(function () {
         console.log("made get request for prev data");
         jQuery.each(data, function (key, value) {
             let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
-            let row = $('<div class="row justify-content-center slider mx-5 mt-3"></div>').attr('id', key).click(function () {
+            let row = $('<div class="row slider mx-5 mt-3"></div>').attr('id', key).click(function () {
                 row_content.slideToggle("fast");
             });
             row.append(`<h4 class="headings">Test ${key}</h4>`);
-            let row_id = "testcase-" + key
-            displayResults(value, row_id);
+            inner_col = $(`<div id='col-${key}' class="col"></div>`);
+            row_content.append(inner_col);
+            let col_id = "col-" + key
+            displayResults(value, col_id);
             $('#results').append(row, row_content);
         })
     });
