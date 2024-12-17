@@ -451,10 +451,10 @@ $(document).ready(function () {
             instance_2: { process_engine: target_2, execution_handler: $("#exe2").val() },
             test: test_name
         };
-        data.append("settings", form_data);
         $("#main").remove();
         $("#overlay").fadeIn(300);
         const settings = JSON.stringify(form_data);
+        data.append("settings", settings);
         console.log(settings);
 
         $.ajax({
@@ -463,7 +463,7 @@ $(document).ready(function () {
             data: data,
             contentType: false,
             processData: false,
-            headers: {'Content-ID': 'configuration'}
+            headers: {'Content-ID': 'test-config'}
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
             displayResults(res, settings);
