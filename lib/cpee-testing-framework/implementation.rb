@@ -37,6 +37,7 @@ module CPEE
         testfile = @p[1] || nil
         settings = JSON.parse(@p[0].value.read)
         
+        puts testfile.class
         
         if settings['test'] == 'all'
           tests = [

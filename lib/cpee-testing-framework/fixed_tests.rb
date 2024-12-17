@@ -60,10 +60,10 @@ module TestHelpers
             puts "Rust log"
             p rust_log
         else
-            ruby_log = run_test_case(start_url, engine_1, testcase[:custom], data)
+            ruby_log = run_test_case(start_url, engine_1, testinstance[:custom], data)
             puts "Ruby log"
             p ruby_log
-            rust_log = run_test_case(start_url, engine_2, testcase[:custom], data)
+            rust_log = run_test_case(start_url, engine_2, testinstance[:custom], data)
         end
         puts "DOC URL 1: #{doc_url_ins_1}"
         puts "DOC URL 2: #{doc_url_ins_2}"
