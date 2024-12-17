@@ -111,6 +111,7 @@ module CPEE
 
     class Instances < Riddl::Implementation #{{{
       def response
+        puts "In response for instances"
         Riddl::Parameter::Complex.new("instances", "application/json", @a[0].to_json)
       end
     end #}}}
