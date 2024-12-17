@@ -418,7 +418,8 @@ $(document).ready(function () {
   // get previous results
   $.ajax({
     url: run_tests_url,
-    type: 'GET'
+    type: 'GET',
+    dataType: 'json'
     }).done(function (data) {
         console.log("made get request for prev data");
         console.log(data);
