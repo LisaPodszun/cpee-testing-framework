@@ -1,9 +1,9 @@
 <description datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes" xmlns="http://riddl.org/ns/description/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
   <message name="test-config">
-    <parameter name="settings" mimetype="application/json"/>
     <optional>
       <parameter name="model" mimetype="text/xml"/>
     </optional>
+    <parameter name="settings" mimetype="application/json"/>
   </message>
   <message name="instances">
     <parameter name="instances" mimetype="application/json"/>
