@@ -421,6 +421,7 @@ $(document).ready(function () {
     type: 'GET',
     dataType: 'application/json'
     }).done(function (data) {
+        console.log("made get request for prev data");
         console.log(data);
         //displayResults(res, settings);
     });
