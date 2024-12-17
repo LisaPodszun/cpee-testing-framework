@@ -319,8 +319,8 @@ $(document).ready(function () {
                 enableStart();
             },
             success: function() {
-                enableStart();
                 $('#pe_1').removeClass('is-invalid');
+                enableStart();
                 $('#pe_1').addClass('is-valid');
             }
         }).done(function (data) {
@@ -352,8 +352,8 @@ $(document).ready(function () {
                 enableStart();
             },
             success: function() {
-                enableStart();
                 $('#pe_2').removeClass('is-invalid');
+                enableStart();
                 $('#pe_2').addClass('is-valid');
             }
         }).done(function (data) {
