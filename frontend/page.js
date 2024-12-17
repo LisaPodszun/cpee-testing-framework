@@ -205,9 +205,17 @@ $(document).ready(function () {
         dataType: 'json',
         global: false
     }).done(function (data) {
-        for (let index in data['tests']) {
-            let item = data['tests'][index];
-            $('#test_case').append($(new Option(item["name"], item['name'])));
+        for (let type in data['tests']) {
+            let opt_group_target;
+            if (type == "aalst") {
+                opt_group_target = 'allstopt';
+            } else if (type == "cpee") {
+                opt_group_target = 'cpeeopt'
+            }
+            for (let test_case in data['tests'][type]) {
+                let item = data['tests'][type][test_case];
+                $('#' + opt_group_target).append($(new Option(item["name"], type + '/' + item['name'])));
+            }
         };
         $('#start').removeAttr('disabled');
     });
