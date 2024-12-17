@@ -119,10 +119,9 @@ module Helpers #{{{
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
     else
       file = Tempfile.new("model.xml")
-      p doc.to_s
       file.write(doc.to_s)
       file.rewind
-      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "text/xml", file)]
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "text/xml", file.read)]
       file.close
       file.unlink
     end
