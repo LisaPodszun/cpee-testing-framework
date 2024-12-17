@@ -118,7 +118,12 @@ module Helpers #{{{
     if doc.is_a? String
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
     else
-      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('xml', doc)]
+      file = Tempfile.new("model.xml")
+      file.write(doc.to_s)
+      file.rewind
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "text/xml", file)]
+      file.close
+      file.unlink
     end
     puts 'Headers:'
     p headers
