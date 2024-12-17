@@ -211,6 +211,24 @@ $(document).ready(function () {
         };
         $('#start').removeAttr('disabled');
     });
+
+    // get previous results
+    $.ajax({
+    url: run_tests_url,
+    type: 'GET',
+    success: function (data) {
+        console.log("made get request for prev data");
+        console.log(data);
+    }
+    }).done(function (data) {
+        console.log("made get request for prev data");
+        console.log(data);
+        //displayResults(res, settings);
+    });
+
+
+
+
     target = "";
     if ($("#pe_1").val().length == 0) {
         target = $("#pe_1").attr('placeholder');
@@ -390,13 +408,13 @@ $(document).ready(function () {
     $('#upload').hide();
     $('#tests').show();
     enableStart();
-  })
+  });
 
   $('#own_file').click(function () {
     $('#tests').hide();
     $('#upload').show();
     enableStart();
-  })
+  });
 
 
 
@@ -414,25 +432,6 @@ $(document).ready(function () {
         $('#file-error').remove();
     }
   });
-    
-  // get previous results
-  $.ajax({
-    url: run_tests_url,
-    type: 'GET',
-    dataType: 'json',
-    success: function (data) {
-        console.log("made get request for prev data");
-        console.log(data);
-    }
-    }).done(function (data) {
-        console.log("made get request for prev data");
-        console.log(data);
-        //displayResults(res, settings);
-    });
-
-
-
-
 
     $("#start").click(function () {
 
