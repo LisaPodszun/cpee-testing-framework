@@ -2,7 +2,7 @@
   <message name="test_config">
     <parameter name="settings" mimetype="application/json"/>
     <optional>
-      <parameter name="model" mimetype="application/xml"/>
+      <parameter name="model" mimetype="text/xml"/>
     </optional>
   </message>
   <message name="instances">
