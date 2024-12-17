@@ -23,6 +23,7 @@ module Helpers #{{{
 
   # Loads the 5 most recent test runs
   def self::load_test_instances(instance_hash)
+    puts Dir.empty?('./results') 
     if Dir.empty?('./results')
       instances = nil
     else
