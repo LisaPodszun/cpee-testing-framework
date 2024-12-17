@@ -437,13 +437,13 @@ $(document).ready(function () {
         } else {
             start_service = $("#start_service").val();
         }
+        let model = null;
         if (($('#fixed_file').is(':checked'))) {
             test_name = $("#test_case").val();
         } else {
             test_name = $("#file_input").prop('files')[0].name;
+            own_model_provided = true;
             model = $("#file_input").prop('files')[0];
-            data.append("model", model)
-            console.log(typeof model);
         }
         const form_data = {
             start: start_service,
@@ -459,6 +459,10 @@ $(document).ready(function () {
           });
         data.append("settings", settings);
         console.log(settings);
+        if (model != null) {
+            data.append("model", model)
+            console.log(typeof model);
+        }
 
         $.ajax({
             url: run_tests_url,
