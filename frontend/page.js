@@ -181,9 +181,10 @@ function enableStart() {
     let pe_1 = document.getElementById('pe_1').classList.contains('is-invalid');
     let pe_2 = document.getElementById('pe_2').classList.contains('is-invalid');
     let stas = document.getElementById('start_service').classList.contains('is-invalid');
+    let file = document.getElementById('file_input').classList.contains('is-invalid');
     console.log('in enable start');
     console.log('values : ', pe_1 , pe_2 , stas);
-    if ((pe_1 || pe_2 || stas)) {
+    if ((pe_1 || pe_2 || stas || file)) {
         console.log("in first if");
         $('#start').prop('disabled', true);
     } else {
@@ -373,8 +374,8 @@ $(document).ready(function () {
     $('#upload').show();
     let filename = document.getElementById('file_input').files[0].name;
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        enableStart();
         $('#file_input').addClass('is-invalid');
+        enableStart();
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
@@ -403,8 +404,8 @@ $(document).ready(function () {
     let filename = document.getElementById('file_input').files[0].name;
     console.log(filename);
     if (document.getElementById('file_input').files.length == 0 || !isXML(filename)) {
-        enableStart();
         $('#file_input').addClass('is-invalid');
+        enableStart();
         $('#upload').append('<p id="file-error" class="error-text">Only XML file allowed!</p>');
     } else {   
         $('#file_input').removeClass('is-invalid');
