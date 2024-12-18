@@ -99,7 +99,7 @@ module Helpers #{{{
   private :augment_testset
  
 
-  def post_testset(start_url, engine, doc) #{{{
+  def post_testset(start_url, engine, testcase, doc) #{{{
     ins_id = -1
     uuid = nil
     url = ""
@@ -115,15 +115,10 @@ module Helpers #{{{
     response = nil
     headers = nil
     # create instance
-    if doc.is_a? String
+    if testcase != 'custom'
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
     else
-      file = Tempfile.new("model.xml")
-      file.write(doc.to_s)
-      file.rewind
-      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "text/xml", file.read)]
-      file.close
-      file.unlink
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "application/xml", doc)]
     end
     puts 'Headers:'
     p headers

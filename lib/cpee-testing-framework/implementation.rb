@@ -38,7 +38,7 @@ module CPEE
         settings = JSON.parse(@p[0].value.read)
         
 
-        puts testfile.class
+        puts @p[1].value.class
         
         if settings['test'] == 'all'
           tests = [
@@ -88,7 +88,7 @@ module CPEE
         
         testinstance = testinstances[i]
 
-        testfile = XML::Smart.string(testfile)
+        # testfile = XML::Smart.string(testfile)
         puts "fulltest call"
         # Own Basic Tests
 
