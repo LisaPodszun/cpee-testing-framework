@@ -108,8 +108,6 @@ module Helpers #{{{
     puts engine
     srv = Riddl::Client.new(start_url)
 
-    puts 'Doc URL'
-    p doc
     status = 0
     response = nil
     headers = nil
