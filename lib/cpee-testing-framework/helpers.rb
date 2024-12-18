@@ -115,7 +115,7 @@ module Helpers #{{{
     headers = nil
     # create instance
     if testcase != 'custom'
-      res = srv.resource('/')
+      res = srv.resource('/url')
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
     else
       res = srv.resource('/xml')
