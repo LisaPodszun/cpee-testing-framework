@@ -108,7 +108,6 @@ module Helpers #{{{
     puts engine
     srv = Riddl::Client.new(start_url)
 
-    res = srv.resource('/')
     puts 'Doc URL'
     p doc
     status = 0
@@ -116,9 +115,17 @@ module Helpers #{{{
     headers = nil
     # create instance
     if testcase != 'custom'
+      res = srv.resource('/')
       status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Simple.new('url', doc)]
     else
-      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "application/xml", doc)]
+      res = srv.resource('/xml')
+      begin
+      file = Tempfile.new('model.xml')
+      file = file.write(doc)
+      status, response, headers = res.post [Riddl::Header.new("X_CPEE", engine), Riddl::Parameter::Simple.new("behavior", "fork_ready"), Riddl::Parameter::Complex.new('xml', "text/xml", file)]
+      ensure
+        file.close
+      end
     end
     puts 'Headers:'
     p headers
