@@ -50,7 +50,7 @@ module TestHelpers
                 testgroup.each do |list|
                     puts 'list'
                     p list
-                    list.each do |entry|
+                    testgroup[list].each do |entry|
                         puts 'entry'
                         p entry
                         if entry['name'] == testcase
