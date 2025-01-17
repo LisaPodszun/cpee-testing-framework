@@ -40,7 +40,7 @@ module CPEE
 
         puts @p[1].value.class
         
-        if settings['test'] == 'all'
+        if settings['test'] == 'all' 
           tests = [
             :service_call,
             :service_script_call,
@@ -61,6 +61,31 @@ module CPEE
             :cancel_multiple_instance_activity,   
             :loop_posttest,
             :loop_pretest
+          ]
+        elsif settings['test'] == 'all van der Aalst'
+          tests = [
+          :sequence,
+          :exclusive_choice_simple_merge,
+          :parallel_split_and_synchronization,
+          :multi_choice_chained,
+          #:multi_choice_parallel,  --> not possible in rust
+          :cancelling_discriminator,
+          :thread_split_thread_merge,
+          :multiple_instances_with_design_time_knowledge,
+          :cancelling_partial_join_multiple_instances,
+          :interleaved_routing,
+          :interleaved_parallel_routing,
+          :critical_section,
+          :cancel_multiple_instance_activity,   
+          :loop_posttest,
+          :loop_pretest
+          ]
+        elsif settings['test'] == 'all CPEE'
+          tests = [
+            :service_call,
+            :service_script_call,
+            :script_call,
+            :subprocess_call 
           ]
         elsif settings['test'].split('.')[-1] == 'xml'
           tests = [:custom]
@@ -110,7 +135,6 @@ module CPEE
           json = JSON::generate(testinstance)
           Helpers::write_test_result(json, i)
         end
-        
         Riddl::Parameter::Simple.new('instance', i)
       end
     end #}}}
