@@ -226,6 +226,7 @@ module CPEE
           run Instances, opts[:testinstances] if get
           on resource '\d+' do |res|
             p res[:r].last
+            p opts[:testinstances]
             p opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
