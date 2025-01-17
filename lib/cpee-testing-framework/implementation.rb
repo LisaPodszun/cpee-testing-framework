@@ -228,7 +228,7 @@ module CPEE
             p "In res"
             p res[:r]
             p res[:r].last.to_i
-            p opts[:testinstances][res[:r].last.to_i]
+            p opts[:testinstances]
             run Status, opts[:testinstances][res[:r].last.to_i] if get
           end
           on resource 'configuration' do
