@@ -249,7 +249,7 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
-    $('new_result').hide();
+    $('#new_result').hide();
     // get previous results
     $.ajax({
         url: run_tests_url,
