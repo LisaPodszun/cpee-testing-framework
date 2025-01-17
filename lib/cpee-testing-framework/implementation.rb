@@ -104,6 +104,7 @@ module CPEE
           instance_ids_desc = testinstances.keys.sort {|a, b| b.to_i <=> a.to_i}
           i = instance_ids_desc[0].to_i + 1
         end
+        i = i.to_str
         p "Computed instance id: #{i}"
         testinstances[i] = {
           :status => :running,
