@@ -55,9 +55,18 @@ async function displayResults(data_promise, appendto) {
 
         inner_col = $('<div class="col"></div>');
         row_content.append(inner_col);
-
+        
+        let info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
+        let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
+        let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
+        info_row.append(ins_1_info, ins_2_info);
+        inner_col.append(info_row);
         let matches_ins_1 = value['matches'][0];
         let matches_ins_2 = value['matches'][1];
+
+
+
+
 
         let maxxed = false;
         let index_2 = 0;
