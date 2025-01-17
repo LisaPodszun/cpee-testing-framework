@@ -41,6 +41,8 @@ module CPEE
         end
         settings = JSON.parse(@p[0].value.read) 
         
+        puts 'current settings chosen:'
+        p settings['test']
         if settings['test'] == 'all' 
           tests = [
             :service_call,
