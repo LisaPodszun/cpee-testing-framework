@@ -80,7 +80,7 @@ module CPEE
           :loop_posttest,
           :loop_pretest
           ]
-        elsif settings['test'] == 'all CPEE'
+        elsif settings['test'] == 'allCPEE'
           tests = [
             :service_call,
             :service_script_call,
