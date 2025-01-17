@@ -59,7 +59,7 @@ module TestHelpers
                 end
             end
             p "In run tests on:"
-            p testinstance[testcase]
+            p testinstance
             testinstance[testcase][:instance_1][:start] = Time.now
             ruby_log = run_test_case(start_url, engine_1, testcase, doc_url_ins_1, data)
             testinstance[testcase][:instance_1][:end] = Time.now
