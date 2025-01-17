@@ -76,7 +76,7 @@ async function displayResults(data_promise, appendto) {
         ins_1_info.append(ins_1_info_content);
 
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li><b>Execution duration:</b> ${Math.round(data[key]['instance_2']['duration_in_seconds']*100)/100}s</li>`)
+        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li><li class="list-group-item"><b>Execution duration:</b> ${Math.round(data[key]['instance_2']['duration_in_seconds']*100)/100}s</li>`)
         if ('cf_ins_2' in data['results'][key]){
             if (data['results'][key]['cf_ins_2']){
                 ins_2_info_content.append(`<li class="list-group-item"><b>Passed Control Flow Check:</b> &#9989;</li>`)
