@@ -58,10 +58,10 @@ module TestHelpers
                     end
                 end
             end
-            ruby_log = run_test_case(start_url, engine_1, doc_url_ins_1, data)
+            ruby_log = run_test_case(start_url, engine_1, testcase, doc_url_ins_1, data)
             puts "Ruby log"
             p ruby_log
-            rust_log = run_test_case(start_url, engine_2, doc_url_ins_2, data)
+            rust_log = run_test_case(start_url, engine_2, testcase, doc_url_ins_2, data)
             puts "Rust log"
             p rust_log
         else
