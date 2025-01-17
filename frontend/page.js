@@ -70,7 +70,7 @@ async function displayResults(data_promise, appendto) {
         let ins_2_info_content =  $('<ul class="list-group list-group-flush"</ul>').html(`<li>Process Engine: ${data['settings']['instance_2']['process_engine']}</li><li>Execution Handler: ${data['settings']['instance_2']['execution_handler']}</li>`)
         ins_2_info.append(ins_2_info_content);
         info_row_testinstances.append(ins_1_info, ins_2_info);
-        inner_col.append(info_row);
+        inner_col.append(info_row_testinstances);
         let matches_ins_1 = value['matches'][0];
         let matches_ins_2 = value['matches'][1];
 
