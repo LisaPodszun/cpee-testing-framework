@@ -119,6 +119,7 @@ module CPEE
 
         # testfile = XML::Smart.string(testfile)
         puts "fulltest call"
+        p testinstances.keys
         # Own Basic Tests
 
         Thread.new do
@@ -227,7 +228,7 @@ module CPEE
           on resource '\d+' do |res|
             p "In get values"
             p res[:r].last
-            p opts[:testinstances]
+            p opts[:testinstances].keys
             p opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
