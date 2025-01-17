@@ -65,9 +65,25 @@ async function displayResults(data_promise, appendto) {
         let info_row_testinstances = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
         let ins_1_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_1']['execution_handler']}</li>`);
+        
+        if ('cf_ins_1' in data['results'][key]){
+            if (data['results'][key]['cf_ins_1']){
+                ins_1_info_content.append(`<li class="list-group-item">Passed Control Flow Check: &#9989;</li>`)
+            } else {
+                ins_1_info_content.append(`<li class="list-group-item">Passed Control Flow Check: &#10060;</li>`)
+            } 
+        }
         ins_1_info.append(ins_1_info_content);
+
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
         let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li>`)
+        if ('cf_ins_2' in data['results'][key]){
+            if (data['results'][key]['cf_ins_2']){
+                ins_1_info_content.append(`<li class="list-group-item">Passed Control Flow Check: &#9989;</li>`)
+            } else {
+                ins_1_info_content.append(`<li class="list-group-item">Passed Control Flow Check: &#10060;</li>`)
+            } 
+        }
         ins_2_info.append(ins_2_info_content);
         info_row_testinstances.append(ins_1_info, ins_2_info);
         inner_col.append(info_row_testinstances);
