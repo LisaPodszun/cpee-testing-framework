@@ -14,7 +14,6 @@ module TestCases
   end
 
 
-
   def service_call(data, testinstance, settings)
 
     results = run_tests_on(settings, testinstance, data, 'service_call')
