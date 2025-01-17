@@ -58,25 +58,21 @@ async function displayResults(data_promise, appendto) {
         
         let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Testrun Data</h5>');
-        let overall_info_content = $('<ul class="list-group list-group-flush text-center"></ul>').html(`<li class="list-group-item"><str>Total tests run:</str> ${data['total']}</li><li class="list-group-item"><str>Test run duration:</str> ${data[key]['duration_in_seconds']}s</li><li class="list-group-item"><str>Start Service used:</str> ${data['settings']['start']}</li>`);
+        let overall_info_content = $('<ul class="list-group list-group-flush text-center"></ul>').html(`<li class="list-group-item"><b>Total tests run:</b> ${data['total']}</li><li class="list-group-item"><b>Test run duration:</b> ${data[key]['duration_in_seconds']}s</li><li class="list-group-item"><b>Start Service used:</b> ${data['settings']['start']}</li>`);
         overall_info_col.append(overall_info_content);
         overall_info_row.append(overall_info_col);
         inner_col.append(overall_info_row);
         let info_row_testinstances = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
-        let ins_1_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><str>Process Engine:</str> ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item"><str>Execution Handler:</str> ${data['settings']['instance_1']['execution_handler']}</li>`);
+        let ins_1_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_1']['execution_handler']}</li>`);
         ins_1_info.append(ins_1_info_content);
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><str>Process Engine:</str> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><str>Execution Handler:</str> ${data['settings']['instance_2']['execution_handler']}</li>`)
+        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li>`)
         ins_2_info.append(ins_2_info_content);
         info_row_testinstances.append(ins_1_info, ins_2_info);
         inner_col.append(info_row_testinstances);
         let matches_ins_1 = value['matches'][0];
         let matches_ins_2 = value['matches'][1];
-
-
-
-
 
         let maxxed = false;
         let index_2 = 0;
