@@ -53,17 +53,17 @@ async function displayResults(data_promise, appendto) {
         });
         row.append(`<h4 class="headings">${key}</h4>`);
 
-        inner_col = $('<div class="col border border-3 border-top-0 border-primary"></div>');
+        inner_col = $('<div class="col border border-3 border-top-0 border-secondary"></div>');
         row_content.append(inner_col);
         
         let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Testrun Data</h5>');
-        let overall_info_content = $('<ul class="list-group list-group-flush"></ul>').html(`<li class="list-group-item">Total tests run: ${data['total']}</li><li class="list-group-item">Test run duration: ${data[key]['duration_in_seconds']}s</li><li class="list-group-item">Start Service used: ${data['settings']['start']}</li>`);
+        let overall_info_content = $('<ul class="list-group list-group-flush justify-content-center"></ul>').html(`<li class="list-group-item">Total tests run: ${data['total']}</li><li class="list-group-item">Test run duration: ${data[key]['duration_in_seconds']}s</li><li class="list-group-item">Start Service used: ${data['settings']['start']}</li>`);
         overall_info_col.append(overall_info_content);
         overall_info_row.append(overall_info_col);
         inner_col.append(overall_info_row);
         let info_row_testinstances = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
-        let ins_1_info = $('<div class="col justify-content-center"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
+        let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
         let ins_1_info_content =  $('<ul class="list-group list-group-flush"</ul>').html(`<li class="list-group-item">Process Engine: ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item">Execution Handler: ${data['settings']['instance_1']['execution_handler']}</li>`);
         ins_1_info.append(ins_1_info_content);
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
@@ -250,7 +250,7 @@ $(document).ready(function () {
                     row_content.slideToggle("fast");
                 });
                 row.append(`<h4 class="headings">Test ${key}</h4>`);
-                inner_col = $(`<div id='col-${key}' class="col border border-5 border-top-0 border-primary"></div>`);
+                inner_col = $(`<div id='col-${key}' class="col border border-5 border-top-0 border-secondary"></div>`);
                 row_content.append(inner_col);
                 let col_id = "col-" + key
                 displayResults(value, col_id);
