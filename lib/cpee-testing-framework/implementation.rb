@@ -227,6 +227,8 @@ module CPEE
           on resource '\d+' do |res|
             p "In res"
             p res[:r]
+            p res[:r].last.to_i
+            p opts[:testinstances][res[:r].last.to_i]
             run Status, opts[:testinstances][res[:r].last.to_i] if get
           end
           on resource 'configuration' do
