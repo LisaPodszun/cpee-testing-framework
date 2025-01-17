@@ -84,6 +84,7 @@ module CPEE
           :loop_pretest
           ]
         elsif settings['test'] == 'allCPEE'
+          puts 'in allCPEE'
           tests = [
             :service_call,
             :service_script_call,

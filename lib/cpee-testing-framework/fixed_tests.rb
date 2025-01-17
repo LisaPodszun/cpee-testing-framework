@@ -45,13 +45,13 @@ module TestHelpers
 
         if testcase != 'custom'
             config['tests'].each do |testgroup|
-                testgroup.each do |entry|
-                    puts entry
-                    puts testcase
-                    if entry['name'] == testcase
-                        doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
-                        doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
-                        break
+                testgroup.each do |list|
+                    list.each do |entry|
+                        if entry['name'] == testcase
+                            doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
+                            doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
+                            break
+                        end
                     end
                 end
             end
