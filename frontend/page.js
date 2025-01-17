@@ -267,7 +267,7 @@ $(document).ready(function () {
                 row_content.append(inner_col);
                 let col_id = "col-" + key
                 displayResults(value, col_id);
-                $('#new_result').append(row, row_content);
+                $('#results').append(row, row_content);
             })
         }
     });
@@ -533,8 +533,7 @@ $(document).ready(function () {
             headers: { 'Content-ID': 'test-config' }
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
-            displayResults(res, 'results');
-            $('#new_result').show();
+            displayResults(res, 'new_result');
         });
     });
 });
@@ -551,6 +550,7 @@ async function getResult(run_tests_url, ins) {
         })
         if ((res == null || res["status"] !== "finished")) { await delay(1500); }
     } while (res == null || res["status"] !== "finished");
+    $('#new_result').show();
     return res;
 }
 
