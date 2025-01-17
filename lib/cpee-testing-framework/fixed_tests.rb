@@ -47,17 +47,14 @@ module TestHelpers
             config['tests'].each do |testgroup|
                 puts 'testgroup value'
                 p testgroup
-                testgroup.each do |list|
-                    puts 'list value'
-                    p list
-                    config['tests'][list].each do |entry|
-                        puts 'entry'
-                        p entry
-                        if entry['name'] == testcase
-                            doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
-                            doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
-                            break
-                        end
+                list = testgroup.first
+                config['tests'][list].each do |entry|
+                    puts 'entry'
+                    p entry
+                    if entry['name'] == testcase
+                        doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
+                        doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
+                        break
                     end
                 end
             end
