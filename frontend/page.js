@@ -56,10 +56,20 @@ async function displayResults(data_promise, appendto) {
         inner_col = $('<div class="col"></div>');
         row_content.append(inner_col);
         
-        let info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
+        let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
+        let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Testrun Data</h5>');
+        let overall_info_content = $('<ul class="list-group list-group-flush"></ul>').html(`<li>Total tests run: ${data['total']}</li><li>Test run duration: ${data[value]['duration_in_seconds']}s</li><li>Start Service used: ${data['settings']['start']}</li>`);
+        overall_info_col.append(overall_info_content);
+        overall_info_row.append(overall_info_col);
+        inner_col.append(overall_info_row);
+        let info_row_testinstances = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
+        let ins_1_info_content =  $('<ul class="list-group list-group-flush"</ul>').html(`<li>Process Engine: ${data['settings']['instance_1']['process_engine']}</li><li>Execution Handler: ${data['settings']['instance_1']['execution_handler']}</li>`);
+        ins_1_info.append(ins_1_info_content);
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-        info_row.append(ins_1_info, ins_2_info);
+        let ins_2_info_content =  $('<ul class="list-group list-group-flush"</ul>').html(`<li>Process Engine: ${data['settings']['instance_2']['process_engine']}</li><li>Execution Handler: ${data['settings']['instance_2']['execution_handler']}</li>`)
+        ins_2_info.append(ins_2_info_content);
+        info_row_testinstances.append(ins_1_info, ins_2_info);
         inner_col.append(info_row);
         let matches_ins_1 = value['matches'][0];
         let matches_ins_2 = value['matches'][1];
