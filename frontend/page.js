@@ -64,7 +64,7 @@ async function displayResults(data_promise, appendto) {
         inner_col.append(overall_info_row);
         let info_row_testinstances = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let ins_1_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
-        let ins_1_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_1']['execution_handler']}</li>`);
+        let ins_1_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_1']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_1']['execution_handler']}</li><li class="list-group-item"><b>Execution duration:</b> ${Math.round(data[key]['instance_1']['duration_in_seconds']*100)/100}s</li>`);
         
         if ('cf_ins_1' in data['results'][key]){
             if (data['results'][key]['cf_ins_1']){
@@ -76,7 +76,7 @@ async function displayResults(data_promise, appendto) {
         ins_1_info.append(ins_1_info_content);
 
         let ins_2_info = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
-        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li>`)
+        let ins_2_info_content =  $('<ul class="list-group list-group-flush text-center"</ul>').html(`<li class="list-group-item"><b>Process Engine:</b> ${data['settings']['instance_2']['process_engine']}</li><li class="list-group-item"><b>Execution Handler:</b> ${data['settings']['instance_2']['execution_handler']}</li><b>Execution duration:</b> ${Math.round(data[key]['instance_2']['duration_in_seconds']*100)/100}s</li>`)
         if ('cf_ins_2' in data['results'][key]){
             if (data['results'][key]['cf_ins_2']){
                 ins_2_info_content.append(`<li class="list-group-item"><b>Passed Control Flow Check:</b> &#9989;</li>`)
@@ -249,6 +249,7 @@ $(document).ready(function () {
         $('#start').removeAttr('disabled');
     });
 
+    $('new_result').hide();
     // get previous results
     $.ajax({
         url: run_tests_url,
@@ -511,6 +512,7 @@ $(document).ready(function () {
             test: test_name
         };
         $("#main").remove();
+        $("#results").remove();
         $("#overlay").fadeIn(300);
         settings = JSON.stringify(form_data);
         settings = new Blob([settings], {
@@ -532,6 +534,7 @@ $(document).ready(function () {
         }).done(function (data) {
             let res = getResult(run_tests_url, data);
             displayResults(res, 'results');
+            $('#new_result').show();
         });
     });
 });
