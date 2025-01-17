@@ -53,7 +53,7 @@ async function displayResults(data_promise, appendto) {
         });
         row.append(`<h4 class="headings">${key}</h4>`);
 
-        inner_col = $('<div class="col"></div>');
+        inner_col = $('<div class="col border border-3 border-top-0 border-primary"></div>');
         row_content.append(inner_col);
         
         let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
@@ -245,12 +245,12 @@ $(document).ready(function () {
         if (data != null) {
             console.log("made get request for prev data");
             jQuery.each(data, function (key, value) {
-                let row_content = $('<div class="row justify-content-center panel mx-5 border-top-0 border-primary"></div>').attr('id', "testcase-" + key);
+                let row_content = $('<div class="row justify-content-center panel mx-5"></div>').attr('id', "testcase-" + key);
                 let row = $('<div class="row slider mx-5 mt-3"></div>').attr('id', key).click(function () {
                     row_content.slideToggle("fast");
                 });
                 row.append(`<h4 class="headings">Test ${key}</h4>`);
-                inner_col = $(`<div id='col-${key}' class="col"></div>`);
+                inner_col = $(`<div id='col-${key}' class="col border border-5 border-top-0 border-primary"></div>`);
                 row_content.append(inner_col);
                 let col_id = "col-" + key
                 displayResults(value, col_id);
