@@ -34,11 +34,12 @@ module CPEE
         pp @p
         data = @a[0]
         testinstances = @a[1]
-        testfile = @p[1].value.read || nil
-        settings = JSON.parse(@p[0].value.read)
-        
-
-        puts @p[1].value.class
+        if @p[1]
+          testfile = @p[1].value.read 
+        else
+          testfile = nil
+        end
+        settings = JSON.parse(@p[0].value.read) 
         
         if settings['test'] == 'all' 
           tests = [
