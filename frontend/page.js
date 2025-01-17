@@ -267,7 +267,7 @@ $(document).ready(function () {
                 row_content.append(inner_col);
                 let col_id = "col-" + key
                 displayResults(value, col_id);
-                $('#results').append(row, row_content);
+                $('#new_result').append(row, row_content);
             })
         }
     });
