@@ -212,7 +212,7 @@ $(document).ready(function () {
             }
             for (let test_case in data['tests'][type]) {
                 let item = data['tests'][type][test_case];
-                $('#' + opt_group_target).append($(new Option(item["name"], type + '/' + item['name'])));
+                $('#' + opt_group_target).append($(new Option(item["name"], item['name'])));
             }
         };
         $('#start').removeAttr('disabled');
