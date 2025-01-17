@@ -65,7 +65,7 @@ module CPEE
             :loop_posttest,
             :loop_pretest
           ]
-        elsif settings['test'] == 'all van der Aalst'
+        elsif settings['test'] == 'allAalst'
           tests = [
           :sequence,
           :exclusive_choice_simple_merge,
