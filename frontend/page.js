@@ -548,7 +548,7 @@ async function getResult(run_tests_url, ins) {
             res = data;
 
         })
-        if ((res == null || res["status"] !== "finished")) { await delay(1500); }
+        if ((res == null || res["status"] !== "finished")) { await delay(500); }
     } while (res == null || res["status"] !== "finished");
     $('#new_result').show();
     return res;
