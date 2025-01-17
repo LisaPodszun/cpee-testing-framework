@@ -46,6 +46,8 @@ module TestHelpers
         if testcase != 'custom'
             config['tests'].each do |testgroup|
                 testgroup.each do |list|
+                    puts 'list value'
+                    p list
                     config['tests'][list].each do |entry|
                         puts 'entry'
                         p entry
