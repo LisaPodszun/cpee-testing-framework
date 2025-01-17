@@ -225,6 +225,8 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'test-config'
           run Instances, opts[:testinstances] if get
           on resource '\d+' do |res|
+            p res[:r].last
+            p opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do
