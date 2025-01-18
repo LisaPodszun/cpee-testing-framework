@@ -31,7 +31,7 @@
 .slider {
   background-color: #0065bd;
 }
-.slider:hover {
+slider:hover {
   background-color: #004480;
 }
 .table [class*="col"] {
