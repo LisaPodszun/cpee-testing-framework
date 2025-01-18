@@ -31,6 +31,9 @@
 .slider {
   background-color: #0065bd;
 }
+.slider:hover {
+  background-color: #004480;
+}
 .table [class*="col"] {
   display: table-cell;
   vertical-align: top;
