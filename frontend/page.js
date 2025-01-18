@@ -184,7 +184,7 @@ async function displayResults(data_promise, appendto) {
                 let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
                 if (ind_1 == "no_match" || ind_1 == "only_ins_2") {
-                    inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 60%, #fc6262 80%,#fc6262 100%)');
+                    inner_row.addClass('blue-red-gradient');
                 }
                 inner_row_panel.append(ins_1_log, ins_2_log);
                 inner_col.append(inner_row, inner_row_panel);
