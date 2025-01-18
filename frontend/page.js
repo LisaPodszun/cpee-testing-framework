@@ -325,38 +325,38 @@ $(document).ready(function () {
         })
     });
 
-//    let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?');
- //   let start_service = $('#start_service').val();
-  //  if (start_service.length == 0) {
-   //     start_service = $('#start_service').attr('placeholder');
-   // }
-   // if (url.test(start_service)) {
-   //     $('#start_service').removeClass('is-invalid');
-   //     enableStart();
-   // } else {
-    //    $('#start_service').addClass('is-invalid');
-    //    enableStart();
-    //}
+    let url = new RegExp('^https?:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?');
+    let start_service = $('#start_service').val();
+    if (start_service.length == 0) {
+      start_service = $('#start_service').attr('placeholder');
+    }
+    if (url.test(start_service)) {
+       $('#start_service').removeClass('is-invalid');
+        enableStart();
+    } else {
+      $('#start_service').addClass('is-invalid');
+       enableStart();
+    }
 
-   // $('#start_service').focus(function () {
-    //    $('#start_service').removeClass('is-invalid');
-     //   enableStart();
-   // });
+    $('#start_service').focus(function () {
+      $('#start_service').removeClass('is-invalid');
+      enableStart();
+    });
     
-    //$('#start_service').blur(function () {
-      //  let url = new RegExp('^https:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
-       // let start_service = $('#start_service').val();
-     //   if (start_service.length == 0) {
-      //      start_service = $('#start_service').attr('placeholder');
-      //  }
-       // if (url.test(start_service)) {
-       //     $('#start_service').removeClass('is-invalid');
-       //     enableStart();
-       // } else {
-        //    $('#start_service').addClass('is-invalid');
-        //    enableStart();
-        //}
-    //});
+    $('#start_service').blur(function () {
+      let url = new RegExp('^https?:\/\/[a-z]+\.[a-z]+(\/[a-z]+)*\/?')
+      let start_service = $('#start_service').val();
+      if (start_service.length == 0) {
+         start_service = $('#start_service').attr('placeholder');
+        }
+      if (url.test(start_service)) {
+        $('#start_service').removeClass('is-invalid');
+        enableStart();
+        } else {
+          $('#start_service').addClass('is-invalid');
+          enableStart();
+        }
+    });
 
 
     $('#pe_1').focus(function () {
