@@ -130,11 +130,11 @@ async function displayResults(data_promise, appendto) {
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             if (ind_2 == "only_ins_1" || ind_2 == "no_match") {
-                inner_row.css('background', 'linear-gradient(to right, #0065bd 0%,#0065bd 60%, #fc6262 80%,#fc6262 100%)');
+                inner_row.addClass('blue-red-gradient');
                 ins_2_log.append(ind_2);
             }
             else if (marked) {
-                inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #fefa77 80%,#fefa77 100%)');
+                inner_row.addClass('blue-yellow-gradient');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 let marked_content_2 = "";
                 let marked_2 = false;
@@ -159,7 +159,7 @@ async function displayResults(data_promise, appendto) {
                 ins_2_log.append(json_2);
             }
             else {
-                inner_row.css('background', 'linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%)');
+                inner_row.addClass('blue-green-gradient');
                 json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
                 ins_2_log.append(json_2);
             }

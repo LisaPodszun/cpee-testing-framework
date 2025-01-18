@@ -18,6 +18,26 @@
   padding: .1rem .1rem;
 }
 
+.blue-red-gradient {
+  background: linear-gradient(to right, rgb(0, 101, 189) 0%, rgb(0, 101, 189) 60%, rgb(252, 98, 98) 80%, rgb(252, 98, 98) 100%);
+}
+.blue-red-gradient:hover {
+  background: linear-gradient(to right, rgb(0, 68, 128) 0%, rgb(0, 68, 128) 60%, rgb(161, 61, 61) 80%, rgb(161, 61, 61) 100%);
+}
+
+.blue-yellow-gradient {
+  background: linear-gradient(to right, rgb(0, 101, 189) 0%, rgb(0, 101, 189) 60%, rgb(254, 250, 119) 80%, rgb(254, 250, 119) 100%);
+}
+.blue-yellow-gradient:hover {
+  background: linear-gradient(to right, rgb(0, 68, 128) 0%,  rgb(0, 68, 128) 60%, rgb(140, 138, 65) 80%, rgb(140, 138, 65) 100%);
+}
+.blue-green-gradient {
+  background: linear-gradient(to right,#0065bd 0%,#0065bd 60%, #88fe77 80%,#88fe77 100%);
+}
+.blue-green-gradient:hover {
+  background: linear-gradient(to right, rgb(0, 68, 128) 0%, rgb(0, 68, 128) 60%, #438039 80%,#438039 100%);
+}
+
 #overlay {
   position: fixed;
   top: 0;
