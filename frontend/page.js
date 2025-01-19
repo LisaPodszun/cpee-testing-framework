@@ -323,7 +323,9 @@ $(document).ready(function () {
         }
     }).done(function (data) {
         $(data).find('handler').each(function () {
+            if ($(this).text() != 'eval') {
             $('#exe1').append('<option class="exe1" value="' + $(this).text() + '">' + $(this).text() + '</option>');
+            }
         })
     });
 
@@ -350,7 +352,9 @@ $(document).ready(function () {
         }
     }).done(function (data) {
         $(data).find('handler').each(function () {
-            $('#exe2').append('<option class="exe2" value="' + $(this).text() + '">' + $(this).text() + '</option>');
+            if ($(this).text() != 'eval') {
+                $('#exe2').append('<option class="exe2" value="' + $(this).text() + '">' + $(this).text() + '</option>');
+                }
         })
     });
 
