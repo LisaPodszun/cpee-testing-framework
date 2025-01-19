@@ -22,12 +22,14 @@ function markInnerStructureResults(log_entry, index, differences_hash) {
     console.log("Result:" + log_entry);
     return log_entry
 }
+
 function markInnerContentResults(log_entry, index, differences_hash) {
     for (const [ind, value] of Object.entries(differences_hash[index])) {
         keys = value.split("_");
         element_index = 0;
         for (i = 0; i < keys.length; i++) {
             element_index = log_entry.indexOf("\"" + keys[i] + "\"", element_index);
+            console.log("Index of " + keys[i] + ": " + element_index)
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
         tmp = log_entry.substring(element_index, log_entry.length - 1);
@@ -42,6 +44,7 @@ function markInnerContentResults(log_entry, index, differences_hash) {
     }
     return log_entry
 }
+
 async function displayResults(data_promise, appendto) {
     let data = await data_promise;
     $("#overlay").fadeOut(300);
