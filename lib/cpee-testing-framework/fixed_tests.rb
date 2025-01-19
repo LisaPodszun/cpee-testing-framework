@@ -132,6 +132,8 @@ module TestHelpers
         [dif_rust_to_ruby, dif_ruby_to_rust]
     end
 
+
+    # PRECONDITION: hash_1 and hash_2 are Hashes, we do not recursively enter nested arrays!
     def hash_structure_test(path, hash_1, hash_2)
         diff = []
         # test hash_1 > hash_2
@@ -144,9 +146,28 @@ module TestHelpers
             if !hash_2.key?(key)
                 diff << path.join("_")
             elsif value.class == Hash
-                diff << hash_structure_test(path, value, hash_2[key])
+                if hash_2[key].class != Hash
+                    # If they are not the same class, they cannot be compared in the diff test -> See content test
+                    diff << path.join("_")
+                else
+                    diff << hash_structure_test(path, value, hash_2[key])
+                end
             elsif value.class == Array
-                diff << hash_structure_test(path, value[0], hash_2[key][0])
+                if hash_2[key].class != Array
+                    # If they are not the same class, they cannot be compared in the diff test -> See content test
+                    diff << path.join("_")
+                else
+                    value.each_with_index do |entry, index|
+                        if hash_2[key].length <= index {
+                            # Skip entries if array 2 is shorter
+                            continue
+                        }
+                        if entry.class != Hash || hash_2[key][index].class != Hash
+                            continue
+                        end
+                        diff << hash_structure_test(path, entry, hash_2[key][index])
+                    end
+                end
             end
             path.pop
         end
@@ -158,8 +179,9 @@ module TestHelpers
         dif_content_keys = hash_content_test([], rust_log_entry, ruby_log_entry, dif_rust_to_ruby, dif_ruby_to_rust)
     end
 
+    # PRECONDITION: hash_1 and hash_2 are Hashes, we do not recursively enter nested arrays!
     def hash_content_test(path, hash_1, hash_2, dif_rust_to_ruby, dif_ruby_to_rust)
-        diff = []
+        diff = []    
         # test hash_1 > hash_2
         hash_1.each do |key, value|
             path << key
@@ -168,11 +190,31 @@ module TestHelpers
                     diff << path.join("_")
                 end
             elsif value.class == Hash && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
-                diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
+                if hash_2[key].class != Hash 
+                    diff << path.join("_")       
+                else
+                    diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
+                end
             elsif value.class == Array && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
                 p value[0]
                 p hash_2[key]
-                diff << (hash_content_test(path, value[0], hash_2[key][0], dif_rust_to_ruby, dif_ruby_to_rust))
+                if hash_2[key].class != Array 
+                    diff << path.join("_")
+                else 
+                    if hash_2[key].length != value.length
+                        diff << path.join("_")
+                    else
+                        value.each_with_index do |entry, index|
+                            if entry.class != Hash || hash_2[key][index].class != Hash 
+                                if entry != hash_2[key][index] 
+                                    diff << path.join("_")
+                                end    
+                            else 
+                                diff << hash_content_test(path, entry, hash_2[key][index], dif_rust_to_ruby, dif_ruby_to_rust)
+                            end
+                        end
+                    end
+                end
             end
             path.pop
         end
