@@ -148,7 +148,6 @@ module TestHelpers
             elsif value.class == Hash
                 if hash_2[key].class != Hash
                     # If they are not the same class, they cannot be compared in the diff test -> See content test
-                    diff << path.join("_")
                 else
                     diff << hash_structure_test(path, value, hash_2[key])
                 end
@@ -169,6 +168,7 @@ module TestHelpers
                     end
                 end
             end
+            # If both are anything else, we ignore it in this case
             path.pop
         end
         diff.flatten
@@ -186,6 +186,7 @@ module TestHelpers
         hash_1.each do |key, value|
             path << key
             if !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")) || value.class == Hash || value.class == Array)
+                # If the value is neither an array or hash, compare directly
                 if (value != hash_2[key])
                     diff << path.join("_")
                 end
