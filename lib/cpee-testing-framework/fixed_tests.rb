@@ -103,7 +103,9 @@ module TestHelpers
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
                 structure_differences_ruby.merge!({key => dif_structure[1]})
                 structure_differences_rust.merge!({value => dif_structure[0]})
+                p "Content differences for match #{key} #{value}"
                 diff_content = content_test(rust_log[value]["message"], dif_structure[0], ruby_log[key]["message"], dif_structure[1])
+                p diff_content
                 content_differences_ruby.merge!({key => diff_content})
                 content_differences_rust.merge!({value => diff_content})
             end
