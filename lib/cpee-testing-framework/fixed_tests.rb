@@ -160,10 +160,10 @@ module TestHelpers
                     value.each_with_index do |entry, index|
                         if hash_2[key].length <= index
                             # Skip entries if array 2 is shorter
-                            continue
+                            next
                         end
                         if entry.class != Hash || hash_2[key][index].class != Hash
-                            continue
+                            next
                         end
                         diff << hash_structure_test(path, entry, hash_2[key][index])
                     end
