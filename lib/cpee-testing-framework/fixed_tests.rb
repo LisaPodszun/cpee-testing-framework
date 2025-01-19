@@ -156,7 +156,6 @@ module TestHelpers
             elsif value.class == Array
                 if hash_2[key].class != Array
                     # If they are not the same class, they cannot be compared in the diff test -> See content test
-                    diff << path.join("_")
                 else
                     value.each_with_index do |entry, index|
                         if hash_2[key].length <= index
