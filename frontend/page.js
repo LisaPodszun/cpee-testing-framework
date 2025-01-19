@@ -33,6 +33,33 @@ function markInnerContentResults(log_entry, index, differences_hash) {
         }
         element_index = log_entry.indexOf(' ', element_index) + 1;
         tmp = log_entry.substring(element_index, log_entry.length - 1);
+        // Symbol that signals the start of the entry, can be " for strings or {, [ for hashes or arrays
+        special_symbol = tmp[0];
+        if (special_symbol  == "\"") {
+            end_index = tmp.search(/\n/);
+        } else {
+            open_symbols = 1;
+            current_index = 1;
+            while (open_symbols > 0) {
+                if (special_symbol == "{") {
+                    if (tmp[current_index] == "{") {
+                        open_symbols++;
+                    } else if (tmp[current_index] == "}") {
+                        open_symbols--;
+                    }
+                } else if (special_symbol == "[") {
+                    if (tmp[current_index] == "[") {
+                        open_symbols++;
+                    } else if (tmp[current_index] == "]") {
+                        open_symbols--;
+                    }
+                } else {
+                    console.error("Unexpected symbol: " + open_symbol)
+                }
+                current_index++;
+            }
+            end_index = current_index;
+        }
         end_index = tmp.search(/\n/);
         if (tmp[end_index] == ',') {
             console.log("Is the last letter a , ?" + tmp[end_index]);
