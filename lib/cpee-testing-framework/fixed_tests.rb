@@ -158,10 +158,10 @@ module TestHelpers
                     diff << path.join("_")
                 else
                     value.each_with_index do |entry, index|
-                        if hash_2[key].length <= index {
+                        if hash_2[key].length <= index
                             # Skip entries if array 2 is shorter
                             continue
-                        }
+                        end
                         if entry.class != Hash || hash_2[key][index].class != Hash
                             continue
                         end
