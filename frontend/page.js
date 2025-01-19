@@ -60,7 +60,6 @@ function markInnerContentResults(log_entry, index, differences_hash) {
             }
             end_index = current_index;
         }
-        end_index = tmp.search(/\n/);
         if (tmp[end_index] == ',') {
             console.log("Is the last letter a , ?" + tmp[end_index]);
             end_index = end_index - 1;
