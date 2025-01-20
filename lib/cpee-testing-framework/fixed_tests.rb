@@ -133,11 +133,11 @@ module TestHelpers
         testfile.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
 
         execution_handler_node = testfile.find("/*/prop:executionhandler")
-        p execution_handler_node.children[0].text
+        p execution_handler_node.first.text
         #p execution_handler_node        
         puts execution_handler
-        execution_handler_node.children[0].text=execution_handler
-        p execution_handler_node.children[0].text
+        execution_handler_node.first.text=execution_handler
+        p execution_handler_node.first.text
         testfile.to_s
     end
 
