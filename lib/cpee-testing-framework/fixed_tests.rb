@@ -77,6 +77,7 @@ module TestHelpers
         else
             testinstance[testcase.to_sym][:instance_1] = {}
             testinstance[testcase.to_sym][:instance_1][:start] = Time.now
+            testinstance[:xml] = change_executionhandler(testinstance[:xml], settings['instance_1']['execution_handler']) 
             ruby_log = run_test_case(start_url, engine_1, testcase, testinstance[:xml], data)
             testinstance[testcase.to_sym][:instance_1][:end] = Time.now
             testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
@@ -84,6 +85,7 @@ module TestHelpers
             p ruby_log
             testinstance[testcase.to_sym][:instance_2] = {}
             testinstance[testcase.to_sym][:instance_2][:start] = Time.now
+            testinstance[:xml] = change_executionhandler(testinstance[:xml],settings['instance_2']['execution_handler'])
             rust_log = run_test_case(start_url, engine_2, testcase, testinstance[:xml], data)
             testinstance[testcase.to_sym][:instance_2][:end] = Time.now
             testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
@@ -125,6 +127,19 @@ module TestHelpers
         puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
         {"log_instance_1" => ruby_log,"log_instance_2" => rust_log, 'differences_log_entries' => differences_log_entries, "matches" => matches,  'structure_differences' => [structure_differences_ruby, structure_differences_rust], 'content_differences' => [content_differences_ruby, content_differences_rust], 'cf_ins_1' => ruby_cf_events, 'cf_ins_2' => rust_cf_events}
     end
+
+    def change_executionhandler(testfile, execution_handler)
+        testfile = XML::Smart.string(testfile)
+        testfile.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
+
+        execution_handler_node = testfile.find('prop:executionhandler')
+        
+        execution_handler_node.text=execution_handler
+
+        testfile.to_s
+    end
+
+
 
     def structure_test(rust_log_entry, ruby_log_entry)
         # holds all keys ruby - rust
