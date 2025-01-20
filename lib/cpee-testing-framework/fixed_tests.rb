@@ -132,12 +132,11 @@ module TestHelpers
         testfile = XML::Smart.string(testfile)
         testfile.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
 
-        execution_handler_node = testfile.find('prop:executionhandler')
-        puts execution_handler_node.qname.name
-        
+        execution_handler_node = testfile.find('prop:properties/executionhandler')
+        p execution_handler_node        
         puts execution_handler
         #execution_handler_node.text=execution_handler
-        p execution_handler_node.qname.name
+        #p execution_handler_node.qname.name
         testfile.to_s
     end
 
