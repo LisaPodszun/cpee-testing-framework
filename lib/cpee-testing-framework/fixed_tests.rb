@@ -7,20 +7,14 @@ module TestHelpers
 
     # TODO: find out how to start rust instance
     def run_test_case(start_url, engine, testcase, doc_url, data)
-        puts 'in run test case'
         instance, uuid, url = post_testset(start_url, engine, testcase, doc_url)
-        puts 'after post testset'
-        puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
         data[url] = {}
         data[url][:resource_utilization] = []
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
         handle_starting(instance, url)
 
-        puts 'before wait'
-        puts "URL-ID: #{url}"
         data[url][:end].wait
-        puts 'after wait'
         # sort by timestamp from weel
         data[url][:log] = data[url][:log].sort_by{|key, value| key}
         data[url][:log].each_with_index do |entry,i|
@@ -30,7 +24,6 @@ module TestHelpers
     end
     
     def run_tests_on(settings, testinstance, data, testcase)
-        puts "in run tests on"
         start_url = settings['start']
         engine_1 = settings['instance_1']['process_engine']
         engine_2 = settings['instance_2']['process_engine']
@@ -39,18 +32,13 @@ module TestHelpers
 
 
         pn =  Pathname.new(__dir__).parent.parent
-        puts pn.join('server/config.json')
         file = File.read(pn.join('server/config.json'))
         config = JSON.parse(file)
 
         if testcase != 'custom'
             config['tests'].each do |testgroup|
-                puts 'testgroup value'
-                p testgroup
                 list = testgroup.first
                 config['tests'][list].each do |entry|
-                    puts 'entry'
-                    p entry
                     if entry['name'] == testcase
                         doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
                         doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
@@ -58,22 +46,18 @@ module TestHelpers
                     end
                 end
             end
-            p "In run tests on:"
-            p testinstance
             testinstance[testcase.to_sym][:instance_1] = {}
             testinstance[testcase.to_sym][:instance_1][:start] = Time.now
             ruby_log = run_test_case(start_url, engine_1, testcase, doc_url_ins_1, data)
             testinstance[testcase.to_sym][:instance_1][:end] = Time.now
             testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
-            puts "Ruby log"
-            p ruby_log
+            
             testinstance[testcase.to_sym][:instance_2] = {}
             testinstance[testcase.to_sym][:instance_2][:start] = Time.now
             rust_log = run_test_case(start_url, engine_2, testcase, doc_url_ins_2, data)
             testinstance[testcase.to_sym][:instance_2][:end] = Time.now
             testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
-            puts "Rust log"
-            p rust_log
+            
         else
             testinstance[testcase.to_sym][:instance_1] = {}
             testinstance[testcase.to_sym][:instance_1][:start] = Time.now
@@ -81,8 +65,7 @@ module TestHelpers
             ruby_log = run_test_case(start_url, engine_1, testcase, testinstance[:xml], data)
             testinstance[testcase.to_sym][:instance_1][:end] = Time.now
             testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
-            puts "Ruby log"
-            p ruby_log
+            
             testinstance[testcase.to_sym][:instance_2] = {}
             testinstance[testcase.to_sym][:instance_2][:start] = Time.now
             testinstance[:xml] = change_executionhandler(testinstance[:xml],settings['instance_2']['execution_handler'])
@@ -90,17 +73,11 @@ module TestHelpers
             testinstance[testcase.to_sym][:instance_2][:end] = Time.now
             testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
         end
-        puts "DOC URL 1: #{doc_url_ins_1}"
-        puts "DOC URL 2: #{doc_url_ins_2}"
-
-
-        puts "finished running tests"
+        
 
         differences_log_entries = completeness_test(rust_log, ruby_log)
         matches = match_logs(rust_log, ruby_log, differences_log_entries[1], differences_log_entries[2])
 
-        puts "matched logs"
-        puts "can match perfectly? #{!(matches[0].values.include?("no_match") || matches[1].values.include?("no_match"))}"
 
         structure_differences_ruby = {}
         structure_differences_rust = {}
@@ -113,9 +90,7 @@ module TestHelpers
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
                 structure_differences_ruby.merge!({key => dif_structure[1]})
                 structure_differences_rust.merge!({value => dif_structure[0]})
-                p "Content differences for match #{key} #{value}"
                 diff_content = content_test(rust_log[value]["message"], dif_structure[0], ruby_log[key]["message"], dif_structure[1])
-                p diff_content
                 content_differences_ruby.merge!({key => diff_content})
                 content_differences_rust.merge!({value => diff_content})
             end
@@ -124,7 +99,6 @@ module TestHelpers
         ruby_cf_events = extract_cf_events(ruby_log)
         rust_cf_events = extract_cf_events(rust_log)
 
-        puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
         {"log_instance_1" => ruby_log,"log_instance_2" => rust_log, 'differences_log_entries' => differences_log_entries, "matches" => matches,  'structure_differences' => [structure_differences_ruby, structure_differences_rust], 'content_differences' => [content_differences_ruby, content_differences_rust], 'cf_ins_1' => ruby_cf_events, 'cf_ins_2' => rust_cf_events}
     end
 

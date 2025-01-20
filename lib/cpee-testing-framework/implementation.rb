@@ -20,7 +20,6 @@ module CPEE
 
     class Status < Riddl::Implementation #{{{
       def response
-        p @a[0]
         Riddl::Parameter::Complex.new('results','application/json', JSON::generate(@a[0]))
       end
     end #}}}
