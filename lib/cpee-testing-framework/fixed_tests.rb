@@ -75,10 +75,16 @@ module TestHelpers
             puts "Rust log"
             p rust_log
         else
+            testinstance[testcase.to_sym][:instance_1][:start] = Time.now
             ruby_log = run_test_case(start_url, engine_1, testcase, testinstance[:xml], data)
+            testinstance[testcase.to_sym][:instance_1][:end] = Time.now
+            testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
             puts "Ruby log"
             p ruby_log
+            testinstance[testcase.to_sym][:instance_2][:start] = Time.now
             rust_log = run_test_case(start_url, engine_2, testcase, testinstance[:xml], data)
+            testinstance[testcase.to_sym][:instance_2][:end] = Time.now
+            testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
         end
         puts "DOC URL 1: #{doc_url_ins_1}"
         puts "DOC URL 2: #{doc_url_ins_2}"
