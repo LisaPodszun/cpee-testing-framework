@@ -131,13 +131,8 @@ module TestHelpers
     def change_executionhandler(testfile, execution_handler)
         testfile = XML::Smart.string(testfile)
         testfile.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
-
         execution_handler_node = testfile.find("/*/prop:executionhandler")
-        p execution_handler_node.first.text
-        #p execution_handler_node        
-        puts execution_handler
         execution_handler_node.first.text=execution_handler
-        p execution_handler_node.first.text
         testfile.to_s
     end
 
@@ -153,9 +148,6 @@ module TestHelpers
 
         dif_rust_to_ruby = hash_structure_test([], rust_log_entry, ruby_log_entry)
 
-        puts "Structure Differences found"
-        p dif_ruby_to_rust
-        p dif_rust_to_ruby
         [dif_rust_to_ruby, dif_ruby_to_rust]
     end
 
@@ -164,10 +156,7 @@ module TestHelpers
     def hash_structure_test(path, hash_1, hash_2)
         diff = []
         # test hash_1 > hash_2
-        puts 'hash 1'
-        p hash_1
-        puts 'hash 2'
-        p hash_2
+       
         hash_1.each do |key, value|
             path << key
             if !hash_2.key?(key)
@@ -223,8 +212,7 @@ module TestHelpers
                     diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
                 end
             elsif value.class == Array && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
-                p value[0]
-                p hash_2[key]
+                
                 if hash_2[key].class != Array 
                     diff << path.join("_")
                 else 
@@ -410,7 +398,6 @@ module TestHelpers
             else
                 rust_index += 1
                 if (rust_index >= rust_log.length)
-                    p "could not find match for #{ruby_event_type}, Content ins 1: #{ruby_log[ruby_index]}"
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
                     ruby_index += 1
                     rust_index = 0
@@ -427,7 +414,6 @@ module TestHelpers
                 rust_index += 1
             else
                 rust_log_tags = rust_log_tags.merge({rust_index => "no_match"})
-                p "could not find match for #{event_type}, Content ins 2: #{rust_log[rust_index]}"
                 rust_index += 1
             end
         end

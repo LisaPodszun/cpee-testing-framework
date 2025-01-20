@@ -30,7 +30,6 @@ module CPEE
       include Helpers
 
       def response
-        p 'Process response'
         pp @p
         data = @a[0]
         testinstances = @a[1]
@@ -41,8 +40,6 @@ module CPEE
         end
         settings = JSON.parse(@p[0].value.read) 
         
-        puts 'current settings chosen:'
-        p settings['test']
         if settings['test'] == 'all' 
           tests = [
             :service_call,
@@ -84,7 +81,6 @@ module CPEE
           :loop_pretest
           ]
         elsif settings['test'] == 'allCPEE'
-          puts 'in allCPEE'
           tests = [
             :service_call,
             :service_script_call,
@@ -105,7 +101,6 @@ module CPEE
           i = instance_ids_desc[0].to_i + 1
         end
         i = i.to_s
-        p "Computed instance id: #{i}"
         testinstances[i] = {
           :status => :running,
           :currently_running => '',
@@ -118,8 +113,6 @@ module CPEE
         
         testinstance = testinstances[i]
 
-        # testfile = XML::Smart.string(testfile)
-        puts "fulltest call"
         p testinstances.keys
         # Own Basic Tests
 
@@ -188,17 +181,11 @@ module CPEE
         end
 
         if data[event['instance-url']][:log].key? event['timestamp']
-          p "Topic: #{topic}"
-          p "Event: #{eventname}"
-          p "content: #{event}"
-
-          p "ALREADY CONTAINS THE TIMESTAMP"
-          p "Overwriting value: #{data[event['instance-url']][:log][event['timestamp']]}"
         end
         data[event['instance-url']][:log].merge!({event['timestamp'] =>   {'channel' => topic +'/'+ eventname, 'message' => event}})
 
+        # Seen the state finished
         if topic == 'state' && event['content']['state'] == 'finished'
-          puts "seen the state finished"
           Thread.new do 
             sleep 5
             data[event['instance-url']][:end].continue
@@ -227,10 +214,6 @@ module CPEE
           run FullTest, opts[:data], opts[:testinstances] if post 'test-config'
           run Instances, opts[:testinstances] if get
           on resource '\d+' do |res|
-            p "In get values"
-            p res[:r].last
-            p opts[:testinstances].keys
-            p opts[:testinstances][res[:r].last]
             run Status, opts[:testinstances][res[:r].last] if get
           end
           on resource 'configuration' do

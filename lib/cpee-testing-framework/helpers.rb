@@ -126,14 +126,7 @@ module Helpers #{{{
         file.close
       end
     end
-    puts 'Headers:'
-    p headers
-    puts 'status:'
-    p status
-    puts 'Response:'
-    p response
     parsed_content = JSON.parse(headers['CPEE_INSTANTIATION'])
-    p parsed_content
     if status == 200
       ins_id = parsed_content['CPEE-INSTANCE']
       uuid = parsed_content['CPEE-INSTANCE-UUID']
@@ -147,17 +140,17 @@ module Helpers #{{{
 
   def handle_starting(instance, instance_url) #{{{
     base_url = File.dirname(instance_url)
-    p "Base-URL in handle_starting: #{base_url}"
     srv = Riddl::Client.new(base_url, File.join(base_url, "?riddl-description"))
     res = srv.resource("/#{instance}/properties/state")
     status, response = res.put Riddl::Parameter::Simple.new('value','running')
-    p "Handle starting: status: #{status}, response: #{response}"
   end #}}}
   private :handle_starting
 
+
+
+   # method is depracated
   def subscribe_all(instance, wait, setup_done) #{{{
     #db = SQLite3::Database.open("events.db")
-    puts "in subscribe all"
     event_log = {}
     #db.execute (
       #  " CREATE TABLE IF NOT EXISTS instances_events (instance INT, channel TEXT, m_content TEXT, time TEXT)"
