@@ -80,7 +80,7 @@ async function displayResults(data_promise, appendto) {
         let row = $('<div class="row justify-content-center slider mt-3 mx-5"></div>').attr('id', key).click(function () {
             row_content.slideToggle("fast");
         });
-        row.append(`<h4 class="headings">Process model: ${key}</h4>`);
+        row.append(`<h4 class="headings">Process model: <b>${key}</b></h4>`);
 
         inner_col = $('<div class="col border border-3 border-top-0 border-secondary"></div>');
         row_content.append(inner_col);
