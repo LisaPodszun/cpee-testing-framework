@@ -140,22 +140,22 @@ async function displayResults(data_promise, appendto) {
             let marked = false;
             let json_1 = $('<pre></pre>').text(JSON.stringify((value['log_instance_1'][ind_1]['message']), undefined, 2));
             let marked_content = "";
-            //if ((Array.isArray(value['structure_differences'][0][ind_1]) && value['structure_differences'][0][ind_1].length)) {
-            //    console.log("detected structure differences");
-             //   marked_content = markInnerStructureResults(json_1.html(), ind_1, value['structure_differences'][0]);
-            //    json_1.html(marked_content);
-            //    marked = true;
-            //}
-            //if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
-            //    if (marked) {
-            //        marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
-            //    } else {
-            //        marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
-            //    }
-            //    json_1.html(marked_content);
-            //    marked = true;
-            //    console.log("Current marked value" + marked);
-            //}
+            if ((Array.isArray(value['structure_differences'][0][ind_1]) && value['structure_differences'][0][ind_1].length)) {
+                console.log("detected structure differences");
+                marked_content = markInnerStructureResults(json_1.html(), ind_1, value['structure_differences'][0]);
+                json_1.html(marked_content);
+                marked = true;
+            }
+            if ((Array.isArray(value['content_differences'][0][ind_1]) && value['content_differences'][0][ind_1].length)) {
+                if (marked) {
+                    marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
+                } else {
+                  marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                }
+                json_1.html(marked_content);
+                marked = true;
+                console.log("Current marked value" + marked);
+            }
             ins_1_log.append(json_1);
             let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
             if (ind_2 == "only_ins_1" || ind_2 == "no_match") {
