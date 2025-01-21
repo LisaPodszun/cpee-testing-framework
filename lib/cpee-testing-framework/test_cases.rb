@@ -86,7 +86,7 @@ module TestCases
     results['cf_ins_1'] = cf_parallel_split_synchronization(results['cf_ins_1'])
     results['cf_ins_2'] = cf_parallel_split_synchronization(results['cf_ins_2'])
 
-    testinstance[:results][:parallel_split_synchronization] = results
+    testinstance[:results][:parallel_split_and_synchronization] = results
 
   end
 
