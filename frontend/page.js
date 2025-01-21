@@ -85,6 +85,9 @@ async function displayResults(data_promise, appendto) {
         inner_col = $('<div class="col border border-3 border-top-0 border-secondary"></div>');
         row_content.append(inner_col);
         
+
+        console.log('key', key);
+
         let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
         let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Testrun Data</h5>');
         let overall_info_content = $('<ul class="list-group list-group-flush text-center"></ul>').html(`<li class="list-group-item"><b>Total tests run:</b> ${data['total']}</li><li class="list-group-item"><b>Test run duration:</b> ${Math.round(data[key]['duration_in_seconds']*100)/100}s</li><li class="list-group-item"><b>Start Service used:</b> ${data['settings']['start']}</li>`);
