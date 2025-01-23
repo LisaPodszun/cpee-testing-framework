@@ -35,7 +35,7 @@ function markInnerContentResults(log_entry, index, differences_hash) {
         tmp = log_entry.substring(element_index, log_entry.length - 1);
         // Symbol that signals the start of the entry, can be " for strings or {, [ for hashes or arrays
         special_symbol = tmp[0];
-        if (special_symbol  == "\"") {
+        if (special_symbol  == "\"" || special_symbol  == " ") {
             end_index = tmp.search(/\n/);
         } else {
             open_symbols = 1;

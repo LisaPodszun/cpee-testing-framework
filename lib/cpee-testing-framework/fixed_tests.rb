@@ -482,7 +482,7 @@ module TestHelpers
 
     def cf_subprocess_call(cf_events)
         passed = 0
-        if cf_events.length == 3
+        if cf_events.length == 4
             cf_events.each do |key, value|
                 case key
                 when 0
@@ -490,10 +490,14 @@ module TestHelpers
                         passed += 1
                     end
                 when 1
+                    if !(value["message"]["content"].key?("wait") && value["message"]["content"]["wait"][0]["position"] == "a1")
+                        passed += 1
+                    end
+                when 2    
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                         passed += 1
                     end
-                when 2
+                when 3
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                         passed += 1
                     end
