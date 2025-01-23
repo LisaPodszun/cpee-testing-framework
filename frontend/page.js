@@ -54,7 +54,7 @@ function markInnerContentResults(log_entry, index, differences_hash) {
                         open_symbols--;
                     }
                 } else {
-                    console.error("Unexpected symbol: " + open_symbol)
+                    console.error("Unexpected symbol: " + special_symbol)
                 }
                 current_index++;
             }
