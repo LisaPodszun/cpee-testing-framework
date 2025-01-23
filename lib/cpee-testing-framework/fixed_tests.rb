@@ -2,8 +2,8 @@ require_relative 'helpers'
 require 'xml/smart'
 require 'pathname'
 module TestHelpers
-    NON_TESTABLE_ENTRIES = ["instance-uuid", "executionhandler","instance_uuid", "content_at_uuid","content_unmark_uuid","content_after_uuid", "uuid", "instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
-        "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid"]
+    NON_TESTABLE_ENTRIES = ["instance-uuid", "executionhandler","instance_uuid", "content_at_uuid","content_wait_uuid","content_wait_passthrough","content_unmark_uuid","content_after_uuid", "uuid", "instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
+        "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_received_CPEE-INSTANCE", "content_received_CPEE-INSTANCE-URL","content_received_CPEE-INSTANCE-UUID"]
 
     # TODO: find out how to start rust instance
     def run_test_case(start_url, engine, testcase, doc_url, data)
