@@ -29,7 +29,7 @@ module Helpers #{{{
     else
       instances = Dir.children('./results')
       instances.sort! {|a, b| b.to_i <=> a.to_i}
-      instances = instances.slice(0, 5)
+      #instances = instances.slice(0, 5)
       instances.map! do |instance| 
         result = File.read("./results/#{instance}")
         instance_hash[instance] = JSON::parse(result)
