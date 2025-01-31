@@ -2,25 +2,19 @@ require_relative 'helpers'
 require 'xml/smart'
 require 'pathname'
 module TestHelpers
-    NON_TESTABLE_ENTRIES = ["instance-uuid", "content_at_uuid","content_unmark_uuid","content_after_uuid", "uuid", "instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
-        "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid"]
+    NON_TESTABLE_ENTRIES = ["instance-uuid", "executionhandler","instance_uuid", "content_at_uuid","content_wait_uuid","content_wait_passthrough","content_unmark_uuid","content_after_uuid", "uuid", "instance-url","instance","instance-uuid","content_attributes_uuid","content_at_uuid","content_unmark_uuid","content_after_uuid" ,
+        "timestamp", "uuid", "ecid", "content_ecid", "content_activity-uuid", "content_received_CPEE-INSTANCE", "content_received_CPEE-INSTANCE-URL","content_received_CPEE-INSTANCE-UUID"]
 
     # TODO: find out how to start rust instance
     def run_test_case(start_url, engine, testcase, doc_url, data)
-        puts 'in run test case'
         instance, uuid, url = post_testset(start_url, engine, testcase, doc_url)
-        puts 'after post testset'
-        puts "Instance #{instance}, UUID: #{uuid}, URL: #{url}"
         data[url] = {}
         data[url][:resource_utilization] = []
         data[url][:end] =  WEEL::Continue.new
         data[url][:log] = {}
         handle_starting(instance, url)
 
-        puts 'before wait'
-        puts "URL-ID: #{url}"
         data[url][:end].wait
-        puts 'after wait'
         # sort by timestamp from weel
         data[url][:log] = data[url][:log].sort_by{|key, value| key}
         data[url][:log].each_with_index do |entry,i|
@@ -30,7 +24,6 @@ module TestHelpers
     end
     
     def run_tests_on(settings, testinstance, data, testcase)
-        puts "in run tests on"
         start_url = settings['start']
         engine_1 = settings['instance_1']['process_engine']
         engine_2 = settings['instance_2']['process_engine']
@@ -39,18 +32,13 @@ module TestHelpers
 
 
         pn =  Pathname.new(__dir__).parent.parent
-        puts pn.join('server/config.json')
         file = File.read(pn.join('server/config.json'))
         config = JSON.parse(file)
 
         if testcase != 'custom'
             config['tests'].each do |testgroup|
-                puts 'testgroup value'
-                p testgroup
                 list = testgroup.first
                 config['tests'][list].each do |entry|
-                    puts 'entry'
-                    p entry
                     if entry['name'] == testcase
                         doc_url_ins_1 = entry[settings['instance_1']['execution_handler']]
                         doc_url_ins_2 = entry[settings['instance_2']['execution_handler']]
@@ -58,39 +46,38 @@ module TestHelpers
                     end
                 end
             end
-            p "In run tests on:"
-            p testinstance
             testinstance[testcase.to_sym][:instance_1] = {}
             testinstance[testcase.to_sym][:instance_1][:start] = Time.now
             ruby_log = run_test_case(start_url, engine_1, testcase, doc_url_ins_1, data)
             testinstance[testcase.to_sym][:instance_1][:end] = Time.now
             testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
-            puts "Ruby log"
-            p ruby_log
+            
             testinstance[testcase.to_sym][:instance_2] = {}
             testinstance[testcase.to_sym][:instance_2][:start] = Time.now
             rust_log = run_test_case(start_url, engine_2, testcase, doc_url_ins_2, data)
             testinstance[testcase.to_sym][:instance_2][:end] = Time.now
             testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
-            puts "Rust log"
-            p rust_log
+            
         else
+            testinstance[testcase.to_sym][:instance_1] = {}
+            testinstance[testcase.to_sym][:instance_1][:start] = Time.now
+            testinstance[:xml] = change_executionhandler(testinstance[:xml], settings['instance_1']['execution_handler']) 
             ruby_log = run_test_case(start_url, engine_1, testcase, testinstance[:xml], data)
-            puts "Ruby log"
-            p ruby_log
+            testinstance[testcase.to_sym][:instance_1][:end] = Time.now
+            testinstance[testcase.to_sym][:instance_1][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_1][:end] - testinstance[testcase.to_sym][:instance_1][:start]
+            
+            testinstance[testcase.to_sym][:instance_2] = {}
+            testinstance[testcase.to_sym][:instance_2][:start] = Time.now
+            testinstance[:xml] = change_executionhandler(testinstance[:xml],settings['instance_2']['execution_handler'])
             rust_log = run_test_case(start_url, engine_2, testcase, testinstance[:xml], data)
+            testinstance[testcase.to_sym][:instance_2][:end] = Time.now
+            testinstance[testcase.to_sym][:instance_2][:duration_in_seconds] = testinstance[testcase.to_sym][:instance_2][:end] - testinstance[testcase.to_sym][:instance_2][:start]
         end
-        puts "DOC URL 1: #{doc_url_ins_1}"
-        puts "DOC URL 2: #{doc_url_ins_2}"
-
-
-        puts "finished running tests"
+        
 
         differences_log_entries = completeness_test(rust_log, ruby_log)
         matches = match_logs(rust_log, ruby_log, differences_log_entries[1], differences_log_entries[2])
 
-        puts "matched logs"
-        puts "can match perfectly? #{!(matches[0].values.include?("no_match") || matches[1].values.include?("no_match"))}"
 
         structure_differences_ruby = {}
         structure_differences_rust = {}
@@ -103,9 +90,7 @@ module TestHelpers
                 dif_structure = structure_test(rust_log[value]["message"], ruby_log[key]["message"])
                 structure_differences_ruby.merge!({key => dif_structure[1]})
                 structure_differences_rust.merge!({value => dif_structure[0]})
-                p "Content differences for match #{key} #{value}"
                 diff_content = content_test(rust_log[value]["message"], dif_structure[0], ruby_log[key]["message"], dif_structure[1])
-                p diff_content
                 content_differences_ruby.merge!({key => diff_content})
                 content_differences_rust.merge!({value => diff_content})
             end
@@ -114,9 +99,18 @@ module TestHelpers
         ruby_cf_events = extract_cf_events(ruby_log)
         rust_cf_events = extract_cf_events(rust_log)
 
-        puts "Equal amounts of cf events? #{(ruby_cf_events.length == rust_cf_events.length)}"
         {"log_instance_1" => ruby_log,"log_instance_2" => rust_log, 'differences_log_entries' => differences_log_entries, "matches" => matches,  'structure_differences' => [structure_differences_ruby, structure_differences_rust], 'content_differences' => [content_differences_ruby, content_differences_rust], 'cf_ins_1' => ruby_cf_events, 'cf_ins_2' => rust_cf_events}
     end
+
+    def change_executionhandler(testfile, execution_handler)
+        testfile = XML::Smart.string(testfile)
+        testfile.register_namespace 'prop', 'http://cpee.org/ns/properties/2.0'
+        execution_handler_node = testfile.find("/*/prop:executionhandler")
+        execution_handler_node.first.text=execution_handler
+        testfile.to_s
+    end
+
+
 
     def structure_test(rust_log_entry, ruby_log_entry)
         # holds all keys ruby - rust
@@ -128,9 +122,6 @@ module TestHelpers
 
         dif_rust_to_ruby = hash_structure_test([], rust_log_entry, ruby_log_entry)
 
-        puts "Structure Differences found"
-        p dif_ruby_to_rust
-        p dif_rust_to_ruby
         [dif_rust_to_ruby, dif_ruby_to_rust]
     end
 
@@ -139,10 +130,7 @@ module TestHelpers
     def hash_structure_test(path, hash_1, hash_2)
         diff = []
         # test hash_1 > hash_2
-        puts 'hash 1'
-        p hash_1
-        puts 'hash 2'
-        p hash_2
+       
         hash_1.each do |key, value|
             path << key
             if !hash_2.key?(key)
@@ -198,8 +186,7 @@ module TestHelpers
                     diff << (hash_content_test(path, value, hash_2[key], dif_rust_to_ruby, dif_ruby_to_rust))
                 end
             elsif value.class == Array && !(NON_TESTABLE_ENTRIES.include?(path.join("_")) || dif_rust_to_ruby.include?(path.join("_")) || dif_ruby_to_rust.include?(path.join("_")))
-                p value[0]
-                p hash_2[key]
+                
                 if hash_2[key].class != Array 
                     diff << path.join("_")
                 else 
@@ -355,6 +342,8 @@ module TestHelpers
                     rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
                 when "activity/done"
                     rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
+                when "task/instantiation"
+                    rust_log_entry["message"]["content"]["activity"] == ruby_log_entry["message"]["content"]["activity"]
                 end
     end
 
@@ -385,7 +374,6 @@ module TestHelpers
             else
                 rust_index += 1
                 if (rust_index >= rust_log.length)
-                    p "could not find match for #{ruby_event_type}, Content ins 1: #{ruby_log[ruby_index]}"
                     ruby_log_tags = ruby_log_tags.merge({ruby_index => "no_match"})
                     ruby_index += 1
                     rust_index = 0
@@ -402,7 +390,6 @@ module TestHelpers
                 rust_index += 1
             else
                 rust_log_tags = rust_log_tags.merge({rust_index => "no_match"})
-                p "could not find match for #{event_type}, Content ins 2: #{rust_log[rust_index]}"
                 rust_index += 1
             end
         end
@@ -495,7 +482,7 @@ module TestHelpers
 
     def cf_subprocess_call(cf_events)
         passed = 0
-        if cf_events.length == 3
+        if cf_events.length == 4
             cf_events.each do |key, value|
                 case key
                 when 0
@@ -503,10 +490,14 @@ module TestHelpers
                         passed += 1
                     end
                 when 1
+                    if !(value["message"]["content"].key?("wait") && value["message"]["content"]["wait"][0]["position"] == "a1")
+                        passed += 1
+                    end
+                when 2    
                     if !(value["message"]["content"].key?("after") && value["message"]["content"]["after"][0]["position"] == "a1")
                         passed += 1
                     end
-                when 2
+                when 3
                     if !(value["message"]["content"].key?("unmark") && value["message"]["content"]["unmark"][0]["position"] == "a1")
                         passed += 1
                     end

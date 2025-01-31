@@ -35,7 +35,7 @@ function markInnerContentResults(log_entry, index, differences_hash) {
         tmp = log_entry.substring(element_index, log_entry.length - 1);
         // Symbol that signals the start of the entry, can be " for strings or {, [ for hashes or arrays
         special_symbol = tmp[0];
-        if (special_symbol  == "\"") {
+        if (special_symbol  == "\"" || special_symbol  == " ") {
             end_index = tmp.search(/\n/);
         } else {
             open_symbols = 1;
@@ -54,7 +54,8 @@ function markInnerContentResults(log_entry, index, differences_hash) {
                         open_symbols--;
                     }
                 } else {
-                    console.error("Unexpected symbol: " + open_symbol)
+                    alert("Unexpected symbol: " + special_symbol + " in log entry: " + log_entry)
+                    return
                 }
                 current_index++;
             }
@@ -80,13 +81,16 @@ async function displayResults(data_promise, appendto) {
         let row = $('<div class="row justify-content-center slider mt-3 mx-5"></div>').attr('id', key).click(function () {
             row_content.slideToggle("fast");
         });
-        row.append(`<h4 class="headings">${key}</h4>`);
+        row.append(`<h4 class="headings">process model: <b>${key}</b></h4>`);
 
         inner_col = $('<div class="col border border-3 border-top-0 border-secondary"></div>');
         row_content.append(inner_col);
         
+
+        console.log('key', key);
+
         let overall_info_row = $(`<div class="row slider mx-3 my-1 border-bottom-0"></div>`);
-        let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Testrun Data</h5>');
+        let overall_info_col = $('<div class="col"></div>').html('<h5 class="text-center my-1">Test run Data</h5>');
         let overall_info_content = $('<ul class="list-group list-group-flush text-center"></ul>').html(`<li class="list-group-item"><b>Total tests run:</b> ${data['total']}</li><li class="list-group-item"><b>Test run duration:</b> ${Math.round(data[key]['duration_in_seconds']*100)/100}s</li><li class="list-group-item"><b>Start Service used:</b> ${data['settings']['start']}</li>`);
         overall_info_col.append(overall_info_content);
         overall_info_row.append(overall_info_col);
@@ -134,7 +138,7 @@ async function displayResults(data_promise, appendto) {
                 e.stopPropagation();
             });
 
-            inner_row.append(`<h5 class='headings'>${value['log_instance_1'][ind_1]['channel']}</h5>`);
+            inner_row.append(`<h5 class='headings'>event: <b>${value['log_instance_1'][ind_1]['channel']} </b></h5>`);
 
             let ins_1_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 1</h5>');
             let marked = false;
@@ -150,7 +154,7 @@ async function displayResults(data_promise, appendto) {
                 if (marked) {
                     marked_content = markInnerContentResults(marked_content, ind_1, value['content_differences'][0]);
                 } else {
-                    marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
+                  marked_content = markInnerContentResults(json_1.html(), ind_1, value['content_differences'][0]);
                 }
                 json_1.html(marked_content);
                 marked = true;
@@ -207,7 +211,7 @@ async function displayResults(data_promise, appendto) {
                     e.stopPropagation();
                 });
                 // put one block [matches_ins_2[index_2]  || ins_2_element ]
-                inner_row.append(`<h5 class='headings'>${value['log_instance_2'][ind_2]['channel']}</h5>`);
+                inner_row.append(`<h5 class='headings'>event: <b>${value['log_instance_2'][ind_2]['channel']}</b></h5>`);
                 let ins_1_log = $('<div class="col"><h5 class="text-center my-1">Instance 1</h5></div>').append(ind_1);
                 let ins_2_log = $('<div class="col"></div>').html('<h5 class="text-center my-1">Instance 2</h5>');
                 let json_2 = $('<pre></pre>').text(JSON.stringify(value['log_instance_2'][ind_2]['message'], undefined, 2));
